@@ -12,7 +12,6 @@ import 'package:master_jobz/models/requerimiento.dart';
 import 'package:master_jobz/models/requerimiento_response.dart';
 import 'package:master_jobz/models/requisito.dart';
 import 'package:master_jobz/models/requisito_response.dart';
-import 'package:master_jobz/models/requisitos_response.dart';
 import 'package:master_jobz/peticiones/auth.dart';
 
 class JobProvider with ChangeNotifier{
@@ -34,6 +33,20 @@ class JobProvider with ChangeNotifier{
       return jobs;
     }
   }
+  Future postular()async{
+    final url = Uri.parse('${Environment.baseURL}/postulantes/${job!.id}');
+    final String? token = await Auth.getToken();
+    final resp = await  http.post(url, headers: {
+      'Content-type':'application/json',
+      'x-token': token.toString()
+    });
+  
+    if(resp.statusCode == 200){
+      
+      return true;
+    }
+      return false;
+  }
   Future getEmpleos()async{
     final url = Uri.parse('${Environment.baseURL}/jobs/empleos/');
     final String? token = await Auth.getToken();
@@ -41,7 +54,7 @@ class JobProvider with ChangeNotifier{
       'Content-type':'application/json',
       'x-token': token.toString()
     });
-    print(resp.body);
+
     if(resp.statusCode == 200){
       final jobsResponse = jobsResponseFromJson(resp.body);
       jobs = jobsResponse.jobs;
@@ -64,10 +77,40 @@ class JobProvider with ChangeNotifier{
       'x-token': token.toString()
     },
     body:jsonEncode(data));
-    print(resp.body);
+
     if(resp.statusCode == 200){
       final jobsResponse = jobResponseFromJson(resp.body);
       job = jobsResponse.job;
+      
+      // jobs = jobs!.where((element)  element.id != job!.id).toList();
+     
+      // jobs = [...jobs!.map((element) => element.id != id ?element:jobsResponse.job)];
+      // int selector = jobs!.indexWhere((element) => element.id == id);
+      // jobs![selector] = job!;
+      
+      
+      notifyListeners();
+      return true;
+    }
+    return false;
+  }
+  Future editStatus(String id, String status)async{
+    final data = {
+      "status":status,
+    };
+    final url = Uri.parse('${Environment.baseURL}/jobs/$id');
+    final String? token = await Auth.getToken();
+    final resp = await  http.put(url, headers: {
+      'Content-type':'application/json',
+      'x-token': token.toString()
+    },
+    body:jsonEncode(data));
+ 
+    if(resp.statusCode == 200){
+      final jobsResponse = jobResponseFromJson(resp.body);
+      job = jobsResponse.job;
+      
+
       // jobs = jobs!.where((element)  element.id != job!.id).toList();
       
       
@@ -111,6 +154,9 @@ class JobProvider with ChangeNotifier{
       final jobResponse = jobResponseFromJson(resp.body);
       final job = jobResponse.job;
       this.job = job;
+      this.jobs!.add(jobResponse.job);
+      
+      notifyListeners();
       return true;
     }
     return false;
@@ -128,7 +174,7 @@ class JobProvider with ChangeNotifier{
       'x-token': token.toString()
     },
     body: jsonEncode(data));
-    print(resp.body);
+
     if(resp.statusCode == 200){
       
       final requisitosResponse = requerimientoResponseFromJson(resp.body);
@@ -150,7 +196,7 @@ class JobProvider with ChangeNotifier{
       'x-token': token.toString()
     },
     body: jsonEncode(data));
-    print(resp.body);
+    
     if(resp.statusCode == 200){
       
       final requisitosResponse = requerimientoResponseFromJson(resp.body);
@@ -167,7 +213,7 @@ class JobProvider with ChangeNotifier{
       'Content-type':'application/json',
       'x-token': token.toString()
     });
-    print(resp.body);
+
     if(resp.statusCode == 200){
 
       job!.requerimientos.removeWhere((element) => element.id == id);
@@ -187,7 +233,7 @@ class JobProvider with ChangeNotifier{
       'x-token': token.toString()
     },
     body: jsonEncode(data));
-    print(resp.body);
+    
     if(resp.statusCode == 200){
       
       final requisitosResponse = requisitoResponseFromJson(resp.body);
@@ -210,7 +256,7 @@ class JobProvider with ChangeNotifier{
       'x-token': token.toString()
     },
     body: jsonEncode(data));
-    print(resp.body);
+ 
     if(resp.statusCode == 200){
       
       final requisitosResponse = requisitoResponseFromJson(resp.body);
@@ -229,7 +275,7 @@ class JobProvider with ChangeNotifier{
       'Content-type':'application/json',
       'x-token': token.toString()
     });
-    print(resp.body);
+ 
     if(resp.statusCode == 200){
       
       job!.requerimientos.firstWhere((element) => element.id == reqId ).requisitos.removeWhere((element) => element.id == id) ;

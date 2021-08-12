@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:master_jobz/models/job.dart';
-import 'package:master_jobz/peticiones/auth.dart';
+
 import 'package:master_jobz/peticiones/jobs.dart';
 import 'package:master_jobz/services/job_services.dart';
 import 'package:master_jobz/ui/input_decoration.dart';
@@ -14,7 +14,6 @@ class OfertaScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final authProvider = Provider.of<Auth>(context);
     return Scaffold(
       body: Stack(
         children: [
@@ -25,13 +24,13 @@ class OfertaScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: 180,),
-                  Text('Agregar\n\n oferta de trabajo', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                  Text('Agregar\n\noferta de trabajo', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
                   ChangeNotifierProvider(create: ( _ ) => JobServices() ,child: _Formulario()),
                 ],
               ),
             )
           ),
-          Cabezera(user: authProvider.usuario!.nombre),
+          Cabezera(),
 
         ],
       ),
@@ -93,6 +92,7 @@ class _Formulario extends StatelessWidget {
           jobServices.isLoading = false;
           if(resp){
             Navigator.pushReplacementNamed(context, 'empleos');
+            // Navigator.pop(context);
           }
         })
         ],

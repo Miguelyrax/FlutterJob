@@ -57,12 +57,18 @@ class JobScreen extends StatelessWidget{
                             ),
                             SizedBox(height: 40,),
                             Center(
-                              child: MaterialButton(onPressed: (){
+                              child: MaterialButton(onPressed: jobProvider.job!.status == 'false' ? null : ()async{
                                 if(jobProvider.getTotal() == true){
-                                  alertOk(context);
+                                  final resp = await jobProvider.postular();
+                                  if(resp){
+                                    alertOk(context, true, 'Tu postulacion ha sido enviada');
+                                  }else{
+                                    alertOk(context, false, 'Ya has postulado a este cargo');
+                                  }
                                 }else{
-                                  alertError(context);
+                                  alertOk(context, false, 'Complete los requerimientos');
                                 }
+                                
                               },
                               disabledColor: Colors.grey,
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),

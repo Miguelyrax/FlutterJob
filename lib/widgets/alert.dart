@@ -2,33 +2,38 @@
 import 'package:flutter/material.dart';
 import 'package:master_jobz/peticiones/jobs.dart';
 import 'package:master_jobz/widgets/boton.dart';
+import 'package:master_jobz/widgets/formularios.dart';
 import 'package:provider/provider.dart';
 
-void alertOk(BuildContext context){
+void alertOk(BuildContext context, bool success, String title,){
   showDialog(context: context, builder: (context)=>AlertDialog(
+    actions: [
+      success
+      ? Boton(text: 'Volver', onPressed: ()=>Navigator.pushReplacementNamed(context, 'jobs'))
+      : Boton(text: 'Cerrar', onPressed: ()=>Navigator.pop(context))
+     
+    ],
     content: SingleChildScrollView(
       child: Column(
         children: [
-          Text('Genial'),
-          Text('Has postulado al siguiente cargo'),
+          success
+          ? Icon(Icons.done, color: Colors.green, size: 40,)
+          : Icon(Icons.cancel, color: Colors.red, size: 60,),
+          
+          SizedBox(height: 10,),
+          success
+          ? Text('Genial!', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),)
+          : Text('Error', style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),),
+          SizedBox(height: 10,),
+          Text(title),
+          SizedBox(height: 10,),
+          
         ],
       ),
     ),  
   ));
 }
 
-void alertError(BuildContext context){
-  showDialog(context: context, builder: (context)=>AlertDialog(
-    content: SingleChildScrollView(
-      child: Column(
-        children: [
-          Text('Error'),
-          Text('Para postular se requiere el 100% de los requisitos'),
-        ],
-      ),
-    ),  
-  ));
-}
 
 void editAlert(BuildContext context, TextEditingController controller){
   final jobProvider = Provider.of<JobProvider>(context, listen: false);
@@ -51,6 +56,33 @@ void editAlert(BuildContext context, TextEditingController controller){
           
         ],
       ),
+    ),
+  ));
+}
+void editContacto(BuildContext context, Widget child ){
+  showDialog(barrierDismissible: true,context: context, builder: ( context) => AlertDialog(
+    content: SingleChildScrollView(
+      child: child
+    ),
+  ));
+}
+
+void alertEliminar(BuildContext context, Function onPressed ){
+  showDialog(barrierDismissible: true,context: context, builder: ( context) => AlertDialog(
+    actions: [
+      Boton(text: 'Eliminar', onPressed: ()=>onPressed()),
+      SizedBox(height: 10,),
+      Boton(text: 'Cancelar', onPressed: ()=>Navigator.pop(context)),
+    ],
+    content: SingleChildScrollView(
+      child: Column(
+        children: [
+          Icon(Icons.cancel, color: Colors.red, size: 60,),
+          Text('Eliminar', style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),),
+          Text('¿Esta seguro?'),
+          Text('Esta accion es irreversible'),
+        ],
+      )
     ),
   ));
 }

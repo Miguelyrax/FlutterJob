@@ -6,9 +6,10 @@ class Targeta extends StatelessWidget {
   final Job job;
   final Function? onPressed;
   final Color color;
+  final bool colocar;
   final Color color2;
   const Targeta({
-    Key? key,required  this.color,required  this.color2, required this.job, this.onPressed,
+    Key? key,required  this.color,required  this.color2, required this.job, this.onPressed, this.colocar = true,
   }) : super(key: key);
 
   @override
@@ -43,7 +44,10 @@ class Targeta extends StatelessWidget {
                 )]
               ),
             ),
-            Positioned(right: -20,top: -20,child:circulo(width: size.width * 0.35, color: this.color2,)),
+            colocar 
+            ? Positioned(right: -20,top: -20,child:circulo(width: size.width * 0.25, color: this.color2, jobProvider: jobProvider,job: job,))
+            : Positioned(right: -30,top: -30,child:circulo2(width: size.width * 0.35, color: this.color2,)),
+            
             Positioned(
               bottom: 40,
               left: 30,
@@ -69,7 +73,38 @@ class Targeta extends StatelessWidget {
 class circulo extends StatelessWidget {
   final double width;
   final Color color;
+  final JobProvider jobProvider;
+  final Job job;
   const circulo({
+    Key? key,
+     required this.width, required this.color,required this.jobProvider,required this.job,
+  }) : super(key: key);
+
+ 
+
+  @override
+  Widget build(BuildContext context) {
+    return  Container(
+        width: this.width,
+        height: this.width,
+        decoration: BoxDecoration(
+          border: Border.all(width: 5, color: this.color),
+          
+          borderRadius: BorderRadius.circular(200)
+        ),
+        child: Center(
+          child:IconButton(onPressed: (){
+            jobProvider.job = job;
+            Navigator.pushNamed(context, 'postulantes');
+          }, icon: Icon(Icons.remove_red_eye)),
+        ),
+      );
+  }
+}
+class circulo2 extends StatelessWidget {
+  final double width;
+  final Color color;
+  const circulo2({
     Key? key,
      required this.width, required this.color,
   }) : super(key: key);
@@ -82,13 +117,11 @@ class circulo extends StatelessWidget {
         width: this.width,
         height: this.width,
         decoration: BoxDecoration(
-          border: Border.all(width: 3, color: this.color),
+          border: Border.all(width: 25, color: this.color),
           
           borderRadius: BorderRadius.circular(200)
         ),
-        child: Center(
-          child: Text('JS', style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
-        ),
+        
       );
   }
 }

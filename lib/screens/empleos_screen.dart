@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:master_jobz/models/job.dart';
-import 'package:master_jobz/peticiones/auth.dart';
+
 import 'package:master_jobz/peticiones/jobs.dart';
 import 'package:master_jobz/widgets/cabezera.dart';
+import 'package:master_jobz/widgets/circulo.dart';
 import 'package:master_jobz/widgets/targeta.dart';
-import 'package:provider/provider.dart';
-
 
 class EmpleosScreen extends StatefulWidget {
 
@@ -24,7 +23,6 @@ class _EmpleosScreenState extends State<EmpleosScreen> {
   }
   @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<Auth>(context);
     int numero = 1;
     Color color1 = Color(0xffF3D03E);
     Color color2 = Color(0xffA28B29);
@@ -39,7 +37,13 @@ class _EmpleosScreenState extends State<EmpleosScreen> {
               child: Column(
                 children: [
                   SizedBox(height: 180,),
-                  Text('Mis ofertas', style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('Mis ofertas', style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
+                      SizedBox(width: 10,),
+                      Circulo(onPressed: ()=>Navigator.pushNamed(context, 'oferta'), width: 40)
+                  ],),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 40, vertical: 30),
                     child: ListView.separated(
@@ -71,7 +75,7 @@ class _EmpleosScreenState extends State<EmpleosScreen> {
               ),
             ),
           ),
-          Cabezera(user: userProvider.usuario!.nombre)
+          Cabezera()
         ],
       ),
    );

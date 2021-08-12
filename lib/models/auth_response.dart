@@ -6,15 +6,16 @@ import 'dart:convert';
 
 import 'package:master_jobz/models/usuario.dart';
 
+
 AuthResponse authResponseFromJson(String str) => AuthResponse.fromJson(json.decode(str));
 
 String authResponseToJson(AuthResponse data) => json.encode(data.toJson());
 
 class AuthResponse {
     AuthResponse({
-       required this.ok,
-       required this.usuario,
-       required this.token,
+        required this.ok,
+        required this.usuario,
+        required this.token,
     });
 
     bool ok;
@@ -33,5 +34,9 @@ class AuthResponse {
         "token": token,
     };
 }
+
+
+
+
 
 

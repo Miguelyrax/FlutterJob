@@ -10,10 +10,11 @@ class Cascaron extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-    padding: EdgeInsets.symmetric(horizontal: 20),
+    padding: EdgeInsets.only(right: 10),
     decoration: BoxDecoration(
-      border: Border.all(color: Color(0xff0F1225), width: 3),
-      borderRadius: BorderRadius.circular(15)
+      color: Colors.black12.withOpacity(0.05),
+      border: Border.all(color: Colors.black12, width: 1),
+      borderRadius: BorderRadius.circular(5)
     ),
   child: this.child,
         );

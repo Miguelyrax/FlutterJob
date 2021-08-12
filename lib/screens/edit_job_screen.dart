@@ -71,7 +71,7 @@ class _EditJobScreenState extends State<EditJobScreen> {
                         Text('Sub título',style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold ), ),
                         TextFormField(maxLength: 18,controller: ctrlSubtitle, decoration: InputDecoration(border: OutlineInputBorder(),),),
                         SizedBox(height: 20,),
-                        _estado(jobProvider,estado),
+                        _Estado(),
                         Text('Descripción',style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold ), ),
                         SizedBox(height: 30,),
                         TextFormField(maxLines: 8, controller: ctrlDescription, decoration: InputDecoration(
@@ -113,6 +113,7 @@ class _EditJobScreenState extends State<EditJobScreen> {
                             Center(
                               child: MaterialButton(onPressed: ()async{
                                 await jobProvider.editJob(ctrlTitle.text, ctrlSubtitle.text, ctrlDescription.text, int.parse(ctrlTtotalRequerido.text), jobProvider.job!.id);
+                                Navigator.pushNamed(context, 'empleos');
                               },
                               disabledColor: Colors.grey,
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -135,21 +136,36 @@ class _EditJobScreenState extends State<EditJobScreen> {
    );
   }
 
-  Widget _estado(JobProvider jobProvider, bool estado) {
-    
+  
+}
+class _Estado extends StatefulWidget {
+  const _Estado({Key? key}) : super(key: key);
+
+  @override
+  __EstadoState createState() => __EstadoState();
+}
+
+class __EstadoState extends State<_Estado> {
+  bool estado = false;
+  @override
+  Widget build(BuildContext context) {
+  final jobProvider = Provider.of<JobProvider>(context);
+  estado = jobProvider.job!.status == 'true' ? true : false;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Row(
           children: [
             Text('Estado',style: TextStyle(fontSize: 20),),
-            Switch(value: estado, onChanged: (value){
-              print(value);
-            
-              estado = value;
-              setState(() {
-                
+            Switch(value: estado, onChanged: (value)async{
+              final resp = await jobProvider.editStatus(jobProvider.job!.id, value.toString());
+              if(resp){
+                print(value);
+                estado = value;
+                setState(() { 
               });
+              }
+              
             })
           ],
         ),

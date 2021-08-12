@@ -25,7 +25,7 @@ class InputDecorations {
                 color: Colors.grey
               ),
               prefixIcon: prefixIcon != null 
-              ? Icon(prefixIcon, color: Color(0xff65E9A1),)
+              ? Icon(prefixIcon, color: Colors.black45,)
               :null
 
               );
