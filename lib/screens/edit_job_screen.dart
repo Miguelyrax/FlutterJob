@@ -5,6 +5,7 @@ import 'package:master_jobz/models/requisito.dart';
 import 'package:master_jobz/peticiones/jobs.dart';
 import 'package:master_jobz/widgets/alert.dart';
 import 'package:master_jobz/widgets/background.dart';
+import 'package:master_jobz/widgets/boton.dart';
 import 'package:master_jobz/widgets/circulo.dart';
 import 'package:provider/provider.dart';
 
@@ -61,7 +62,7 @@ class _EditJobScreenState extends State<EditJobScreen> {
                         SizedBox(height: 30,),
                         Text('Título',style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold ), ),
                          TextFormField(
-                           maxLength: 5,
+                           maxLength: 11,
                            controller: ctrlTitle,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(),
@@ -111,18 +112,12 @@ class _EditJobScreenState extends State<EditJobScreen> {
                             }),
                             SizedBox(height: 40,),
                             Center(
-                              child: MaterialButton(onPressed: ()async{
-                                await jobProvider.editJob(ctrlTitle.text, ctrlSubtitle.text, ctrlDescription.text, int.parse(ctrlTtotalRequerido.text), jobProvider.job!.id);
-                                Navigator.pushNamed(context, 'empleos');
-                              },
-                              disabledColor: Colors.grey,
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                              color: Color(0xff0F1225),
-                              minWidth: double.infinity,
-                              padding: EdgeInsets.symmetric(vertical: 10),
-                              child:  Text('Guardar',style: TextStyle(fontSize: 25, color: Color(0xff75F39F)))
-                              ),
-                            )
+                              child: 
+                            
+                            Boton(text: 'Guardar', onPressed:()async{
+                                await jobProvider.editJob(ctrlTitle.text, ctrlSubtitle.text, ctrlDescription.text, int.parse(ctrlTtotalRequerido.text), jobProvider.job!.id);     
+                                Navigator.pop(context);
+                              })),
                            
                           
                       ],
@@ -177,7 +172,7 @@ class __EstadoState extends State<_Estado> {
             color: Color(0xff0F1225),
             borderRadius: BorderRadius.circular(15)
           ),
-          child: Center(child: Text(jobProvider.job?.status == 'true'  ? 'Disponible' : 'Caducado',style: TextStyle(fontSize: 15, color: Color(0xff75F39F)),)  ,),
+          child: Center(child: Text(jobProvider.job?.status == 'true'  ? 'Disponible' : 'Caducado',style: TextStyle(fontSize: 15, color: Colors.white),)  ,),
         )
       ],
     );

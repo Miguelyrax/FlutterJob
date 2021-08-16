@@ -8,19 +8,14 @@ class Contenedor extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: EdgeInsets.symmetric(horizontal: 0),
       child: Container(
         width: double.infinity,
         padding: EdgeInsets.symmetric(horizontal: 20),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(15),
-          boxShadow: [BoxShadow(
-            color: Colors.black.withOpacity(0.2),
-            blurRadius: 9,
-            spreadRadius: 0.9,
-            offset: Offset(0,2)
-          )]
+          borderRadius: BorderRadius.only(topLeft: Radius.circular(50)),
+          
         ),
         child: this.child,
       ),

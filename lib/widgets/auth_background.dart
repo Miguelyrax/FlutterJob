@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 class AuthBackground extends StatelessWidget {
   final Widget child;
   const AuthBackground({
@@ -11,10 +12,40 @@ class AuthBackground extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: double.infinity,
+      color: Colors.white,
       child: Stack(
         children: [
           Box(size: size),
           Align(alignment: Alignment.topCenter ,child: Icono(size: size)),
+          this.child
+        ],
+      ),
+    );
+  }
+}
+class AuthBackgroundRegister extends StatelessWidget {
+  final Widget child;
+  const AuthBackgroundRegister({
+    Key? key, required this.child,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    return Container(
+      width: double.infinity,
+      height: double.infinity,
+      color: Colors.black,
+      child: Stack(
+        children: [
+          Container(
+          width: double.infinity,
+          height: size.height * 0.2,
+          decoration: BoxDecoration(
+          color: Colors.black,
+          ),
+          child: Center(child: Text('Register', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 30),),),
+        ),
           this.child
         ],
       ),
@@ -34,15 +65,15 @@ class Icono extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Container(
-        margin: EdgeInsets.only(top: 30),
-        width: 180,
-        height: 180,
+        margin: EdgeInsets.only(top: 50),
+        width: 120,
+        height: 120,
         decoration: BoxDecoration(
-          color: Color(0xff0F1225),
+          color: Colors.black,
           borderRadius: BorderRadius.circular(200),
-          border: Border.all(color:Color(0xff65E9A1), width: 5 )
+          border: Border.all(color:Colors.white, width: 5 )
         ),
-        child: Center(child: Text('MZ',style: TextStyle(color: Color(0xff65E9A1), fontSize: 50, fontWeight: FontWeight.bold),),),
+        child: Center(child: Text('MZ',style: TextStyle(color: Colors.white, fontSize: 35, fontWeight: FontWeight.bold),),),
       ),
     );
   }
@@ -62,7 +93,7 @@ class Box extends StatelessWidget {
       width: double.infinity,
       height: size.height * 0.4,
       decoration: BoxDecoration(
-        color: Color(0xff0F1225),
+        color: Colors.black,
       ),
     );
   }

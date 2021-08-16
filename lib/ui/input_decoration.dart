@@ -8,24 +8,27 @@ class InputDecorations {
   }) {
     return InputDecoration(
       border: InputBorder.none,
-              //   enabledBorder: UnderlineInputBorder(
-              //     borderSide: BorderSide(
-              //       color: Color(0xff65E9A1),
-              //     ),
-              //   ),
-              // focusedBorder: UnderlineInputBorder(
-              //   borderSide: BorderSide(
-              //     color: Color(0xff65E9A1),
-              //     width: 2
-              //   )
-              // ),
+     
+                enabledBorder: UnderlineInputBorder(
+                  
+                  borderSide: BorderSide(
+                    color: Colors.white,
+                    
+                  ),
+                ),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.white,
+                 
+                )
+              ),
               hintText: hintText,
-              labelText: labelText,
-              labelStyle: TextStyle(
-                color: Colors.grey
+              hintStyle: TextStyle(
+                color: Colors.grey,
+                fontWeight: FontWeight.bold
               ),
               prefixIcon: prefixIcon != null 
-              ? Icon(prefixIcon, color: Colors.black45,)
+              ? Icon(prefixIcon, color: Colors.black,)
               :null
 
               );

@@ -11,11 +11,11 @@ class Boton extends StatelessWidget {
     return Center(
                 child: MaterialButton(onPressed: this.onPressed == null ? null : ()=>onPressed!(),
                 disabledColor: Colors.grey,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
                 color: Color(0xff0F1225),
                 minWidth: double.infinity,
-                padding: EdgeInsets.symmetric(vertical: 10),
-                child:  Text(this.text,style: TextStyle(fontSize: 25, color: Color(0xff75F39F)))
+                padding: EdgeInsets.symmetric(vertical: 15),
+                child:  Text(this.text,style: TextStyle(fontSize: 20, color: Colors.white.withOpacity(0.8)))
                 ),
               );
   }

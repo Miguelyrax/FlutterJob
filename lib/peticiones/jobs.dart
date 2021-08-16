@@ -15,11 +15,22 @@ import 'package:master_jobz/models/requisito_response.dart';
 import 'package:master_jobz/peticiones/auth.dart';
 
 class JobProvider with ChangeNotifier{
-  List<Job>? jobs;
+  List<Job> jobs = [];
+  List<Job> empleos = [];
   Job? job;
   Color color1 = Colors.red;
   Color color2 = Colors.red;
+   JobProvider(){
+    print('---------hola----------');
+    this.getEmpleos();
+    this.getJobs();
+  }
+  cargarTodo(){
+    this.getEmpleos();
+    this.getJobs();
+  }
   Future getJobs()async{
+    print('---------hola----------');
     final url = Uri.parse('${Environment.baseURL}/jobs/');
     final String? token = await Auth.getToken();
     final resp = await  http.get(url, headers: {
@@ -57,7 +68,7 @@ class JobProvider with ChangeNotifier{
 
     if(resp.statusCode == 200){
       final jobsResponse = jobsResponseFromJson(resp.body);
-      jobs = jobsResponse.jobs;
+      empleos = jobsResponse.jobs;
       notifyListeners();
       return jobs;
     }
@@ -85,7 +96,10 @@ class JobProvider with ChangeNotifier{
       // jobs = jobs!.where((element)  element.id != job!.id).toList();
      
       // jobs = [...jobs!.map((element) => element.id != id ?element:jobsResponse.job)];
-      // int selector = jobs!.indexWhere((element) => element.id == id);
+      int selector = jobs.indexWhere((element) => element.id == id);
+      int index = empleos.indexWhere((element) => element.id == id);
+      this.jobs[selector] = jobsResponse.job;
+      this.empleos[index] = jobsResponse.job;
       // jobs![selector] = job!;
       
       
@@ -154,7 +168,8 @@ class JobProvider with ChangeNotifier{
       final jobResponse = jobResponseFromJson(resp.body);
       final job = jobResponse.job;
       this.job = job;
-      this.jobs!.add(jobResponse.job);
+      this.jobs.add(jobResponse.job);
+      this.empleos.add(jobResponse.job);
       
       notifyListeners();
       return true;

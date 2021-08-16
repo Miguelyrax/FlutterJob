@@ -41,6 +41,27 @@ class Auth with ChangeNotifier{
   }
   return false;
 }
+  Future<bool> register(String nombre, String apellido,String email,String password,)async{
+  final url = Uri.parse('${Environment.baseURL}/auth/register/');
+  final data = {
+    "nombre":nombre,
+    "apellido":apellido,
+    "email":email,
+    "password":password,
+  };
+  final resp = await http.post(url, headers: {
+    'Content-type':'application/json'
+  },
+  body: jsonEncode(data));
+  print(resp.body);
+  if(resp.statusCode == 200){
+    final authResponse = authResponseFromJson(resp.body);
+    usuario = authResponse.usuario;
+    await guardarToken(authResponse.token); 
+    return true;
+  }
+  return false;
+}
   Future<bool> renew()async{
   final url = Uri.parse('${Environment.baseURL}/auth/renew');
   final String? token = await _storage.read(key: 'token');

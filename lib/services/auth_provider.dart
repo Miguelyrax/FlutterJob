@@ -8,6 +8,10 @@ class AuthProvider with ChangeNotifier {
 
   String usuario = '';
   String password = '';
+  String nombre = '';
+  String apellido = '';
+  String email = '';
+  String password2 = '';
   bool _isLoading = false;
   bool get isLoading => _isLoading;
   set isLoading(bool value){

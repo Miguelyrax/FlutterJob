@@ -4,6 +4,7 @@ import 'package:master_jobz/models/requisito.dart';
 import 'package:master_jobz/peticiones/jobs.dart';
 import 'package:master_jobz/widgets/alert.dart';
 import 'package:master_jobz/widgets/background.dart';
+import 'package:master_jobz/widgets/boton.dart';
 import 'package:provider/provider.dart';
 
 
@@ -56,8 +57,7 @@ class JobScreen extends StatelessWidget{
                                ),
                             ),
                             SizedBox(height: 40,),
-                            Center(
-                              child: MaterialButton(onPressed: jobProvider.job!.status == 'false' ? null : ()async{
+                            Boton(text: 'Postular', onPressed:  jobProvider.job!.status == 'false' ? null : ()async{
                                 if(jobProvider.getTotal() == true){
                                   final resp = await jobProvider.postular();
                                   if(resp){
@@ -68,18 +68,7 @@ class JobScreen extends StatelessWidget{
                                 }else{
                                   alertOk(context, false, 'Complete los requerimientos');
                                 }
-                                
-                              },
-                              disabledColor: Colors.grey,
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                              color: Color(0xff0F1225),
-                              minWidth: double.infinity,
-                              padding: EdgeInsets.symmetric(vertical: 10),
-                              child:  Text('Postular',style: TextStyle(fontSize: 25, color: Color(0xff75F39F)))
-                              ),
-                            )
-                           
-                          
+                              })
                       ],
                     ),
                   ),
@@ -207,7 +196,7 @@ class _Estado extends StatelessWidget {
             color: Color(0xff0F1225),
             borderRadius: BorderRadius.circular(15)
           ),
-          child: Center(child: Text(jobProvider.job?.status == 'true'  ? 'Disponible' : 'Caducado',style: TextStyle(fontSize: 15, color: Color(0xff75F39F)),)  ,),
+          child: Center(child: Text(jobProvider.job?.status == 'true'  ? 'Disponible' : 'Caducado',style: TextStyle(fontSize: 15, color: Colors.white),)  ,),
         )
       ],
     );

@@ -22,7 +22,7 @@ class Circulo extends StatelessWidget {
             offset: Offset(0,2)
           )]
         ),
-        child: Center(child: Icon(this.icon, color: Color(0xff75F39F),)),
+        child: Center(child: Icon(this.icon, color: Colors.white,)),
       ),
     );
   }

@@ -12,8 +12,13 @@ class Cascaron extends StatelessWidget {
     return Container(
     padding: EdgeInsets.only(right: 10),
     decoration: BoxDecoration(
-      color: Colors.black12.withOpacity(0.05),
-      border: Border.all(color: Colors.black12, width: 1),
+      color: Colors.white,
+      boxShadow: [BoxShadow(
+          color: Colors.black.withOpacity(0.05),
+          blurRadius: 10,
+          spreadRadius: 0.2,
+          offset: Offset(0,5)
+        )],
       borderRadius: BorderRadius.circular(5)
     ),
   child: this.child,

@@ -13,6 +13,9 @@ import 'package:master_jobz/screens/oferta_screen.dart';
 import 'package:master_jobz/screens/postulantes_screen.dart';
 import 'package:master_jobz/screens/profile_publico_screen.dart';
 import 'package:master_jobz/screens/profile_screen.dart';
+import 'package:master_jobz/services/auth_navegacion_provider.dart';
+import 'package:master_jobz/services/job_services.dart';
+import 'package:master_jobz/services/navegacion_provider.dart';
 import 'package:master_jobz/services/profile_services.dart';
 import 'package:provider/provider.dart';
  
@@ -25,10 +28,14 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: ( _ ) => Auth(),),
         ChangeNotifierProvider(create: ( _ ) => JobProvider(),),
+        ChangeNotifierProvider(create: ( _ ) => JobServices(),),
         ChangeNotifierProvider(create: ( _ ) => Postulantes(),),
         ChangeNotifierProvider(create: ( _ ) => ProfileProvider(),),
+        ChangeNotifierProvider(create: ( _ ) => NavegacionModel(),),
+        ChangeNotifierProvider(create: ( _ ) => AuthNavegacionProvider(),),
       ],
       child: MaterialApp(
+        theme: ThemeData(fontFamily: 'RobotoMono'),
         debugShowCheckedModeBanner: false,
         title: 'Material App',
         initialRoute: 'loading',

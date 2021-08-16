@@ -19,18 +19,43 @@ class ProfilePublicoScreen extends StatelessWidget {
     final postulanteProvider = Provider.of<Postulantes>(context);
     final usuario = authProvider.usuario!;
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          
-          _crearAppbar(usuario),
-          SliverList(delegate: SliverChildListDelegate(
-            [
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+          child: Column(
+            children: [
               SizedBox(height: 20,),
+              
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Caja(authProvider: authProvider, child: 
+                  Column(
+              children: [
+               
+                Container(
+                  width: 100,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    color: Color(0xffF5CB39),
+                    border: Border.all(color: Colors.black, width: 4),
+                    borderRadius: BorderRadius.circular(200)
+                  ),
+                  child: Center(child: Text('${usuario.nombre.substring(0,2)}', style: TextStyle(fontSize: 30, color: Colors.black, fontWeight: FontWeight.bold),),),
+                ),
+                SizedBox(height: 10,),
+                Text('${usuario.telefono}',style: TextStyle(color:Colors.black, fontSize: 16.0)),
+                Text('${usuario.email}',style: TextStyle(color:Colors.black, fontSize: 16.0)),
+                SizedBox(height: 10,),
+                Text('${usuario.nombre} ${usuario.apellido}',style: TextStyle(color:Colors.black, fontSize: 20.0)),
+                  ],
+              ),
+                  ),
+                  SizedBox(height: 20,),
                   Caja(
                     authProvider: authProvider,
                     child: Column(
@@ -42,7 +67,7 @@ class ProfilePublicoScreen extends StatelessWidget {
                           Text('Datos de contacto', style: TextStyle(color:Colors.black45, fontSize: 20.0, fontWeight: FontWeight.bold),),
                           IconButton(onPressed: (){
                             editContacto(context,Formulario());
-                          }, icon: Icon(Icons.edit, color: Colors.green,))
+                          }, icon: Icon(Icons.edit, color: Colors.black,))
                         ],
                       ),
                       Divider(),
@@ -69,13 +94,16 @@ class ProfilePublicoScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text('Habilidades', style: TextStyle(color:Colors.black45, fontSize: 20.0, fontWeight: FontWeight.bold),),
-                          IconButton(onPressed: ()=>editContacto(context,FormularioHabilidad()), icon: Icon(Icons.add_circle, color: Colors.green,))
+                          IconButton(onPressed: ()=>editContacto(context,FormularioHabilidad()), icon: Icon(Icons.add_circle, color: Colors.black,))
                         ],
                       ),
-                        ListView.separated(
+                     
+                        GridView.builder(
                           physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
-                          itemBuilder: (_,i) => Row(
+                          itemBuilder: (_,i) => Wrap(
+                            alignment: WrapAlignment.start,
+                            crossAxisAlignment: WrapCrossAlignment.center,
                             children: [
                               Text('${habilidades[i].habilidad}', style: TextStyle(fontSize: 17),),
                               IconButton(onPressed: ()async{
@@ -83,10 +111,12 @@ class ProfilePublicoScreen extends StatelessWidget {
                               }, icon: Icon(Icons.cancel, color: Colors.black26,))
                             ],
                           ),
-                          separatorBuilder: (_,snapshot)=> SizedBox(height: 20),
-                          itemCount: habilidades.length),
-        
-                        SizedBox(height: 20,),
+            
+                          itemCount: habilidades.length,
+                           gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 2,
+                          ),),
                     ],
                   ),),
                   SizedBox(height: 20,),
@@ -100,7 +130,7 @@ class ProfilePublicoScreen extends StatelessWidget {
                           Text('Experiencia laboral', style: TextStyle(color:Colors.black45, fontSize: 20.0, fontWeight: FontWeight.bold),),
                           IconButton(onPressed: (){
                             editContacto(context, FormulariEmpleo());
-                          }, icon: Icon(Icons.add_circle, color: Colors.green,))
+                          }, icon: Icon(Icons.add_circle, color: Colors.black,))
                         ],
                       ),
                         ListView.separated(
@@ -124,7 +154,7 @@ class ProfilePublicoScreen extends StatelessWidget {
                                   }, icon: Icon(Icons.delete, color: Colors.red,)),
                                   IconButton(onPressed: (){
                                     editContacto(context, FormulariEmpleo(empleo: empleos[i],),);
-                                  }, icon: Icon(Icons.edit, color: Colors.green,)),
+                                  }, icon: Icon(Icons.edit, color: Colors.black,)),
                                 ],
                               )
                             ],
@@ -155,14 +185,15 @@ class ProfilePublicoScreen extends StatelessWidget {
                           itemCount: empleos.length),
                     ],
                   ),)      ,
+                  SizedBox(height: 100,),
                         
                       
                 ],
               )),
-              
-            ]
-          ))
-        ],
+            ],
+          ),
+        ),
+        
       )
    );
   } 

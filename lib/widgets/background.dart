@@ -22,7 +22,7 @@ class Background extends StatelessWidget {
           children: [
             
             _Cabezera(jobProvider: jobProvider),
-            Positioned(right: -40,top: -40,child: circulo2(width: 160, color: jobProvider.color2,)),
+            Positioned(right: -60,top: -60,child: circulo2(width: 160, color: Colors.black12,)),
             this.child
           ],
         ),
@@ -81,7 +81,7 @@ class _Cabezera extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(left: 40, top: 20),
+      padding: EdgeInsets.only(left: 30, top: 40),
       child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

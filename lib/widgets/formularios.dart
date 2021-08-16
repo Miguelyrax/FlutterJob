@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:master_jobz/models/empleo.dart';
 import 'package:master_jobz/peticiones/auth.dart';
+import 'package:master_jobz/peticiones/jobs.dart';
+import 'package:master_jobz/services/job_services.dart';
 import 'package:master_jobz/services/profile_services.dart';
 import 'package:master_jobz/ui/input_decoration.dart';
 import 'package:provider/provider.dart';
@@ -146,14 +148,14 @@ class FormulariEmpleo extends StatelessWidget {
           SizedBox(height: 20,),
           Cascaron(
             child: TextFormField(
-              decoration: InputDecorations.authInputDecoration(hintText: 'Empresa', labelText: 'Empresa', prefixIcon: Icons.assignment),
+              decoration: InputDecorations.authInputDecoration(hintText: 'Empresa', labelText: 'Empresa', prefixIcon: Icons.work),
               controller: ctrlEmpresa,
             ),
           ),
           SizedBox(height: 20,),
           Cascaron(
             child: TextFormField(
-              decoration: InputDecorations.authInputDecoration(hintText: 'Cargo', labelText: 'Cargo', prefixIcon: Icons.assignment),
+              decoration: InputDecorations.authInputDecoration(hintText: 'Cargo', labelText: 'Cargo', prefixIcon: Icons.person_pin),
               controller: ctrlCargo,
             ),
           ),
@@ -161,7 +163,7 @@ class FormulariEmpleo extends StatelessWidget {
           Cascaron(
             child: TextFormField(
               maxLines: 8,
-              decoration: InputDecorations.authInputDecoration(hintText: 'Description', labelText: 'Description', prefixIcon: Icons.assignment),
+              decoration: InputDecorations.authInputDecoration(hintText: 'Description', labelText: 'Description', prefixIcon: Icons.format_align_justify),
               controller: ctrlDescription,
             ),
           ),
@@ -184,5 +186,70 @@ class FormulariEmpleo extends StatelessWidget {
           
         ],
       );
+  }
+}
+class FormularioJob extends StatelessWidget {
+
+  @override
+  Widget build(BuildContext context) {
+  final jobServices = Provider.of<JobServices>(context); 
+  final jobProvider = Provider.of<JobProvider>(context); 
+    return Form(
+      key: jobServices.key,
+      child: Column(
+        children: [
+        Text('Oferta', style: TextStyle(color:Colors.black45, fontSize: 20.0, fontWeight: FontWeight.bold),),
+        SizedBox(height: 20,),
+        Cascaron(child: TextFormField(
+          maxLength: 11,
+          // initialValue: usuario.nombre,
+        onChanged: (value){
+        jobServices.title = value; 
+        },
+        decoration: InputDecorations.authInputDecoration(hintText: 'Título', labelText: 'Título', prefixIcon: Icons.title),
+      ),),
+          SizedBox(height: 20,),
+       
+        Cascaron(child: TextFormField(
+          maxLength: 18,
+          // initialValue: usuario.email,
+        onChanged: (value){
+        jobServices.subTitle = value; 
+        },
+        decoration: InputDecorations.authInputDecoration(hintText: 'Sub-título', labelText: 'Sub-título', prefixIcon: Icons.email),
+      ),),
+       SizedBox(height: 20,),
+        Cascaron(child: TextFormField(
+          minLines: 8,
+          maxLines: 8,
+          // initialValue: usuario.email,
+        onChanged: (value){
+        jobServices.description = value; 
+        },
+        decoration: InputDecorations.authInputDecoration(hintText: 'Descripción', labelText: 'Descripción', prefixIcon: Icons.email),
+      ),),
+       SizedBox(height: 20,),
+        Cascaron(child: TextFormField(
+          // initialValue: usuario.email,
+        onChanged: (value){
+        jobServices.totalRequerido =  int.parse(value); 
+        },
+        decoration: InputDecorations.authInputDecoration(hintText: 'Total', labelText: 'Total', prefixIcon: Icons.email),
+      ),),
+          SizedBox(height: 20,),
+        
+          SizedBox(height: 20,),
+        Boton(text: 'Guardar', onPressed: jobServices.isLoading ? null: ()async{
+          jobServices.isLoading = true;
+          final resp = await jobProvider.newJob(jobServices.title, jobServices.subTitle, jobServices.description, jobServices.totalRequerido);
+          jobServices.isLoading = false;
+          if(resp){
+            Navigator.pop(context);
+            // Navigator.pop(context);
+          }
+        })
+        ],
+      ),
+    );
   }
 }

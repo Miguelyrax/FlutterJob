@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:master_jobz/models/job.dart';
 import 'package:master_jobz/peticiones/jobs.dart';
+import 'package:master_jobz/screens/job_screen.dart';
 import 'package:provider/provider.dart';
 class Targeta extends StatelessWidget {
   final Job job;
+  final int number;
   final Function? onPressed;
   final Color color;
   final bool colocar;
   final Color color2;
   const Targeta({
-    Key? key,required  this.color,required  this.color2, required this.job, this.onPressed, this.colocar = true,
+    Key? key,required  this.color,required  this.color2, required this.job, this.onPressed, this.colocar = true, required this.number,
   }) : super(key: key);
 
   @override
@@ -22,7 +24,11 @@ class Targeta extends StatelessWidget {
         jobProvider.color1 = color;
         jobProvider.color2 = color2;
         onPressed == null
-        ? Navigator.pushNamed(context, 'job')
+        ? Navigator.push(
+        context,
+        PageRouteBuilder(pageBuilder: (context,__,___)=>JobScreen(),
+        transitionDuration: Duration(milliseconds: 0))
+        )
         : this.onPressed!();
       },
       child: ClipRRect(
@@ -30,36 +36,48 @@ class Targeta extends StatelessWidget {
         child: Stack(
           children: [
             Container(
-              width: size.width * 0.8,
-              height: size.height*0.25,
+              width: size.width ,
+              height: size.height*0.45,
               decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    color,
+                    color2,
+                  ]
+                ),
                 color: this.color,
                 borderRadius: BorderRadius.circular(25),
                 boxShadow: [BoxShadow(
                   color: Colors.black.withOpacity(0.2),
                   blurRadius: 0.2,
-                  spreadRadius: 0.2,
+                  spreadRadius: 2,
                   offset: Offset(0,2)
                   
                 )]
               ),
             ),
             colocar 
-            ? Positioned(right: -20,top: -20,child:circulo(width: size.width * 0.25, color: this.color2, jobProvider: jobProvider,job: job,))
-            : Positioned(right: -30,top: -30,child:circulo2(width: size.width * 0.35, color: this.color2,)),
+            ? Positioned(right: -20,top: -20,child:circulo(width: size.width * 0.25, color: Colors.black12, jobProvider: jobProvider,job: job,))
+            : Positioned(right: -30,top: -30,child:circulo2(width: size.width * 0.35, color: Colors.black12,)),
             
             Positioned(
-              bottom: 40,
+              top: 0,
               left: 30,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(job.title, style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),),
-                  SizedBox(height:30),
-                  Text(job.subtitle, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                  SizedBox(height:10),
-                  Text('26/07/2021', style: TextStyle(color: Colors.black54)),
-                ],
+              child: Container(
+                width: size.width * 0.7,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('${this.number}', style: TextStyle(fontSize: 100, fontWeight: FontWeight.bold),),
+                    SizedBox(height:30),
+                    Text(job.title, style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),),
+                    Text(job.subtitle, style: TextStyle(fontSize:30, fontWeight: FontWeight.bold)),
+                    SizedBox(height:10),
+                    Text('26/07/2021', style: TextStyle(color: Colors.black54)),
+                  ],
+                ),
               ),
             )
     
@@ -88,7 +106,7 @@ class circulo extends StatelessWidget {
         width: this.width,
         height: this.width,
         decoration: BoxDecoration(
-          border: Border.all(width: 5, color: this.color),
+          border: Border.all(width: 15, color: this.color),
           
           borderRadius: BorderRadius.circular(200)
         ),
