@@ -6,7 +6,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:master_jobz/helpers/environment.dart';
-import 'package:master_jobz/models/requerimiento.dart';
+
 import 'package:master_jobz/models/requerimientos_response.dart';
 import 'package:master_jobz/peticiones/auth.dart';
 

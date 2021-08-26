@@ -18,7 +18,7 @@ class MenuScreen extends StatefulWidget {
 }
 
 class _MenuScreenState extends State<MenuScreen> {
-final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
 @override
   void initState() {
       final jobProvider = Provider.of<JobProvider>(context,listen: false);
@@ -29,13 +29,9 @@ final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   Widget build(BuildContext context) {
     
     final auth = Provider.of<Auth>(context);
-  
-    // final navegacionProvider = Provider.of<NavegacionModel>(context);
-   
-    // final size = MediaQuery.of(context).size;
+    final paginaProvider = Provider.of<NavegacionModel>(context);
     return  Scaffold(
-        key: _scaffoldKey,
-        extendBody: true,
+          extendBody: true,
           backgroundColor: Colors.white,
           appBar: AppBar(
          toolbarHeight: 100,
@@ -54,19 +50,21 @@ final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
           ],  
           ),
           
-          bottomNavigationBar: _Navegacion(),
-          body: _Paginas()
+          bottomNavigationBar: _Navegacion(paginaProvider:paginaProvider),
+          body: _Paginas(paginaProvider:paginaProvider)
     
     );
   }
 }
 
 class _Navegacion extends StatelessWidget {
- 
+  final NavegacionModel paginaProvider;
+
+  const _Navegacion({Key? key, required this.paginaProvider}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final paginaProvider = Provider.of<NavegacionModel>(context);
+    
     return RollingBottomBar(
       enableIconRotation: true,
       flat: false,
@@ -87,7 +85,9 @@ class _Navegacion extends StatelessWidget {
 }
 
 class _Paginas extends StatelessWidget {
+  final NavegacionModel paginaProvider;
 
+  const _Paginas({Key? key, required this.paginaProvider}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

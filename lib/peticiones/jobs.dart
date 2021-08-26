@@ -88,7 +88,7 @@ class JobProvider with ChangeNotifier{
       'x-token': token.toString()
     },
     body:jsonEncode(data));
-
+    print(resp.body);
     if(resp.statusCode == 200){
       final jobsResponse = jobResponseFromJson(resp.body);
       job = jobsResponse.job;

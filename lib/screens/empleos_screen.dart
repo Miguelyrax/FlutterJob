@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:master_jobz/models/job.dart';
+
 
 import 'package:master_jobz/peticiones/jobs.dart';
-import 'package:master_jobz/widgets/alert.dart';
+
+import 'package:master_jobz/screens/edit_job_screen.dart';
+import 'package:master_jobz/screens/job_formulario_screen.dart';
+import 'package:master_jobz/services/edit_job_services.dart';
+import 'package:master_jobz/services/edit_navegacion_services.dart';
+import 'package:master_jobz/services/job_services.dart';
+
 
 import 'package:master_jobz/widgets/circulo.dart';
-import 'package:master_jobz/widgets/formularios.dart';
+
+import 'package:master_jobz/widgets/pageroute.dart';
 import 'package:master_jobz/widgets/targeta.dart';
 import 'package:provider/provider.dart';
 
@@ -25,8 +32,11 @@ class _EmpleosScreenState extends State<EmpleosScreen> with AutomaticKeepAliveCl
     Color color1 = Color(0xffF3D03E);
     Color color2 = Color(0xffA28B29);
     final jobProvider = Provider.of<JobProvider>(context);
+
   //  _getJobs();
     return Scaffold(
+            extendBody: true,
+
       backgroundColor: Colors.white,
       body: Stack(
         children: [
@@ -43,7 +53,12 @@ class _EmpleosScreenState extends State<EmpleosScreen> with AutomaticKeepAliveCl
                     children: [
                       Text('Mis ofertas', style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
                       SizedBox(width: 10,),
-                      Circulo(onPressed: ()=>editContacto(context, FormularioJob()), width: 40)
+                      Circulo(color: Colors.black,onPressed: ()=>Navigator.push(context,
+                      ruta(ChangeNotifierProvider(
+                        create: ( _ )=> EditJobServices(),
+                        child: FormularioJob()), Offset(0,2),false)
+                      
+                      ), width: 30)
                   ],),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 35, vertical: 10),
@@ -69,34 +84,34 @@ class _EmpleosScreenState extends State<EmpleosScreen> with AutomaticKeepAliveCl
                             color1 = Color(0xff8DD6FF);
                             color2 = Color(0xff9EDFFF);
                           }
+                          if(numero == 5){
+                            color1 = Color(0xffDEFF60);
+                            color2 = Color(0xffEAFE8C);
+                          }
+                          if(numero == 6){
+                            color1 = Color(0xffFAA2AC);
+                            color2 = Color(0xffFEB3B1);
+                          }
                           numero++;
-                          if(numero>4){
+                          if(numero>6){
                             numero =1;
                           }
-                      return Targeta(job: jobProvider.empleos[i], color: color1, color2: color2, number: i, onPressed: ()=>Navigator.pushNamed(context, 'editJob'),);
+                      return Targeta(job: jobProvider.empleos[i], color: color1, color2: color2, number: i, onPressed: ()=>Navigator.push(context, ruta(MultiProvider(providers: [
+                        ChangeNotifierProvider(create: ( _ ) =>JobServices(),),
+                        ChangeNotifierProvider(create: ( _ ) => EditNavegacionModel())
+                        
+                        ] ,child: EditJobScreen()),Offset(0,2),false)),);
                     } ),
                   ),
                 ],
               ),
             ),
           ),
-          // Cabezera()
         ],
       ),
    );
   }
 
-  // Future _getJobs() async{
-  //   // final jobProvider = Provider.of<JobProvider>(context);
-  //   jobProvider.jobs = await jobProviders.getEmpleos();
-  //   print('caja');
-  //   if (!mounted) { 
-  //     return;
-  //   }
-  //    setState(() {
-       
-  //    });      
-  // }
 
   @override
   // TODO: implement wantKeepAlive

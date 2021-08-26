@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 
-class JobServices with ChangeNotifier{
+class EditJobServices with ChangeNotifier{
   GlobalKey<FormState> formKey = new GlobalKey<FormState>();
   bool _isLoading = false;
   String title = '';

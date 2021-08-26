@@ -4,17 +4,17 @@ import 'package:master_jobz/peticiones/jobs.dart';
 import 'package:master_jobz/peticiones/postulantes.dart';
 import 'package:master_jobz/screens/edit_job_screen.dart';
 import 'package:master_jobz/screens/empleos_screen.dart';
-import 'package:master_jobz/screens/job_screen.dart';
+
 import 'package:master_jobz/screens/jobs_screens.dart';
 import 'package:master_jobz/screens/loading.dart';
 import 'package:master_jobz/screens/login_screen.dart';
 import 'package:master_jobz/screens/menu_screen.dart';
-import 'package:master_jobz/screens/oferta_screen.dart';
+
 import 'package:master_jobz/screens/postulantes_screen.dart';
 import 'package:master_jobz/screens/profile_publico_screen.dart';
 import 'package:master_jobz/screens/profile_screen.dart';
 import 'package:master_jobz/services/auth_navegacion_provider.dart';
-import 'package:master_jobz/services/job_services.dart';
+
 import 'package:master_jobz/services/navegacion_provider.dart';
 import 'package:master_jobz/services/profile_services.dart';
 import 'package:provider/provider.dart';
@@ -28,9 +28,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: ( _ ) => Auth(),),
         ChangeNotifierProvider(create: ( _ ) => JobProvider(),),
-        ChangeNotifierProvider(create: ( _ ) => JobServices(),),
         ChangeNotifierProvider(create: ( _ ) => Postulantes(),),
-        ChangeNotifierProvider(create: ( _ ) => ProfileProvider(),),
         ChangeNotifierProvider(create: ( _ ) => NavegacionModel(),),
         ChangeNotifierProvider(create: ( _ ) => AuthNavegacionProvider(),),
       ],
@@ -44,10 +42,8 @@ class MyApp extends StatelessWidget {
           '/' : ( _ ) => MenuScreen(),
           'loading' : ( _ ) => LoadingScreen(),
           'jobs' : ( _ ) => JobsScreen(),
-          'job' : ( _ ) => JobScreen(),
           'profile' : ( _ ) => ProfileScreen(),
           'profilePublico' : ( _ ) => ProfilePublicoScreen(),
-          'oferta' : ( _ ) => OfertaScreen(),
           'empleos' : ( _ ) => EmpleosScreen(),
           'editJob' : ( _ ) => EditJobScreen(),
           'postulantes' : ( _ ) => PostulantesScreen(),

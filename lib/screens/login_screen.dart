@@ -3,6 +3,7 @@ import 'package:master_jobz/peticiones/auth.dart';
 import 'package:master_jobz/services/auth_navegacion_provider.dart';
 import 'package:master_jobz/services/auth_provider.dart';
 import 'package:master_jobz/ui/input_decoration.dart';
+import 'package:master_jobz/widgets/alert.dart';
 import 'package:master_jobz/widgets/auth_background.dart';
 import 'package:master_jobz/widgets/boton.dart';
 import 'package:master_jobz/widgets/contenedor.dart';
@@ -93,6 +94,7 @@ class _Formulario extends StatelessWidget {
    final auth = Provider.of<Auth>(context);
     return Form(
       key: authProvider.formKey,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       child: Column(
         children: [
           SizedBox(height: 20,),
@@ -102,26 +104,42 @@ class _Formulario extends StatelessWidget {
        authProvider.usuario = value; 
        
         },
+        validator: (value){
+                String pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                RegExp regExp  = new RegExp(pattern);
+                return regExp.hasMatch(value ?? '')
+                ? null
+                : 'El correo no es válido' ;
+              },
         decoration: InputDecorations.authInputDecoration(hintText: 'Usuario', labelText: 'Usuario', prefixIcon: Icons.supervised_user_circle),
       ),),
           SizedBox(height: 50,),
         
           Contenido(
            child: TextFormField(
-            onChanged: (value){
+             obscureText: true,
+             autocorrect: false,
+            decoration: InputDecorations.authInputDecoration(hintText: 'Password', labelText: 'Password', prefixIcon: Icons.lock),
+            
+           validator:  (value){
+                return (value != null && value.length >=6 )
+                ? null
+                : 'La contraseña debe tener mas de 5 caracteres';
+              },
+              onChanged: (value){
               authProvider.password = value; 
-              
             },
-            decoration: InputDecorations.authInputDecoration(hintText: 'Password', labelText: 'Password', prefixIcon: Icons.password),
           ),),
             SizedBox(height: 50,),
           Boton(text: 'LOGIN', onPressed: authProvider.isLoading ? null :  ()async{
-                print(await Auth.getToken());
+                FocusScope.of(context).unfocus();
+                if(!authProvider.isValidForm()) return;
                 authProvider.isLoading = true;
                 final resp = await auth.login(authProvider.usuario, authProvider.password);
                 if(resp){
                   Navigator.pushReplacementNamed(context, 'loading');
                 }else{
+                  alertOk(context, false, 'Credenciales no son correctas');
                 authProvider.isLoading = false;
                 }
             }),
@@ -144,6 +162,7 @@ class _Formulario2 extends StatelessWidget {
    final auth = Provider.of<Auth>(context);
     return Form(
       key: authProvider.formKey,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       child: Column(
         children: [
           SizedBox(height: 20,),
@@ -153,6 +172,11 @@ class _Formulario2 extends StatelessWidget {
        authProvider.nombre = value; 
        
         },
+        validator:  (value){
+                return (value != null && value.length >1 )
+                ? null
+                : 'El nombre debe tener mas de 1 caracter';
+              },
         decoration: InputDecorations.authInputDecoration(hintText: 'Nombre', labelText: 'Nombre', prefixIcon: Icons.title),
       ),),
       SizedBox(height: 50,),
@@ -162,6 +186,11 @@ class _Formulario2 extends StatelessWidget {
        authProvider.apellido = value; 
        
         },
+        validator:  (value){
+                return (value != null && value.length >1 )
+                ? null
+                : 'El apellido debe tener mas de 1 caracter';
+              },
         decoration: InputDecorations.authInputDecoration(hintText: 'Apellido', labelText: 'Apellido', prefixIcon: Icons.text_fields),
       ),),
       SizedBox(height: 50,),
@@ -171,6 +200,13 @@ class _Formulario2 extends StatelessWidget {
        authProvider.email = value; 
        
         },
+        validator: (value){
+                String pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                RegExp regExp  = new RegExp(pattern);
+                return regExp.hasMatch(value ?? '')
+                ? null
+                : 'El correo no es válido' ;
+              },
         decoration: InputDecorations.authInputDecoration(hintText: 'Email', labelText: 'Email', prefixIcon: Icons.email),
       ),),
       SizedBox(height: 50,),
@@ -180,11 +216,17 @@ class _Formulario2 extends StatelessWidget {
        authProvider.password = value; 
        
         },
+        validator:  (value){
+                return (value != null && value.length >=6 )
+                ? null
+                : 'La contraseña debe tener mas de 5 caracteres';
+              },
         decoration: InputDecorations.authInputDecoration(hintText: 'Password', labelText: 'Password', prefixIcon: Icons.lock),
       ),),
           SizedBox(height: 50,),
           Boton(text: 'REGISTRARSE', onPressed: authProvider.isLoading ? null :  ()async{
-                
+                FocusScope.of(context).unfocus();
+                if(!authProvider.isValidForm()) return;
                 authProvider.isLoading = true;
                 final resp = await auth.register(authProvider.nombre, authProvider.apellido, authProvider.email, authProvider.password);
                 if(resp){

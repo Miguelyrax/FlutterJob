@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:master_jobz/models/job.dart';
+
 import 'package:master_jobz/peticiones/jobs.dart';
-import 'package:master_jobz/widgets/cabezera.dart';
+
 import 'package:master_jobz/widgets/targeta.dart';
 import 'package:provider/provider.dart';
 
@@ -12,7 +12,7 @@ class JobsScreen extends StatefulWidget {
 }
 
 class _JobsScreenState extends State<JobsScreen> with AutomaticKeepAliveClientMixin {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
 
   
   @override
@@ -22,7 +22,8 @@ class _JobsScreenState extends State<JobsScreen> with AutomaticKeepAliveClientMi
     Color color2 = Color(0xffA28B29);
     final jobProvider = Provider.of<JobProvider>(context);
     return Scaffold(
-      key: _scaffoldKey,
+
+            extendBody: true,
       backgroundColor: Colors.white,
       body: 
           Stack(
@@ -34,17 +35,7 @@ class _JobsScreenState extends State<JobsScreen> with AutomaticKeepAliveClientMi
               physics: BouncingScrollPhysics(),
               child: Column(
                 children: [
-                  // Container(
-                  //   height: 200, width: double.infinity,
-                  //   child: PageView(
-                  //   scrollDirection: Axis.horizontal,
-                  //   children: [ 
-                  //     _Targetas(title: 'Ofrece empleo', imagen: 'new',),
-                  //     _Targetas(title: 'Mejora tu CV', imagen: 'edit',),
-                  //     _Targetas(title: 'Trabaja asi de facil', imagen: 'work',),
-                  //   ],
-                  //   ),
-                  // ),
+                
                   SizedBox(height: 50,),
                   Text('Trabajos', style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
                   Padding(
@@ -71,8 +62,16 @@ class _JobsScreenState extends State<JobsScreen> with AutomaticKeepAliveClientMi
                             color1 = Color(0xff8DD6FF);
                             color2 = Color(0xff9EDFFF);
                           }
+                          if(numero == 5){
+                            color1 = Color(0xffDEFF60);
+                            color2 = Color(0xffEAFE8C);
+                          }
+                          if(numero == 6){
+                            color1 = Color(0xffFAA2AC);
+                            color2 = Color(0xffFEB3B1);
+                          }
                           numero++;
-                          if(numero>4){
+                          if(numero>6){
                             numero =1;
                           }
                         return Targeta(job: jobProvider.jobs[i], color: color1, color2: color2, colocar: false, number: i,);
@@ -82,7 +81,7 @@ class _JobsScreenState extends State<JobsScreen> with AutomaticKeepAliveClientMi
               ),
             ),
           ),
-          // Cabezera()
+     
             ],
           )
    );
@@ -93,36 +92,5 @@ class _JobsScreenState extends State<JobsScreen> with AutomaticKeepAliveClientMi
   @override
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
-}
-
-class _Targetas extends StatelessWidget {
-  final String title;
-  final String imagen;
-  const _Targetas({
-    Key? key, required this.title,required  this.imagen,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(height: 100, width: 100,
-      decoration: BoxDecoration(
-      boxShadow: [BoxShadow(
-        color: Colors.black.withOpacity(0.2),
-        blurRadius: 2,
-        spreadRadius: 0.2,
-        offset: Offset(0,2)
-      )],
-      borderRadius: BorderRadius.circular(20),
-      ),
-      child: ClipRRect(borderRadius: BorderRadius.circular(20),child: Stack(
-        children: [
-          Image(width: double.infinity,image: AssetImage('assets/$imagen.png'),fit: BoxFit.cover,),
-          Align(alignment: Alignment.bottomCenter,child: Container(width: double.infinity, color: Color(0xffF5CB39),child: Text(this.title, style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold), textAlign: TextAlign.center,)))
-        ],
-      )),),
-    );
-  }
 }
 

@@ -4,6 +4,7 @@
 
 import 'dart:convert';
 
+import 'package:master_jobz/models/capacitacione.dart';
 import 'package:master_jobz/models/empleo.dart';
 import 'package:master_jobz/models/habilidad.dart';
 
@@ -17,6 +18,7 @@ class Usuario {
         required this.online,
         required this.empleos,
         required this.habilidades,
+        required this.capacitaciones,
         required this.id,
         required this.nombre,
         required this.apellido,
@@ -32,6 +34,7 @@ class Usuario {
     String online;
     List<Empleo> empleos;
     List<Habilidad> habilidades;
+    List<Capacitacione> capacitaciones;
     String id;
     String nombre;
     String apellido;
@@ -47,6 +50,7 @@ class Usuario {
         online: json["online"],
         empleos: List<Empleo>.from(json["empleos"].map((x) => Empleo.fromJson(x))),
         habilidades: List<Habilidad>.from(json["habilidades"].map((x) => Habilidad.fromJson(x))),
+        capacitaciones: List<Capacitacione>.from(json["capacitaciones"].map((x) => Capacitacione.fromJson(x))),
         id: json["_id"],
         nombre: json["nombre"],
         apellido: json["apellido"],
@@ -63,6 +67,7 @@ class Usuario {
         "online": online,
         "empleos": List<dynamic>.from(empleos.map((x) => x.toJson())),
         "habilidades": List<dynamic>.from(habilidades.map((x) => x.toJson())),
+        "capacitaciones": List<dynamic>.from(capacitaciones.map((x) => x.toJson())),
         "_id": id,
         "nombre": nombre,
         "apellido": apellido,

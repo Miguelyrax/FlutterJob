@@ -10,6 +10,9 @@ import 'package:master_jobz/peticiones/auth.dart';
 class Postulantes with ChangeNotifier {
   List<Postulante> postulantes = [];
   Postulante? postulante;
+  getTodo(String id){
+    this.getPostulantes(id);
+  }
   Future getPostulantes(String id)async{
     final url = Uri.parse('${Environment.baseURL}/postulantes/$id');
     final String? token = await Auth.getToken();

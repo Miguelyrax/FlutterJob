@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:master_jobz/models/job.dart';
 import 'package:master_jobz/peticiones/jobs.dart';
 import 'package:master_jobz/screens/job_screen.dart';
+import 'package:master_jobz/widgets/pageroute.dart';
 import 'package:provider/provider.dart';
 class Targeta extends StatelessWidget {
   final Job job;
@@ -26,8 +27,7 @@ class Targeta extends StatelessWidget {
         onPressed == null
         ? Navigator.push(
         context,
-        PageRouteBuilder(pageBuilder: (context,__,___)=>JobScreen(),
-        transitionDuration: Duration(milliseconds: 0))
+        ruta(JobScreen(), Offset(0,2), true)
         )
         : this.onPressed!();
       },
@@ -36,31 +36,31 @@ class Targeta extends StatelessWidget {
         child: Stack(
           children: [
             Container(
-              width: size.width ,
-              height: size.height*0.45,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    color,
-                    color2,
-                  ]
+                width: size.width ,
+                height: size.height*0.45,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      color,
+                      color2,
+                    ]
+                  ),
+                  color: this.color,
+                  borderRadius: BorderRadius.circular(25),
+                  boxShadow: [BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    blurRadius: 0.2,
+                    spreadRadius: 2,
+                    offset: Offset(0,2)
+                    
+                  )]
                 ),
-                color: this.color,
-                borderRadius: BorderRadius.circular(25),
-                boxShadow: [BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
-                  blurRadius: 0.2,
-                  spreadRadius: 2,
-                  offset: Offset(0,2)
-                  
-                )]
               ),
-            ),
-            colocar 
-            ? Positioned(right: -20,top: -20,child:circulo(width: size.width * 0.25, color: Colors.black12, jobProvider: jobProvider,job: job,))
-            : Positioned(right: -30,top: -30,child:circulo2(width: size.width * 0.35, color: Colors.black12,)),
+           
+            
+            Positioned(right: -30,top: -30,child:circulo2(width: size.width * 0.35, color: Colors.black12,)),
             
             Positioned(
               top: 0,
@@ -88,37 +88,7 @@ class Targeta extends StatelessWidget {
   }
 }
 
-class circulo extends StatelessWidget {
-  final double width;
-  final Color color;
-  final JobProvider jobProvider;
-  final Job job;
-  const circulo({
-    Key? key,
-     required this.width, required this.color,required this.jobProvider,required this.job,
-  }) : super(key: key);
 
- 
-
-  @override
-  Widget build(BuildContext context) {
-    return  Container(
-        width: this.width,
-        height: this.width,
-        decoration: BoxDecoration(
-          border: Border.all(width: 15, color: this.color),
-          
-          borderRadius: BorderRadius.circular(200)
-        ),
-        child: Center(
-          child:IconButton(onPressed: (){
-            jobProvider.job = job;
-            Navigator.pushNamed(context, 'postulantes');
-          }, icon: Icon(Icons.remove_red_eye)),
-        ),
-      );
-  }
-}
 class circulo2 extends StatelessWidget {
   final double width;
   final Color color;

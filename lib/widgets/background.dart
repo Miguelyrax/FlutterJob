@@ -13,20 +13,38 @@ class Background extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: double.infinity,
-      color:jobProvider.color1 ,
-      child: SafeArea(
-        child: Stack(
-          children: [
-            
-            _Cabezera(jobProvider: jobProvider),
-            Positioned(right: -60,top: -60,child: circulo2(width: 160, color: Colors.black12,)),
-            this.child
+    return
+       Container(
+        width: double.infinity,
+        height: double.infinity,
+        color:jobProvider.color1 ,
+        child: SafeArea(
+          child: Stack(
+            children: [
+              _Cabezera(jobProvider: jobProvider),
+              Positioned(right: -40,top: 0,child: circulo2(width: 160, color: Colors.black12,)),
+              CustomScrollView(
+          slivers: [
+           
+            const SliverAppBar(
+              backgroundColor: Colors.transparent,
+              iconTheme: IconThemeData(
+                color: Colors.black
+              ),
+              expandedHeight: 50,
+            ),    
+            SliverList(
+              delegate: SliverChildBuilderDelegate(       
+                (context, index) => this.child,
+                childCount: 1
+              ),
+            ),
           ],
-        ),
-      )
+        ), 
+            ],
+          ),
+        )
+     
     );
   }
 }
@@ -81,12 +99,12 @@ class _Cabezera extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(left: 30, top: 40),
+      padding: EdgeInsets.only(left: 30, top: 100),
       child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
       SafeArea(child: Container()),
-     IconButton(onPressed: ()=>Navigator.pop(context), icon: Icon(Icons.arrow_left, size: 50,),),
+     
       Text('${jobProvider.job?.title}', style:TextStyle(fontSize: 60, fontWeight: FontWeight.bold) ,),
       Text('${jobProvider.job?.subtitle}', style:TextStyle(fontSize: 30, fontWeight: FontWeight.bold) ,),
           ],

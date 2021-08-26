@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:master_jobz/peticiones/auth.dart';
-import 'package:master_jobz/peticiones/jobs.dart';
 import 'package:master_jobz/screens/login_screen.dart';
 import 'package:master_jobz/screens/menu_screen.dart';
 import 'package:provider/provider.dart';

@@ -2,13 +2,10 @@
 
 import 'package:flutter/material.dart';
 
-class JobServices with ChangeNotifier{
+class HabilidadServices with ChangeNotifier{
   GlobalKey<FormState> formKey = new GlobalKey<FormState>();
   bool _isLoading = false;
-  String title = '';
-  String subTitle = '';
-  String description = '';
-  int totalRequerido = 100;
+  String habilidad = '';
   bool get isLoading => _isLoading;
   set isLoading(bool value){
     _isLoading = value;
@@ -19,6 +16,5 @@ class JobServices with ChangeNotifier{
     return formKey.currentState?.validate() ?? false;
 
   }
-
 
 }

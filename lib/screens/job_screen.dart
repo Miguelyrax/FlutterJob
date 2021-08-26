@@ -14,8 +14,10 @@ class JobScreen extends StatelessWidget{
   Widget build(BuildContext context) {
     final jobProvider = Provider.of<JobProvider>(context);
     requerimientos = jobProvider.job!.requerimientos;
+   
     return Scaffold(
-      
+     
+  
       body:Background(jobProvider: jobProvider,
                child:SingleChildScrollView(
                   child: Container(
@@ -104,14 +106,9 @@ class __ReqState extends State<_Req> {
       valueListenable: number,
       builder: (_,value, child) {
         return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-             Row(
-               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                 children: [
-                 Text('${widget.requerimiento.title}',style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold ),),
-                  Text('% ${this.widget.requerimiento.suma.toInt()}',style: TextStyle(fontSize: 35,  ),),
-                 ],
-             ),    
+             Text('${widget.requerimiento.title}',style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold ),),   
              SizedBox(height: 30,), 
              Container(
                child: ListView.separated(

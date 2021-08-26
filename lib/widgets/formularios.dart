@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:master_jobz/models/capacitacione.dart';
 import 'package:master_jobz/models/empleo.dart';
 import 'package:master_jobz/peticiones/auth.dart';
 import 'package:master_jobz/peticiones/jobs.dart';
-import 'package:master_jobz/services/job_services.dart';
+import 'package:master_jobz/services/educacion_services.dart';
+import 'package:master_jobz/services/empleo_services.dart';
+import 'package:master_jobz/services/formhabilidad_services.dart';
+import 'package:master_jobz/services/habilidad_services.dart';
+
 import 'package:master_jobz/services/profile_services.dart';
 import 'package:master_jobz/ui/input_decoration.dart';
+import 'package:master_jobz/ui/style_decoration.dart';
+
+import 'package:master_jobz/widgets/cuerpo.dart';
 import 'package:provider/provider.dart';
 
-import 'boton.dart';
-import 'cascaron.dart';
 class Formulario extends StatelessWidget {
 
   const Formulario({
@@ -25,67 +31,136 @@ class Formulario extends StatelessWidget {
   profileServices.apellido = authProvider.usuario!.apellido;
   profileServices.telefono = authProvider.usuario!.telefono;
   profileServices.profesion = authProvider.usuario!.profesion;
-    return Form(
-      key: profileServices.formKey,
-      child: Column(
-        children: [
-        Text('Datos de contacto', style: TextStyle(color:Colors.black45, fontSize: 20.0, fontWeight: FontWeight.bold),),
-        SizedBox(height: 20,),
-        Cascaron(child: TextFormField(
-          initialValue: usuario.nombre,
-        onChanged: (value){
-        profileServices.nombre = value;
-        print(value); 
-        },
-        decoration: InputDecorations.authInputDecoration(hintText: 'Nombre', labelText: 'Nombre', prefixIcon: Icons.text_fields),
-      ),),
-          SizedBox(height: 20,),
-        Cascaron(child: TextFormField(
-          initialValue: usuario.apellido,
-        onChanged: (value){
-          profileServices.apellido = value;
-        },
-        decoration: InputDecorations.authInputDecoration(hintText: 'Apellido', labelText: 'Apellido', prefixIcon: Icons.title),
-      ),),
-          SizedBox(height: 20,),
-        Cascaron(child: TextFormField(
-          initialValue: usuario.email,
-        onChanged: (value){
-        profileServices.email = value; 
-        },
-        decoration: InputDecorations.authInputDecoration(hintText: 'Email', labelText: 'Email', prefixIcon: Icons.email),
-      ),),
-          SizedBox(height: 20,),
-        Cascaron(child: TextFormField(
-          initialValue: usuario.telefono,
-        onChanged: (value){
-        profileServices.telefono = value; 
-        },
-        decoration: InputDecorations.authInputDecoration(hintText: 'Telefono', labelText: 'Telefono', prefixIcon: Icons.call),
-      ),),
-          SizedBox(height: 20,),
-       
-        Cascaron(child: TextFormField(
-          initialValue: usuario.profesion,
-        onChanged: (value){
-          profileServices.profesion = value;
-        },
-        decoration: InputDecorations.authInputDecoration(hintText: 'Profesion', labelText: 'Profesion', prefixIcon: Icons.work),
-      ),),
-          SizedBox(height: 40,),
+    return WillPopScope(
+      onWillPop:profileServices.isLoading ? ()async{return false;}: ()async{
+          FocusScope.of(context).unfocus();
+          if(!profileServices.isValidForm()) return false;
+          profileServices.isLoading = true;
+          await authProvider.editUsuario(profileServices.nombre, usuario.id, profileServices.apellido, profileServices.email, profileServices.telefono, profileServices.profesion);
+          profileServices.isLoading = false;
+          Navigator.pop(context);
+          return true;
+      },
+      child: Scaffold(
         
+        appBar:  AppBar(
+          title: Text('Trabajo', style: TextStyle(color: Colors.black),),
+          centerTitle: false,
+          leading:IconButton(icon:profileServices.isLoading ? Loading(): Icon(Icons.arrow_back, size: 24,),onPressed:profileServices.isLoading?  null: ()async{
+          FocusScope.of(context).unfocus();
+          if(!profileServices.isValidForm()) return;
+          profileServices.isLoading = true;
+          await authProvider.editUsuario(profileServices.nombre, usuario.id, profileServices.apellido, profileServices.email, profileServices.telefono, profileServices.profesion);   
+          Navigator.pop(context);
+          profileServices.isLoading = false;
           
-         Boton(text: 'Guardar', onPressed: ()async{
-           final resp = await authProvider.editUsuario(profileServices.nombre, usuario.id, profileServices.apellido, profileServices.email, profileServices.telefono, profileServices.profesion);
-           if(resp){
-             Navigator.pop(context);
-           }else{
-             print('error');
-           }
-         }),
-         SizedBox(height: 20,)
-
-        ],
+          },),
+          backgroundColor: Colors.white,
+          iconTheme: IconThemeData(
+            color: Colors.red
+          ),
+        ),
+        body: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+          child: Form(
+            key: profileServices.formKey,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            child: Column(
+              children: [
+              // Text('Datos de contacto', style: TextStyle(color:Colors.black45, fontSize: 20.0, fontWeight: FontWeight.bold),),
+              SizedBox(height: 20,),
+              Pad(child: Text('Nombre',style: TextStyleDecoration.textStyleDecoration(), )),
+              Pad(
+                title: true,
+                child: TextFormField(
+                  style: TextStyle(color: Colors.black45),
+                  initialValue: usuario.nombre,
+                onChanged: (value){
+                profileServices.nombre = value;
+                print(value); 
+                },
+                validator:  (value){
+                return (value != null && value.length >2 )
+                ? null
+                : 'El nombre debe tener mas de 2 caracteres';
+                },
+                decoration: InputDecorations.editJobDecoration(),
+                      ),
+              ),
+                SizedBox(height: 20,),
+              Pad(child: Text('Apellido',style: TextStyleDecoration.textStyleDecoration(), )),
+              Pad(
+                title: true,
+                child: TextFormField(
+                  style: TextStyle(color: Colors.black45),
+                  initialValue: usuario.apellido,
+                onChanged: (value){
+                  profileServices.apellido = value;
+                },
+                validator:  (value){
+                return (value != null && value.length >2 )
+                ? null
+                : 'El apellido debe tener mas de 2 caracteres';
+                },
+                decoration: InputDecorations.editJobDecoration(hint: 'Agregar apellido'),
+                      ),
+              ),
+                SizedBox(height: 20,),
+                Pad(child: Text('Email',style: TextStyleDecoration.textStyleDecoration(), )),
+              Pad(
+                title: true,
+                child: TextFormField(
+                  style: TextStyle(color: Colors.black45),
+                  initialValue: usuario.email,
+                onChanged: (value){
+                profileServices.email = value; 
+                },
+                validator: (value){
+                String pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                RegExp regExp  = new RegExp(pattern);
+                return regExp.hasMatch(value ?? '')
+                ? null
+                : 'El correo no es válido' ;
+              },
+                decoration: InputDecorations.editJobDecoration(),
+                      ),
+              ),
+                SizedBox(height: 20,),
+                Pad(child: Text('Telefono',style: TextStyleDecoration.textStyleDecoration(), )),
+              Pad(
+                title: true,
+                child: TextFormField(
+                  style: TextStyle(color: Colors.black45),
+                  initialValue: usuario.telefono,
+                onChanged: (value){
+                profileServices.telefono = value; 
+                },
+                decoration: InputDecorations.editJobDecoration(hint: 'Agregar telefono'),
+                      ),
+              ),
+                SizedBox(height: 20,),
+                Pad(child: Text('Profesión',style: TextStyleDecoration.textStyleDecoration(), )),
+             
+              Pad(
+                title: true,
+                child: TextFormField(
+                  style: TextStyle(color: Colors.black45),
+                  initialValue: usuario.profesion,
+                onChanged: (value){
+                  profileServices.profesion = value;
+                },
+                decoration: InputDecorations.editJobDecoration(hint: 'Agregar profesión'),
+                        ),
+              ),
+                SizedBox(height: 40,),
+              
+                
+ 
+            
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -98,29 +173,51 @@ class FormularioHabilidad extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
   final ctrlHabilidad = TextEditingController();
   final authProvider = Provider.of<Auth>(context); 
-    return Column(
-        children: [
-          Text('Habilidad', style: TextStyle(color:Colors.black45, fontSize: 20.0, fontWeight: FontWeight.bold),),
-          SizedBox(height: 20,),
-          Cascaron(
-            child: TextFormField(
-              decoration: InputDecorations.authInputDecoration(hintText: 'Habilidad', labelText: 'Habilidad', prefixIcon: Icons.assignment),
-              controller: ctrlHabilidad,
-            ),
+  final formHabilidadProvider = Provider.of<FormHabilidadProvider>(context); 
+    return 
+      Scaffold(
+ 
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          title: Text('Habilidad', style: TextStyle(color: Colors.black),),
+          centerTitle: false,
+          iconTheme: IconThemeData(
+            color: Colors.red
           ),
-          SizedBox(height: 20,),
-              Boton(text: 'Guardar', onPressed: ()async{
-                final resp = await authProvider.newHabilidad(ctrlHabilidad.text);
-                if(resp){
-                  Navigator.pop(context);
-                }else{
-                  print('error');
-                }
-              }),
-          
-        ],
+        ),
+        body: Form(
+          key: formHabilidadProvider.formKey,
+          child: Column(
+            children: [
+              SizedBox(height: 30,),
+              Container(
+                width: double.infinity,
+                color: Colors.white,
+                child: TextFormField(
+                  decoration: InputDecorations.edicionesDecoration(),
+                  controller: ctrlHabilidad,
+                  validator:  (value){
+                  return (value != null && value.length >1 )
+                  ? null
+                  : 'La habilidad debe tener mas de 1 caracter';
+                  },
+                ),
+              ),
+              SizedBox(height: 30,),
+              MaterialButton(onPressed:formHabilidadProvider.isLoading ? null :  ()async{
+                FocusScope.of(context).unfocus();
+                    if(!formHabilidadProvider.isValidForm()) return;
+                    formHabilidadProvider.isLoading = true;
+                    await authProvider.newHabilidad(ctrlHabilidad.text);
+                    formHabilidadProvider.isLoading = false;
+                    Navigator.pop(context);              
+                  },child: Text('Agregar habilidad', style: TextStyle(color: Colors.red,),))
+            ],
+          ),
+        ),
       );
   }
 }
@@ -136,120 +233,291 @@ class FormulariEmpleo extends StatelessWidget {
   final ctrlCargo = TextEditingController();
   final ctrlDescription = TextEditingController();
   final authProvider = Provider.of<Auth>(context); 
+  final empleoProvider = Provider.of<EmpleoProvider>(context); 
+
   if(empleo != null){
     ctrlEmpresa.text = empleo!.empresa;
     ctrlCargo.text = empleo!.cargo;
     ctrlDescription.text = empleo!.description;
   }
-    return Column(
-        children: [
-          empleo != null ? Text('Editar empleo', style: TextStyle(color:Colors.black45, fontSize: 20.0, fontWeight: FontWeight.bold),) :
-          Text('Empleo', style: TextStyle(color:Colors.black45, fontSize: 20.0, fontWeight: FontWeight.bold),),
-          SizedBox(height: 20,),
-          Cascaron(
-            child: TextFormField(
-              decoration: InputDecorations.authInputDecoration(hintText: 'Empresa', labelText: 'Empresa', prefixIcon: Icons.work),
-              controller: ctrlEmpresa,
-            ),
-          ),
-          SizedBox(height: 20,),
-          Cascaron(
-            child: TextFormField(
-              decoration: InputDecorations.authInputDecoration(hintText: 'Cargo', labelText: 'Cargo', prefixIcon: Icons.person_pin),
-              controller: ctrlCargo,
-            ),
-          ),
-          SizedBox(height: 20,),
-          Cascaron(
-            child: TextFormField(
-              maxLines: 8,
-              decoration: InputDecorations.authInputDecoration(hintText: 'Description', labelText: 'Description', prefixIcon: Icons.format_align_justify),
-              controller: ctrlDescription,
-            ),
-          ),
-          SizedBox(height: 20,),
-              Boton(text: 'Guardar', onPressed:empleo != null  ?()async{
-                final resp = await authProvider.editEmpleo(ctrlEmpresa.text, ctrlCargo.text, ctrlDescription.text, empleo!.id);
-                if(resp){
-                  Navigator.pop(context);
-                }else{
-                  print('error');
-                }
-              } :()async{
-                final resp = await authProvider.newEmpleo(ctrlEmpresa.text, ctrlCargo.text, ctrlDescription.text);
-                if(resp){
-                  Navigator.pop(context);
-                }else{
-                  print('error');
-                }
-              }),
+    return WillPopScope(
+      onWillPop:empleoProvider.isLoading ? ()async{return false;} : empleo != null ?()async{
+                    FocusScope.of(context).unfocus();
+                    if(!empleoProvider.isValidForm()) return false;
+                    empleoProvider.isLoading = true;
+                    await authProvider.editEmpleo(ctrlEmpresa.text, ctrlCargo.text, ctrlDescription.text, empleo!.id);
+                    empleoProvider.isLoading = false;
+                    
+                    return true;
+                  }:null,
+      child: Scaffold(
+
+        appBar: AppBar(
+          title: empleo != null ? Text('Editar empleo', style: TextStyle(color:Colors.black45, fontSize: 20.0, fontWeight: FontWeight.bold),) :
+                Text('Empleo', style: TextStyle(color:Colors.black45, fontSize: 20.0, fontWeight: FontWeight.bold),),
+          centerTitle: false,
+          leading:IconButton(icon:empleoProvider.isLoading ? Loading(): Icon(Icons.arrow_back, size: 24,),onPressed:empleoProvider.isLoading ? null : empleo != null ?()async{
+          FocusScope.of(context).unfocus();
+          if(!empleoProvider.isValidForm()) return;
+          empleoProvider.isLoading = true;
+          await authProvider.editEmpleo(ctrlEmpresa.text, ctrlCargo.text, ctrlDescription.text, empleo!.id);    
+          Navigator.pop(context);
+          empleoProvider.isLoading = false;
           
-        ],
-      );
+          }:()=>Navigator.pop(context)),
+          backgroundColor: Colors.white,
+          iconTheme: IconThemeData(
+            color: Colors.red
+          ),
+        ),
+        body: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+          child: Form(
+            key: empleoProvider.formKey,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            child: Column(
+                children: [
+                  
+                  SizedBox(height: 20,),
+                  Pad(child: Text('Empresa',style: TextStyleDecoration.textStyleDecoration(), )),
+                  Pad(
+                    title: true,
+                    child: TextFormField(
+                      decoration: InputDecorations.editJobDecoration(hint: 'Agregar empresa'),
+                      controller: ctrlEmpresa,
+                      validator:  (value){
+                      return (value != null && value.length >2 )
+                      ? null
+                      : 'La empresa debe tener mas de 2 caracteres';
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 20,),
+                  Pad(child: Text('Cargo',style: TextStyleDecoration.textStyleDecoration(), )),
+                  Pad(
+                    title: true,
+                    child: TextFormField(
+                      decoration: InputDecorations.editJobDecoration(hint: 'Agregar cargo'),
+                      controller: ctrlCargo,
+                      validator:  (value){
+                      return (value != null && value.length >5 )
+                      ? null
+                      : 'El cacrgo debe tener mas de 5 caracteres';
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 20,),
+                  Pad(child: Text('Descripción',style: TextStyleDecoration.textStyleDecoration(), )),
+                  Pad(
+                    title: true,
+                    child: TextFormField(
+                      maxLines: 8,
+                      decoration: InputDecorations.editJobDecoration(hint: 'Agregar descripción'),
+                      controller: ctrlDescription,
+                      validator:  (value){
+                      return (value != null && value.length >10 )
+                      ? null
+                      : 'La descripción debe tener mas de 10 caracteres';
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 20,),
+                  empleo != null ?
+                      Container():MaterialButton(onPressed: empleoProvider.isLoading ? null : ()async{
+                        FocusScope.of(context).unfocus();
+                        if(!empleoProvider.isValidForm()) return;
+                        empleoProvider.isLoading = true;
+                        await authProvider.newEmpleo(ctrlEmpresa.text, ctrlCargo.text, ctrlDescription.text);
+                        empleoProvider.isLoading = false;
+                        Navigator.pop(context);
+                       
+                        
+                      },child: Text('Agregar empleo', style: TextStyle(color: Colors.red,),))
+                  
+                ],
+              ),
+          ),
+        ),
+      ),
+    );
   }
 }
-class FormularioJob extends StatelessWidget {
+class FormulariEducacion extends StatelessWidget {
+  final Capacitacione? capacitacion;
+  const FormulariEducacion({
+    Key? key, this.capacitacion,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-  final jobServices = Provider.of<JobServices>(context); 
-  final jobProvider = Provider.of<JobProvider>(context); 
-    return Form(
-      key: jobServices.key,
-      child: Column(
-        children: [
-        Text('Oferta', style: TextStyle(color:Colors.black45, fontSize: 20.0, fontWeight: FontWeight.bold),),
-        SizedBox(height: 20,),
-        Cascaron(child: TextFormField(
-          maxLength: 11,
-          // initialValue: usuario.nombre,
-        onChanged: (value){
-        jobServices.title = value; 
-        },
-        decoration: InputDecorations.authInputDecoration(hintText: 'Título', labelText: 'Título', prefixIcon: Icons.title),
-      ),),
-          SizedBox(height: 20,),
-       
-        Cascaron(child: TextFormField(
-          maxLength: 18,
-          // initialValue: usuario.email,
-        onChanged: (value){
-        jobServices.subTitle = value; 
-        },
-        decoration: InputDecorations.authInputDecoration(hintText: 'Sub-título', labelText: 'Sub-título', prefixIcon: Icons.email),
-      ),),
-       SizedBox(height: 20,),
-        Cascaron(child: TextFormField(
-          minLines: 8,
-          maxLines: 8,
-          // initialValue: usuario.email,
-        onChanged: (value){
-        jobServices.description = value; 
-        },
-        decoration: InputDecorations.authInputDecoration(hintText: 'Descripción', labelText: 'Descripción', prefixIcon: Icons.email),
-      ),),
-       SizedBox(height: 20,),
-        Cascaron(child: TextFormField(
-          // initialValue: usuario.email,
-        onChanged: (value){
-        jobServices.totalRequerido =  int.parse(value); 
-        },
-        decoration: InputDecorations.authInputDecoration(hintText: 'Total', labelText: 'Total', prefixIcon: Icons.email),
-      ),),
-          SizedBox(height: 20,),
-        
-          SizedBox(height: 20,),
-        Boton(text: 'Guardar', onPressed: jobServices.isLoading ? null: ()async{
-          jobServices.isLoading = true;
-          final resp = await jobProvider.newJob(jobServices.title, jobServices.subTitle, jobServices.description, jobServices.totalRequerido);
-          jobServices.isLoading = false;
-          if(resp){
-            Navigator.pop(context);
-            // Navigator.pop(context);
-          }
-        })
-        ],
+  final ctrlEstablecimiento = TextEditingController();
+  final ctrlTema = TextEditingController();
+
+  final authProvider = Provider.of<Auth>(context); 
+  final cvProvider = Provider.of<EducacionProvider>(context); 
+  if(capacitacion != null){
+    ctrlEstablecimiento.text = capacitacion!.establecimiento;
+    ctrlTema.text = capacitacion!.tema;
+  }
+    return WillPopScope(
+      onWillPop:cvProvider.isLoading ? ()async{return false;}: capacitacion != null ?()async{
+                      FocusScope.of(context).unfocus();
+                      if(!cvProvider.isValidForm()) {
+
+                        return false;
+                      }
+                      cvProvider.isLoading = true;
+                     await authProvider.editEducacion(ctrlEstablecimiento.text, ctrlTema.text, capacitacion!.id);
+                    cvProvider.isLoading = false;
+                    return true;
+                  }:null,
+      child: Scaffold(
+        appBar: AppBar(
+          title: capacitacion != null ? Text('Editar capacitación', style: TextStyle(color:Colors.black45, fontSize: 20.0, fontWeight: FontWeight.bold),) :
+          Text('Capacitación', style: TextStyle(color:Colors.black45, fontSize: 20.0, fontWeight: FontWeight.bold),),
+          leading:IconButton(icon:cvProvider.isLoading ? Loading(): Icon(Icons.arrow_back, size: 24,),onPressed:cvProvider.isLoading ? null: capacitacion != null ? ()async{
+          FocusScope.of(context).unfocus();
+          if(!cvProvider.isValidForm()) return;
+          cvProvider.isLoading = true;
+          await await authProvider.editEducacion(ctrlEstablecimiento.text, ctrlTema.text, capacitacion!.id);     
+          Navigator.pop(context);
+          cvProvider.isLoading = false;
+          
+          }:()=>Navigator.pop(context)),  
+          centerTitle: false,
+          backgroundColor: Colors.white,
+          iconTheme: IconThemeData(
+            color: Colors.red
+          ),
+        ),
+        body: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+          child: Form(
+            key: cvProvider.formKey,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            child: Column(
+                children: [
+                  
+                  SizedBox(height: 20,),
+                  Pad(child: Text('Establecimiento',style: TextStyleDecoration.textStyleDecoration(), )),
+                  Pad(
+                    title: true,
+                    child: TextFormField(
+                      decoration: InputDecorations.editJobDecoration(hint: 'Agregar establecimiento'),
+                      controller: ctrlEstablecimiento,
+                      validator:  (value){
+                      return (value != null && value.length >1 )
+                      ? null
+                      : 'El establecimiento debe tener mas de 5 caracteres';
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 20,),
+                  Pad(child: Text('Materia',style: TextStyleDecoration.textStyleDecoration(), )),
+                  Pad(
+                    title: true,
+                    child: TextFormField(
+                      decoration: InputDecorations.editJobDecoration(hint: 'Agregar materia'),
+                      controller: ctrlTema,
+                      validator:  (value){
+                      return (value != null && value.length >1 )
+                      ? null
+                      : 'La meteria debe tener mas de 1 caracter';
+                      },
+                    ),
+                  ),
+                  
+                  SizedBox(height: 20,),
+                  capacitacion != null ?
+                      Container():MaterialButton(onPressed:cvProvider.isLoading ? null : ()async{
+                        FocusScope.of(context).unfocus();
+                        if(!cvProvider.isValidForm()) return;
+                        cvProvider.isLoading = true;
+                        await authProvider.newEducacion(ctrlEstablecimiento.text, ctrlTema.text);
+                        Navigator.pop(context);
+                        cvProvider.isLoading = false;
+                       
+                      },child: Text('Agregar capacitación', style: TextStyle(color: Colors.red,),))
+                  
+                ],
+              ),
+          ),
+        ),
       ),
     );
+  }
+}
+
+class Loading extends StatelessWidget {
+  const Loading({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Transform.scale(
+      scale: 0.7,
+      child: CircularProgressIndicator(
+        color: Colors.red,
+        strokeWidth: 5,
+      ),
+    );
+  }
+}
+
+class FormularioRequerimiento extends StatelessWidget {
+
+  @override
+  final ctrlController = TextEditingController();
+  @override
+  Widget build(BuildContext context) {
+   
+    final jobProvider = Provider.of<JobProvider>(context, listen: false);
+    final habilidadServices = Provider.of<HabilidadServices>(context, listen: false);
+    return Scaffold(
+      backgroundColor: Color(0xffF5F7FA),
+      appBar: AppBar(
+        title: Text('Agregar habilidad',style: TextStyle(color: Colors.black),),
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(
+          color: Colors.red
+        ),
+        
+      ),
+      body: Column(
+        children: [
+          SizedBox(height: 30,),
+          Container(
+            width: double.infinity,
+            color: Colors.white,
+            child: Form(
+              key: habilidadServices.formKey,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              child: TextFormField(
+                style: TextStyle(color: Colors.black45),
+                controller:ctrlController,
+                decoration: InputDecorations.edicionesDecoration(),
+                validator:  (value){
+                  return (value != null && value.length >1 )
+                  ? null
+                  : 'La habilidad debe tener mas de 1 caracter';
+                },
+              ),
+            ),
+          ),
+          SizedBox(height: 30,),
+          MaterialButton(onPressed:habilidadServices.isLoading ? null : ()async{
+                FocusScope.of(context).unfocus();
+                if(!habilidadServices.isValidForm()) return;
+                habilidadServices.isLoading = true;
+                await jobProvider.newRequerimiento(jobProvider.job!.id, ctrlController.text);
+                habilidadServices.isLoading = false;
+                Navigator.pop(context);
+                
+                habilidadServices.isLoading = false;
+              },child: Text('Agregar habilidad', style: TextStyle(color: Colors.red,),))
+        ],
+      ),
+   );
   }
 }

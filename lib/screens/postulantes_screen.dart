@@ -4,7 +4,10 @@ import 'package:master_jobz/models/postulantes_response.dart';
 
 import 'package:master_jobz/peticiones/jobs.dart';
 import 'package:master_jobz/peticiones/postulantes.dart';
-import 'package:master_jobz/widgets/cabezera.dart';
+import 'package:master_jobz/screens/profile_publico_screen.dart';
+import 'package:master_jobz/screens/profile_screen.dart';
+import 'package:master_jobz/widgets/pageroute.dart';
+
 import 'package:provider/provider.dart';
 
 
@@ -14,8 +17,9 @@ class PostulantesScreen extends StatefulWidget {
   _PostulantesScreenState createState() => _PostulantesScreenState();
 }
 
-class _PostulantesScreenState extends State<PostulantesScreen> {
+class _PostulantesScreenState extends State<PostulantesScreen> with AutomaticKeepAliveClientMixin  {
   final postulantesProvider = Postulantes();
+
   List<Postulante> postulantes = [];
   @override
   void initState() { 
@@ -27,16 +31,15 @@ class _PostulantesScreenState extends State<PostulantesScreen> {
   Widget build(BuildContext context) {
     final postulantesProvider = Provider.of<Postulantes>(context);
     return Scaffold(
-      body: Stack(
-        children: [
-          Container(
+    
+      body: Container(
             width: double.infinity,
             height: double.infinity,
             child: SingleChildScrollView(
               physics: BouncingScrollPhysics(),
               child: Column(
                 children: [
-                  SizedBox(height: 180,),
+                  SizedBox(height: 30,),
                   Text('Postulantes', style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 40, vertical: 30),
@@ -64,9 +67,12 @@ class _PostulantesScreenState extends State<PostulantesScreen> {
                           child: ListTile(
                             onTap: (){
                               postulantesProvider.postulante = postulantes[i];
-                              Navigator.pushNamed(context, 'profile');
+                              Navigator.push(context,
+                              ruta(ProfileScreen(), Offset(0,2),true)
+                              
+                              );
                             },
-                            leading:Icon(Icons.account_circle, size: 60, color: Colors.blue,) ,
+                            leading:Icon(Icons.account_circle, size: 60, color: Colors.red,) ,
                             subtitle: Text('${postulantes[i].usuario.email}'),
                             title: Text('${postulantes[i].usuario.nombre}'),
                           ),
@@ -78,9 +84,6 @@ class _PostulantesScreenState extends State<PostulantesScreen> {
               ),
             ),
           ),
-          Cabezera()
-        ],
-      ),
    );
   }
 
@@ -88,9 +91,18 @@ class _PostulantesScreenState extends State<PostulantesScreen> {
     final jobProvider = Provider.of<JobProvider>(context, listen: false);
     postulantes = await postulantesProvider.getPostulantes(jobProvider.job!.id);
     print(postulantes);
+    if(!mounted){
+      return;
+    }
     setState(() {
       
     });
 
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
+
+
 }

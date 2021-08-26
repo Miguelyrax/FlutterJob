@@ -1,24 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:master_jobz/models/capacitacione.dart';
 import 'package:master_jobz/models/empleo.dart';
 import 'package:master_jobz/models/habilidad.dart';
-import 'package:master_jobz/models/usuario.dart';
+
 import 'package:master_jobz/peticiones/auth.dart';
-import 'package:master_jobz/peticiones/postulantes.dart';
+
+import 'package:master_jobz/services/educacion_services.dart';
+import 'package:master_jobz/services/empleo_services.dart';
+import 'package:master_jobz/services/formhabilidad_services.dart';
+import 'package:master_jobz/services/profile_services.dart';
+
 import 'package:master_jobz/widgets/alert.dart';
 import 'package:master_jobz/widgets/formularios.dart';
+import 'package:master_jobz/widgets/pageroute.dart';
 import 'package:provider/provider.dart';
 
 
-class ProfilePublicoScreen extends StatelessWidget {
+class ProfilePublicoScreen extends StatefulWidget {
+  @override
+  _ProfilePublicoScreenState createState() => _ProfilePublicoScreenState();
+}
+
+class _ProfilePublicoScreenState extends State<ProfilePublicoScreen> {
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+
     final authProvider = Provider.of<Auth>(context);
     List<Habilidad> habilidades = authProvider.usuario!.habilidades;
     List<Empleo> empleos = authProvider.usuario!.empleos;
-    final postulanteProvider = Provider.of<Postulantes>(context);
+    List<Capacitacione> capacitaciones = authProvider.usuario!.capacitaciones;
+
     final usuario = authProvider.usuario!;
     return Scaffold(
+            extendBody: false,
       body: Container(
         width: double.infinity,
         height: double.infinity,
@@ -33,7 +47,7 @@ class ProfilePublicoScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Caja(authProvider: authProvider, child: 
+                  Caja( child: 
                   Column(
               children: [
                
@@ -57,7 +71,7 @@ class ProfilePublicoScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 20,),
                   Caja(
-                    authProvider: authProvider,
+                    
                     child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -66,14 +80,14 @@ class ProfilePublicoScreen extends StatelessWidget {
                         children: [
                           Text('Datos de contacto', style: TextStyle(color:Colors.black45, fontSize: 20.0, fontWeight: FontWeight.bold),),
                           IconButton(onPressed: (){
-                            editContacto(context,Formulario());
+                            Navigator.push(context, ruta( ChangeNotifierProvider(create: ( _ ) => ProfileProvider(),child: Formulario()), Offset(2,0), false));
                           }, icon: Icon(Icons.edit, color: Colors.black,))
                         ],
                       ),
                       Divider(),
                       SizedBox(height: 20,),
                       Text('Telefono', style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold, color: Colors.black45),),
-                      Text('+56985252939', style: TextStyle(fontSize: 17),),
+                      Text('${authProvider.usuario!.telefono}', style: TextStyle(fontSize: 17),),
                       SizedBox(height: 20,),
                       Text('Correo', style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold, color: Colors.black45),),
                       Text('${authProvider.usuario!.email}', style: TextStyle(fontSize: 17),),
@@ -86,7 +100,7 @@ class ProfilePublicoScreen extends StatelessWidget {
               ),
                     ),
                   SizedBox(height: 20,),
-                  Caja(authProvider: authProvider,
+                  Caja(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -94,9 +108,11 @@ class ProfilePublicoScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text('Habilidades', style: TextStyle(color:Colors.black45, fontSize: 20.0, fontWeight: FontWeight.bold),),
-                          IconButton(onPressed: ()=>editContacto(context,FormularioHabilidad()), icon: Icon(Icons.add_circle, color: Colors.black,))
+                          IconButton(onPressed: ()=>Navigator.push(context, ruta(ChangeNotifierProvider(create: ( _ ) => FormHabilidadProvider(),child: FormularioHabilidad()), Offset(2,0),true)), icon: Icon(Icons.add_circle, color: Colors.black,))
                         ],
                       ),
+                      Divider(),
+                      SizedBox(height: 20,),
                      
                         GridView.builder(
                           physics: NeverScrollableScrollPhysics(),
@@ -111,16 +127,19 @@ class ProfilePublicoScreen extends StatelessWidget {
                               }, icon: Icon(Icons.cancel, color: Colors.black26,))
                             ],
                           ),
-            
+
                           itemCount: habilidades.length,
+                          padding: EdgeInsets.only(bottom: 0),
                            gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
                             childAspectRatio: 2,
+                            
+                            
                           ),),
                     ],
                   ),),
                   SizedBox(height: 20,),
-                  Caja(authProvider: authProvider,
+                  Caja(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -129,21 +148,25 @@ class ProfilePublicoScreen extends StatelessWidget {
                         children: [
                           Text('Experiencia laboral', style: TextStyle(color:Colors.black45, fontSize: 20.0, fontWeight: FontWeight.bold),),
                           IconButton(onPressed: (){
-                            editContacto(context, FormulariEmpleo());
+                            Navigator.push(context, ruta(ChangeNotifierProvider(create: ( _ ) => EmpleoProvider(),child: FormulariEmpleo()),Offset(2,0),true));
                           }, icon: Icon(Icons.add_circle, color: Colors.black,))
                         ],
                       ),
-                        ListView.separated(
+                    
+                      SizedBox(height: 20,),
+                        GridView.builder(
                           physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
                           itemBuilder: (_,i) => Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                               Divider(),
                               Text('${empleos[i].cargo} en ${empleos[i].empresa}', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
                               SizedBox(height: 10,),
                               Text('${empleos[i].description}', style: TextStyle(fontSize: 17),),
                               SizedBox(height: 10,),
                               Row(
+                                
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   IconButton(onPressed: (){
@@ -153,39 +176,82 @@ class ProfilePublicoScreen extends StatelessWidget {
                                     });
                                   }, icon: Icon(Icons.delete, color: Colors.red,)),
                                   IconButton(onPressed: (){
-                                    editContacto(context, FormulariEmpleo(empleo: empleos[i],),);
+                                    Navigator.push(context, ruta(ChangeNotifierProvider(create: ( _ ) => EmpleoProvider(),child:FormulariEmpleo(empleo: empleos[i])), Offset(2,0), true));
                                   }, icon: Icon(Icons.edit, color: Colors.black,)),
                                 ],
                               )
                             ],
                           ),
-                          separatorBuilder: (_,snapshot)=> Divider(height: 10,thickness: 1,color: Colors.black26,),
-                          itemCount: empleos.length),
+                           itemCount: empleos.length,
+                          padding: EdgeInsets.only(bottom: 0),
+                           gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 1,
+                            childAspectRatio: 2,
+                            
+                            
+                          ),),
+                    
+                    
                     ],
                   ),)      ,
                   SizedBox(height: 20,),
-                  Caja(authProvider: authProvider,
+                  Caja(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Educación', style: TextStyle(color:Colors.black45, fontSize: 20.0, fontWeight: FontWeight.bold),),
-                        ListView.separated(
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Educación', style: TextStyle(color:Colors.black45, fontSize: 20.0, fontWeight: FontWeight.bold),),
+                          IconButton(onPressed: (){
+                            Navigator.push(context, ruta(ChangeNotifierProvider(create: ( _ ) => EducacionProvider(),child: FormulariEducacion()),Offset(2,0),true));
+                          }, icon: Icon(Icons.add_circle, color: Colors.black,))
+                        ],
+                      ),
+                     
+                      SizedBox(height: 20,),
+                        GridView.builder(
                           physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
                           itemBuilder: (_,i) => Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('${empleos[i].cargo} en ${empleos[i].empresa}', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
+                               Divider(),
                               SizedBox(height: 10,),
-                              Text('${empleos[i].description}', style: TextStyle(fontSize: 17),),
-                              SizedBox(height: 10,),
+                              
+                              Text('${capacitaciones[i].tema}', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
+                              SizedBox(height: 20,),
+                              Text('${capacitaciones[i].establecimiento}', style: TextStyle(fontSize: 17),),
+                              
+                     
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  IconButton(onPressed: (){
+                                    alertEliminar(context,()async{
+                                      await authProvider.deleteEducacion(capacitaciones[i].id);
+                                      Navigator.pop(context);
+                                    });
+                                  }, icon: Icon(Icons.delete, color: Colors.red,)),
+                                  IconButton(onPressed: (){
+                                    Navigator.push(context, ruta(ChangeNotifierProvider(create: ( _ ) => EducacionProvider(),child: FormulariEducacion(capacitacion: capacitaciones[i])), Offset(2,0), true));
+                                  }, icon: Icon(Icons.edit, color: Colors.black,)),
+                                ],
+                              ),
+                              
                             ],
                           ),
-                          separatorBuilder: (_,snapshot)=> Divider(height: 10,thickness: 1,color: Colors.black26,),
-                          itemCount: empleos.length),
+                          padding: EdgeInsets.only(bottom: 0),
+                           gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 1,
+                            childAspectRatio: 2,
+                            
+                            
+                          ),
+                          itemCount: capacitaciones.length),
                     ],
                   ),)      ,
-                  SizedBox(height: 100,),
+                  SizedBox(height: 140,),
                         
                       
                 ],
@@ -197,57 +263,20 @@ class ProfilePublicoScreen extends StatelessWidget {
       )
    );
   } 
-
-  Widget _crearAppbar(Usuario usuario ) {
-    return SliverAppBar(
-      elevation: 2.0,
-      backgroundColor: Color(0xffF5CB39),
-      expandedHeight: 230.0,
-      floating: false,
-      pinned: true,
-      flexibleSpace: FlexibleSpaceBar(
-        centerTitle: true,
-        title: Text(
-          '${usuario.nombre} ${usuario.apellido}',
-          style: TextStyle(color:Colors.black, fontSize: 16.0),
-          ),
-          background:Column(
-              children: [
-                SafeArea(child: Container(height: 20,)),
-                Container(
-                  width: 100,
-                  height: 100,
-                  decoration: BoxDecoration(
-                    color: Color(0xffF5CB39),
-                    border: Border.all(color: Colors.black, width: 4),
-                    borderRadius: BorderRadius.circular(200)
-                  ),
-                  child: Center(child: Text('${usuario.nombre.substring(0,2)}', style: TextStyle(fontSize: 30, color: Colors.black, fontWeight: FontWeight.bold),),),
-                ),
-                SizedBox(height: 10,),
-                Text('${usuario.telefono}',style: TextStyle(color:Colors.black, fontSize: 16.0)),
-                Text('${usuario.email}',style: TextStyle(color:Colors.black, fontSize: 16.0)),
-              ],
-          ),
-      ),
-    );
-  }
 }
 
 class Caja extends StatelessWidget {
   final Widget child;
   const Caja({
     Key? key,
-    required this.authProvider,required  this.child,
+    required  this.child,
   }) : super(key: key);
 
-  final Auth authProvider;
+
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(0),
-      child: Container(
+    return Container(
         width: double.infinity,
         padding: EdgeInsets.all(15),
         decoration: BoxDecoration(
@@ -261,7 +290,7 @@ class Caja extends StatelessWidget {
           )]
         ),
         child: this.child
-            ),
+          
     );
   }
 }

@@ -3,8 +3,9 @@ class Circulo extends StatelessWidget {
   final IconData icon;
   final double width;
   final Function onPressed;
+  final Color color;
 
-  const Circulo({Key? key, required this.onPressed, this.icon = Icons.add, this.width = 50}) : super(key: key);
+  const Circulo({Key? key, required this.onPressed, this.icon = Icons.add, this.width = 50, this.color = Colors.red}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -13,7 +14,7 @@ class Circulo extends StatelessWidget {
         width: this.width,
         height: this.width,
         decoration: BoxDecoration(
-          color: Color(0xff0F1225),
+          color: this.color,
           borderRadius: BorderRadius.circular(200),
           boxShadow: [BoxShadow(
             color: Colors.black.withOpacity(0.2),

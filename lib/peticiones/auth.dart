@@ -5,7 +5,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:master_jobz/helpers/environment.dart';
 import 'package:master_jobz/models/auth_response.dart';
-import 'package:master_jobz/models/empleo.dart';
+import 'package:master_jobz/models/capacitacion_response.dart';
+
 import 'package:master_jobz/models/empleo_response.dart';
 import 'package:master_jobz/models/habilidad_response.dart';
 import 'package:master_jobz/models/usuario.dart';
@@ -201,6 +202,66 @@ class Auth with ChangeNotifier{
 
     if(resp.statusCode == 200){
       usuario!.empleos.removeWhere((element) => element.id == id);
+      notifyListeners();
+      return true;
+    }
+    return false;
+  }
+  Future newEducacion(String educacion, String tema)async{
+    final data = {
+      "establecimiento":educacion,
+      "tema":tema
+    };
+    final url = Uri.parse('${Environment.baseURL}/educacion/');
+    final String? token = await _storage.read(key: 'token');
+    final resp = await http.post(url, headers: {
+      'Content-type':'application/json',
+      'x-token':token.toString()
+    },
+    body: jsonEncode(data));
+  print(resp.body);
+    if(resp.statusCode == 200){
+      final capacitacionResponse = capacitacioneResponseFromJson(resp.body);
+      usuario!.capacitaciones.add(capacitacionResponse.educacion);
+      notifyListeners();
+      return true;
+    }
+    return false;
+  }
+  Future editEducacion(String educacion, String tema, String id)async{
+    final data = {
+      "establecimiento":educacion,
+      "tema":tema
+    };
+    final url = Uri.parse('${Environment.baseURL}/educacion/$id');
+    final String? token = await _storage.read(key: 'token');
+    final resp = await http.put(url, headers: {
+      'Content-type':'application/json',
+      'x-token':token.toString()
+    },
+    body: jsonEncode(data));
+    if(resp.statusCode == 200){
+      final capacitacionResponse = capacitacioneResponseFromJson(resp.body);
+      usuario!.capacitaciones.firstWhere((element) => element.id == id).establecimiento = capacitacionResponse.educacion.establecimiento;
+      usuario!.capacitaciones.firstWhere((element) => element.id == id).tema = capacitacionResponse.educacion.tema;
+      
+      notifyListeners();
+      return true;
+    }
+    return false;
+  }
+  
+  Future deleteEducacion(String id)async{
+
+    final url = Uri.parse('${Environment.baseURL}/educacion/$id');
+    final String? token = await _storage.read(key: 'token');
+    final resp = await http.delete(url, headers: {
+      'Content-type':'application/json',
+      'x-token':token.toString()
+    });
+
+    if(resp.statusCode == 200){
+      usuario!.capacitaciones.removeWhere((element) => element.id == id);
       notifyListeners();
       return true;
     }

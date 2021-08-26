@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-class NavegacionModel with ChangeNotifier{
+class EditNavegacionModel with ChangeNotifier{
   int _valorActual = 0;
   PageController _pageController =new PageController();
   int get paginaActual => this._valorActual;

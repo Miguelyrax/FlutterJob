@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:master_jobz/peticiones/jobs.dart';
 import 'package:master_jobz/widgets/boton.dart';
-import 'package:master_jobz/widgets/formularios.dart';
+
 import 'package:provider/provider.dart';
 
 void alertOk(BuildContext context, bool success, String title,){
@@ -63,6 +63,27 @@ void editContacto(BuildContext context, Widget child ){
   showDialog(barrierDismissible: true,context: context, builder: ( context) => AlertDialog(
     content: SingleChildScrollView(
       child: child
+    ),
+  ));
+}
+void loading(BuildContext context){
+  showDialog(
+    barrierColor: Colors.white.withOpacity(0.3),
+    barrierDismissible: false,context: context, builder: ( context) => AlertDialog(
+      elevation: 0,
+    backgroundColor: Colors.transparent,
+    contentPadding: EdgeInsets.zero,
+    content: SingleChildScrollView(
+
+      child: Center(
+          child: Transform.scale(
+            scale: 1.5,
+            child: CircularProgressIndicator(
+              color: Colors.red,
+              strokeWidth: 6,
+            ),
+          ),
+        ),
     ),
   ));
 }
