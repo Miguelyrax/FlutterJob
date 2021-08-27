@@ -16,7 +16,6 @@ import 'package:master_jobz/screens/profile_screen.dart';
 import 'package:master_jobz/services/auth_navegacion_provider.dart';
 
 import 'package:master_jobz/services/navegacion_provider.dart';
-import 'package:master_jobz/services/profile_services.dart';
 import 'package:provider/provider.dart';
  
 void main() => runApp(MyApp());

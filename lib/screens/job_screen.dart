@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:master_jobz/models/requerimiento.dart';
 import 'package:master_jobz/models/requisito.dart';
+import 'package:master_jobz/peticiones/auth.dart';
 import 'package:master_jobz/peticiones/jobs.dart';
-import 'package:master_jobz/widgets/alert.dart';
 import 'package:master_jobz/widgets/background.dart';
 import 'package:master_jobz/widgets/boton.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +13,7 @@ class JobScreen extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     final jobProvider = Provider.of<JobProvider>(context);
+    final authProvider = Provider.of<Auth>(context);
     requerimientos = jobProvider.job!.requerimientos;
    
     return Scaffold(
@@ -59,17 +60,14 @@ class JobScreen extends StatelessWidget{
                                ),
                             ),
                             SizedBox(height: 40,),
-                            Boton(text: 'Postular', onPressed:  jobProvider.job!.status == 'false' ? null : ()async{
-                                if(jobProvider.getTotal() == true){
-                                  final resp = await jobProvider.postular();
-                                  if(resp){
-                                    alertOk(context, true, 'Tu postulacion ha sido enviada');
-                                  }else{
-                                    alertOk(context, false, 'Ya has postulado a este cargo');
-                                  }
-                                }else{
-                                  alertOk(context, false, 'Complete los requerimientos');
-                                }
+                           requerimientos.length == 0  ?Container(height: 100,) :SizedBox(),
+                            Boton(text:jobProvider.job!.postulantes.any((j) => j == authProvider.usuario!.id) == true ?'Postulado' : 'Postular', onPressed:
+                              jobProvider.job!.status == 'false' || jobProvider.job!.postulantes.any((j) => j == authProvider.usuario!.id) == true   ? null : ()async{
+                                
+                                 await jobProvider.postular();
+                                 Navigator.pop(context);
+                                
+                                
                               })
                       ],
                     ),
@@ -112,7 +110,7 @@ class __ReqState extends State<_Req> {
              SizedBox(height: 30,), 
              Container(
                child: ListView.separated(
-                 physics: NeverScrollableScrollPhysics(),
+                physics: NeverScrollableScrollPhysics(),
                shrinkWrap: true,
                separatorBuilder: ( _ ,i) => SizedBox(height: 20,),
                itemCount: widget.requerimiento.requisitos.length,
@@ -143,15 +141,17 @@ class _Requisito extends StatefulWidget {
 class __RequisitoState extends State<_Requisito> {
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Transform.scale(
+    final jobProvider = Provider.of<JobProvider>(context);
+    final authProvider = Provider.of<Auth>(context);
+    return ListTile(
+      title: Text('${widget.requisito.requisito}', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black38 , fontSize: 15),),
+      leading: jobProvider.job!.postulantes.any((j) => j == authProvider.usuario!.id) == true ?null : Transform.scale(
           scale: 2,
           child: Checkbox(
             value: 
             widget.requisito.status,
             onChanged: (value){
-            
+
              widget.requisito.status = value!;
              if(value == true){
                widget.number.value++;
@@ -161,15 +161,18 @@ class __RequisitoState extends State<_Requisito> {
                widget.number.value++;
              }
              setState(() {
-               
+
              });
             },
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(200)),
           ),
         ),
-        Text('${widget.requisito.requisito}', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black38 , fontSize: 15),)
-      ],
+        
     );
+   
+            
+         
+    
   }
 }
 

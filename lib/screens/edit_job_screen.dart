@@ -3,18 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:master_jobz/models/requerimiento.dart';
 import 'package:master_jobz/models/requisito.dart';
 import 'package:master_jobz/peticiones/jobs.dart';
+import 'package:master_jobz/peticiones/postulantes.dart';
 
 import 'package:master_jobz/screens/postulantes_screen.dart';
 import 'package:master_jobz/services/edit_navegacion_services.dart';
 import 'package:master_jobz/services/habilidad_services.dart';
 import 'package:master_jobz/services/job_services.dart';
+import 'package:master_jobz/services/requisitos_services.dart';
 
 import 'package:master_jobz/ui/input_decoration.dart';
 import 'package:master_jobz/ui/style_decoration.dart';
 import 'package:master_jobz/widgets/alert.dart';
 
 
-import 'package:master_jobz/widgets/circulo.dart';
 import 'package:master_jobz/widgets/cuerpo.dart';
 import 'package:master_jobz/widgets/formularios.dart';
 import 'package:master_jobz/widgets/pageroute.dart';
@@ -41,6 +42,9 @@ class _EditJobScreenState extends State<EditJobScreen> with SingleTickerProvider
    @override
   void initState() {  
     _tabController = TabController(length: 2, vsync: this);
+    final jobProvider = Provider.of<JobProvider>(context,listen: false);
+    final postulantesProvider = Provider.of<Postulantes>(context,listen: false);
+    postulantesProvider.getTodo(jobProvider.job!.id);
     super.initState();
   }
 
@@ -59,6 +63,7 @@ class _EditJobScreenState extends State<EditJobScreen> with SingleTickerProvider
     final jobProvider = Provider.of<JobProvider>(context);
     final editNavegaion = Provider.of<EditNavegacionModel>(context);
     final jobServices = Provider.of<JobServices>(context);
+    
     requerimientos = jobProvider.job!.requerimientos;
     ctrlDescription.text = jobProvider.job!.description;
     ctrlTitle.text = jobProvider.job!.title;
@@ -112,8 +117,6 @@ class _EditJobScreenState extends State<EditJobScreen> with SingleTickerProvider
             BottomNavigationBarItem(icon: Icon(Icons.supervised_user_circle_outlined), label: 'Postulaciones'),
           ],
         ),
-        
-        
         body:
         PageView(
           physics: NeverScrollableScrollPhysics(),
@@ -141,7 +144,6 @@ class _EditJobScreenState extends State<EditJobScreen> with SingleTickerProvider
                                    Pad(
                                      title: true,
                                      child: TextFormField(
-    
                                        maxLength: 11,
                                        controller: ctrlTitle,
                                        style: TextStyle(color: Colors.black45),
@@ -180,16 +182,6 @@ class _EditJobScreenState extends State<EditJobScreen> with SingleTickerProvider
                                       },
                                       decoration: InputDecorations.editJobDecoration(),),
                                   ),
-                                  Pad(child: Text('Total requerido',style: TextStyleDecoration.textStyleDecoration(), )),
-                           
-                                  Pad(
-                                    title: true,
-                                    child: TextFormField( 
-                                      style: TextStyle(color: Colors.black45),
-                                      controller: ctrlTtotalRequerido, decoration: InputDecorations.editJobDecoration(),),
-                                  ),
-                                  
-                            
                                   Pad(
                                     child: Text('Habilidades esperadas',style: TextStyleDecoration.textStyleDecoration(),)),
                                       Container(width: double.infinity,
@@ -217,11 +209,7 @@ class _EditJobScreenState extends State<EditJobScreen> with SingleTickerProvider
                                          },
                                          ),
                                       ),
-                                    
-                                      
                                       SizedBox(height: 40,),
-                                    
-                                    
                                 ],
                               ),
                             ),
@@ -230,8 +218,6 @@ class _EditJobScreenState extends State<EditJobScreen> with SingleTickerProvider
                         PostulantesScreen()
           ],
         ),
-           
-         
        ),
     );
   }
@@ -264,7 +250,6 @@ class __EstadoState extends State<_Estado> {
               value: estado, onChanged: (value)async{
               final resp = await jobProvider.editStatus(jobProvider.job!.id, value.toString());
               if(resp){
-                print(value);
                 estado = value;
                 setState(() { 
               });
@@ -315,41 +300,16 @@ class __ReqState extends State<_Req> {
       builder: (_,value, child) {
         return Column(
           children: [
-             Pad(
-               child: Wrap(
-                 alignment: WrapAlignment.spaceBetween,
-                 crossAxisAlignment: WrapCrossAlignment.center,
-                   children: [
-                     edit 
-                     ?Wrap(children: [Container(
-                       width: 100,
-                       child: TextFormField( controller: ctrlRequerimiento, decoration: InputDecorations.editRequerimiento(),),
-                     ),
-                     SizedBox(width: 10,),
-                     Circulo(width: 40,icon: Icons.save,onPressed: ()async{
-                      final resp = await jobProvider.editRequerimiento(widget.requerimiento.id, ctrlRequerimiento.text);
-                      if(resp){
-                       print('Ok');
-                      }else{
-                       print('Error');
-                      }
-                       edit = !edit;
-                     setState(() {
-                     });
-                   }),
-                     ],)
-                     :
-                    Text('${widget.requerimiento.title}',style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold ),),
-                   Circulo(width: 40,icon: Icons.edit,onPressed: (){
-                     setState((){
+                     Pad(
                        
-                       edit = !edit;
-                     });
-                   }),
-                   
-                   ],
-               ),
-             ),    
+                       child: ListTile(
+                         title: edit ? TextFormField( controller: ctrlRequerimiento, decoration: InputDecorations.editRequerimiento(),)
+                                     :Text('${widget.requerimiento.title}',style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold ),), 
+                         trailing:  IconButton(onPressed: (){
+                                          Navigator.push(context,ruta(ChangeNotifierProvider(create: ( _ ) => HabilidadServices(),child: FormularioRequerimiento(requerimiento: widget.requerimiento,)),Offset(2,0),true));
+                                        }, icon: Icon(Icons.edit))
+                         ),
+                     ),            
              SizedBox(height: 30,), 
              Container(
                child: ListView.separated(
@@ -373,14 +333,13 @@ class __ReqState extends State<_Req> {
               ),
               ) ,
               Container(width: double.infinity,
-                                    child: MaterialButton(
-                                      padding: EdgeInsets.only(left: 22),
-                                      onPressed: (){
-                                        setState(() {
-                                                  editReqAlert(context, ctrlRequisitos, widget.requerimiento.id);
-                                        });
-                                      },
-                                      child: Align(alignment: Alignment.centerLeft,child: Text('Agregar habilidad', style: TextStyle(color: Colors.black45, fontSize: 15),)))),  
+                           child: MaterialButton(
+                           padding: EdgeInsets.only(left: 22),
+                           onPressed: (){
+                             jobProvider.requerimiento = widget.requerimiento;
+                          Navigator.push(context,ruta(ChangeNotifierProvider(create: ( _ ) => RequisitosServices(),child: FormularioRequisito()),Offset(2,0),true));
+                          },
+                          child: Align(alignment: Alignment.centerLeft,child: Text('Agregar requisito', style: TextStyle(color: Colors.black45, fontSize: 15),)))),  
           ],
           );
       },
@@ -407,44 +366,14 @@ class __RequisitoState extends State<_Requisito> {
   Widget build(BuildContext context) {
     ctrlRequisito.text = widget.requisito.requisito;
     final jobProvider = Provider.of<JobProvider>(context);
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: Wrap(
-        alignment: WrapAlignment.spaceBetween,
-        crossAxisAlignment: WrapCrossAlignment.center,
-        children: [
-          edit 
-          ?Wrap(children: [Container(
-                       width: 160,
-                       child: TextFormField(
-                         style: TextStyle(fontSize: 15),
-                          controller: ctrlRequisito, decoration: InputDecorations.editRequerimiento(),),
-                     ),
-                     SizedBox(width: 10,),
-                     IconButton(onPressed: ()async{
-                        final resp = await jobProvider.editRequisito(widget.requisito.id, ctrlRequisito.text);
-                        if(resp){
-                          print('Ok');
-                        }else{
-                          print('Error');
-                        }
-                        edit=!edit;
-                        setState(() {
-                          
-                        });
-                      }, icon: Icon(Icons.save))
-          ],)
-          : Text('${widget.requisito.requisito}', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black38 , fontSize: 15),),
-          
-          IconButton(onPressed: (){
-            edit=!edit;
-            setState(() {
-              
-            });
-          }, icon: Icon(Icons.edit))
-        ],
-      ),
-    );
+    return ListTile(
+                title: edit ? TextFormField( controller: ctrlRequisito, decoration: InputDecorations.editRequerimiento(),)
+                            :Text('${widget.requisito.requisito}', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black38 , fontSize: 15),), 
+                       trailing:  IconButton(onPressed: (){
+                                  Navigator.push(context,ruta(ChangeNotifierProvider(create: ( _ ) => RequisitosServices(),child: FormularioRequisito(requisito: widget.requisito,)),Offset(2,0),true));
+                                  }, icon: Icon(Icons.edit))
+                 ); 
+    
   }
 }
 

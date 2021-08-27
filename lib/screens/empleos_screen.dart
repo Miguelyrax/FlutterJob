@@ -56,7 +56,7 @@ class _EmpleosScreenState extends State<EmpleosScreen> with AutomaticKeepAliveCl
                       Circulo(color: Colors.black,onPressed: ()=>Navigator.push(context,
                       ruta(ChangeNotifierProvider(
                         create: ( _ )=> EditJobServices(),
-                        child: FormularioJob()), Offset(0,2),false)
+                        child: FormularioJob()), Offset(0,2),true)
                       
                       ), width: 30)
                   ],),
@@ -64,6 +64,7 @@ class _EmpleosScreenState extends State<EmpleosScreen> with AutomaticKeepAliveCl
                     padding: EdgeInsets.symmetric(horizontal: 35, vertical: 10),
                     child: ListView.separated(
                       shrinkWrap: true,
+                      reverse: true,
                       separatorBuilder: ( _ , i) => SizedBox(height: 20,),
                       physics: NeverScrollableScrollPhysics(),
                       itemCount: jobProvider.empleos.length,

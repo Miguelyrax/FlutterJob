@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:master_jobz/models/job.dart';
 import 'package:master_jobz/models/job_response.dart';
 import 'package:master_jobz/models/jobs_response.dart';
+import 'package:master_jobz/models/postulacion_response.dart';
 import 'package:master_jobz/models/requerimiento.dart';
 import 'package:master_jobz/models/requerimiento_response.dart';
 import 'package:master_jobz/models/requisito.dart';
@@ -16,6 +17,8 @@ import 'package:master_jobz/peticiones/auth.dart';
 
 class JobProvider with ChangeNotifier{
   List<Job> jobs = [];
+  Requerimiento? requerimiento;
+  Requisito? requisito;
   List<Job> empleos = [];
   Job? job;
   Color color1 = Colors.red;
@@ -45,15 +48,31 @@ class JobProvider with ChangeNotifier{
     }
   }
   Future postular()async{
+    final List<Requisito> requisitos = [];
+    job!.requerimientos.forEach((e) => {
+      e.requisitos.forEach((e) => {
+        if(e.status == false){
+       
+          requisitos.add(e)
+        }
+      })
+    });
+    final data = {
+      "requisitos":requisitos
+    };
     final url = Uri.parse('${Environment.baseURL}/postulantes/${job!.id}');
     final String? token = await Auth.getToken();
     final resp = await  http.post(url, headers: {
       'Content-type':'application/json',
       'x-token': token.toString()
-    });
+    },
+    body: jsonEncode(data));
   
     if(resp.statusCode == 200){
-      
+      final postulantesResponse = postulanteResponseFromJson(resp.body);
+      int index = empleos.indexWhere((element) => element.id == job!.id);
+      this.jobs[index].postulantes.add(postulantesResponse.idUser);
+      notifyListeners();
       return true;
     }
       return false;
@@ -88,7 +107,6 @@ class JobProvider with ChangeNotifier{
       'x-token': token.toString()
     },
     body:jsonEncode(data));
-    print(resp.body);
     if(resp.statusCode == 200){
       final jobsResponse = jobResponseFromJson(resp.body);
       job = jobsResponse.job;
@@ -238,6 +256,7 @@ class JobProvider with ChangeNotifier{
     return false;
   }
   Future newRequisito(String id, String requisito)async{
+    
     final data = {
       "requisito":requisito
     };
@@ -295,7 +314,6 @@ class JobProvider with ChangeNotifier{
       
       job!.requerimientos.firstWhere((element) => element.id == reqId ).requisitos.removeWhere((element) => element.id == id) ;
       job!.requerimientos.firstWhere((element) => element.id == reqId ).requisitos.forEach((element) {
-        print(element.requisito);
        });
       notifyListeners();
        return true;

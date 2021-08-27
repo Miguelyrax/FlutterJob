@@ -23,13 +23,14 @@ class _PostulantesScreenState extends State<PostulantesScreen> with AutomaticKee
   List<Postulante> postulantes = [];
   @override
   void initState() { 
-    _cargarPostulantes();
+    // _cargarPostulantes();
     super.initState();
     
   }
   @override
   Widget build(BuildContext context) {
     final postulantesProvider = Provider.of<Postulantes>(context);
+    postulantes = postulantesProvider.postulantes;
     return Scaffold(
     
       body: Container(

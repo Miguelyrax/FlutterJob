@@ -14,28 +14,31 @@ class Job {
     Job({
         required this.status,
         required this.requerimientos,
+        required this.postulantes,
         required this.id,
         required this.title,
         required this.subtitle,
         required this.description,
-        required this.totalRequerido,
+         this.totalRequerido,
         required this.idUser,
         required this.v,
     });
 
     String status;
     List<Requerimiento> requerimientos;
+    List<String> postulantes;
     String id;
     String title;
     String subtitle;
     String description;
-    int totalRequerido;
+    int? totalRequerido;
     String idUser;
     int v;
 
     factory Job.fromJson(Map<String, dynamic> json) => Job(
         status: json["status"],
         requerimientos: List<Requerimiento>.from(json["requerimientos"].map((x) => Requerimiento.fromJson(x))),
+        postulantes: List<String>.from(json["postulantes"].map((x) => x)),
         id: json["_id"],
         title: json["title"],
         subtitle: json["subtitle"],
@@ -48,6 +51,7 @@ class Job {
     Map<String, dynamic> toJson() => {
         "status": status,
         "requerimientos": List<dynamic>.from(requerimientos.map((x) => x.toJson())),
+        "postulantes": List<dynamic>.from(postulantes.map((x) => x)),
         "_id": id,
         "title": title,
         "subtitle": subtitle,

@@ -157,11 +157,12 @@ class _ProfilePublicoScreenState extends State<ProfilePublicoScreen> {
                         GridView.builder(
                           physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
-                          itemBuilder: (_,i) => Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                          itemBuilder: (_,i) => Wrap(
+                            crossAxisAlignment: WrapCrossAlignment.start,
+                            
                             children: [
                                Divider(),
-                              Text('${empleos[i].cargo} en ${empleos[i].empresa}', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
+                              Container(width: double.infinity,child: Text('${empleos[i].cargo} en ${empleos[i].empresa}', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),)),
                               SizedBox(height: 10,),
                               Text('${empleos[i].description}', style: TextStyle(fontSize: 17),),
                               SizedBox(height: 10,),
@@ -213,13 +214,12 @@ class _ProfilePublicoScreenState extends State<ProfilePublicoScreen> {
                         GridView.builder(
                           physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
-                          itemBuilder: (_,i) => Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                          itemBuilder: (_,i) => Wrap(
+                            crossAxisAlignment: WrapCrossAlignment.start,
                             children: [
                                Divider(),
                               SizedBox(height: 10,),
-                              
-                              Text('${capacitaciones[i].tema}', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
+                              Container(width: double.infinity,child: Text('${capacitaciones[i].tema}', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),)),
                               SizedBox(height: 20,),
                               Text('${capacitaciones[i].establecimiento}', style: TextStyle(fontSize: 17),),
                               

@@ -54,7 +54,6 @@ class Auth with ChangeNotifier{
     'Content-type':'application/json'
   },
   body: jsonEncode(data));
-  print(resp.body);
   if(resp.statusCode == 200){
     final authResponse = authResponseFromJson(resp.body);
     usuario = authResponse.usuario;
@@ -182,9 +181,9 @@ class Auth with ChangeNotifier{
     body: jsonEncode(data));
     if(resp.statusCode == 200){
       final empleoResponse = empleoResponseFromJson(resp.body);
-      usuario!.empleos.firstWhere((element) => element.id == id).cargo = empleoResponse.empleo.cargo;
-      usuario!.empleos.firstWhere((element) => element.id == id).empresa = empleoResponse.empleo.empresa;
-      usuario!.empleos.firstWhere((element) => element.id == id).description = empleoResponse.empleo.description;
+      int index = usuario!.empleos.indexWhere((element) => element.id == id);
+      this.usuario!.empleos[index] = empleoResponse.empleo;
+      
       notifyListeners();
       return true;
     }
@@ -219,7 +218,6 @@ class Auth with ChangeNotifier{
       'x-token':token.toString()
     },
     body: jsonEncode(data));
-  print(resp.body);
     if(resp.statusCode == 200){
       final capacitacionResponse = capacitacioneResponseFromJson(resp.body);
       usuario!.capacitaciones.add(capacitacionResponse.educacion);
@@ -242,9 +240,8 @@ class Auth with ChangeNotifier{
     body: jsonEncode(data));
     if(resp.statusCode == 200){
       final capacitacionResponse = capacitacioneResponseFromJson(resp.body);
-      usuario!.capacitaciones.firstWhere((element) => element.id == id).establecimiento = capacitacionResponse.educacion.establecimiento;
-      usuario!.capacitaciones.firstWhere((element) => element.id == id).tema = capacitacionResponse.educacion.tema;
-      
+      int index = usuario!.capacitaciones.indexWhere((element) => element.id == id);
+      this.usuario!.capacitaciones[index] = capacitacionResponse.educacion;
       notifyListeners();
       return true;
     }
@@ -275,7 +272,6 @@ class Auth with ChangeNotifier{
       "telefono":telefono,
       "profesion":profesion
     };
-    print('Nombre: $nombre' );
     final url = Uri.parse('${Environment.baseURL}/usuarios/$id');
     final String? token = await _storage.read(key: 'token');
     final resp = await http.put(url, headers: {
@@ -284,7 +280,6 @@ class Auth with ChangeNotifier{
     },
     body: jsonEncode(data)
     );
-    print(resp.body);
     if(resp.statusCode == 200){
       final usuarioResponse = usuarioResponseFromJson(resp.body);
       usuario = usuarioResponse.usuario;

@@ -42,6 +42,7 @@ class _JobsScreenState extends State<JobsScreen> with AutomaticKeepAliveClientMi
                     padding: EdgeInsets.symmetric(horizontal: 35, vertical: 10),
                     child: ListView.separated(
                       shrinkWrap: true,
+                      reverse: true,
                         separatorBuilder: ( _ , i) => SizedBox(height: 20,),
                         physics: BouncingScrollPhysics(),
                         itemCount: jobProvider.jobs.length,

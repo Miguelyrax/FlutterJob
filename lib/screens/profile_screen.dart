@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:master_jobz/models/capacitacione.dart';
 import 'package:master_jobz/models/empleo.dart';
 import 'package:master_jobz/models/habilidad.dart';
+import 'package:master_jobz/models/requisito.dart';
 
 import 'package:master_jobz/peticiones/postulantes.dart';
 
@@ -33,12 +34,13 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
     final postulanteProvider = Provider.of<Postulantes>(context);
     final usuario = postulanteProvider.postulante!.usuario;
     List<Habilidad> habilidades = usuario.habilidades;
+    List<Requisito> requisitos = postulanteProvider.postulante!.requisitos;
     List<Empleo> empleos = usuario.empleos;
     List<Capacitacione> capacitaciones = usuario.capacitaciones;
     
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.red,
+        backgroundColor: Colors.black,
         title: Text('Usuario'),
         centerTitle: true,
         bottom: TabBar(
@@ -135,7 +137,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                                       padding: EdgeInsets.all(8),
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(20),
-                                      color: Colors.black45,
+                                      color: Colors.grey,
                                       ),
                                       child: Text('${habilidades[i].habilidad}', style: TextStyle(fontSize: 17, color: Colors.white),)),
                                   ],
@@ -145,6 +147,39 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                                  gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
                                   crossAxisCount: 2,
                                   childAspectRatio: 2,
+                                ),),
+                          ],
+                        ),),
+                         SizedBox(height: 20,),
+                        Caja(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                                Text('Capacitaciones necesarias', style: TextStyle(color:Colors.black45, fontSize: 20.0, fontWeight: FontWeight.bold),),
+                        SizedBox(height: 20,),
+                              GridView.builder(
+                                physics: NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                itemBuilder: (_,i) => Wrap(
+                                  alignment: WrapAlignment.start,
+                                  
+                                  children: [
+                                    ListTile(
+                                      title: Text('${requisitos[i].requisito}', style: TextStyle(fontSize: 17, color: Colors.black),),
+                                      leading: Transform.scale(
+                                        scale: 1.3,
+                                        child: Checkbox(
+                                          activeColor: Colors.grey,
+                                          onChanged: (value){}, value: true, ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                  
+                                itemCount: requisitos.length,
+                                 gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 1,
+                                  childAspectRatio: 4,
                                 ),),
                           ],
                         ),),

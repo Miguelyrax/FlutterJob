@@ -3,7 +3,6 @@ import 'package:master_jobz/peticiones/jobs.dart';
 import 'package:master_jobz/services/edit_job_services.dart';
 import 'package:master_jobz/ui/input_decoration.dart';
 import 'package:master_jobz/ui/style_decoration.dart';
-import 'package:master_jobz/widgets/boton.dart';
 import 'package:master_jobz/widgets/cuerpo.dart';
 import 'package:provider/provider.dart';
 class FormularioJob extends StatelessWidget {
@@ -92,19 +91,6 @@ class FormularioJob extends StatelessWidget {
                               ),
                 ),
                SizedBox(height: 20,),
-                Pad(child: Text('Total',style: TextStyleDecoration.textStyleDecoration(), )),
-                Pad(
-                  title: true,
-                  child: TextFormField(
-                   
-                    style: TextStyle(color: Colors.black45),
-                  onChanged: (value){
-                  jobServices.totalRequerido =  int.parse(value); 
-                  },
-                  decoration: InputDecorations.editJobDecoration(hint: 'Agregar total'),
-                              ),
-                ),
-                
                 Pad(
                   title: true,
                   child: MaterialButton(

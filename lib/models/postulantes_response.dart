@@ -4,6 +4,7 @@
 
 import 'dart:convert';
 
+import 'package:master_jobz/models/requisito.dart';
 import 'package:master_jobz/models/usuario.dart';
 
 PostulantesResponse postulantesResponseFromJson(String str) => PostulantesResponse.fromJson(json.decode(str));
@@ -33,6 +34,7 @@ class PostulantesResponse {
 class Postulante {
     Postulante({
         required this.status,
+        required this.requisitos,
         required this.id,
         required this.idJob,
         required this.usuario,
@@ -40,6 +42,7 @@ class Postulante {
     });
 
     bool status;
+    List<Requisito> requisitos;
     String id;
     String idJob;
     Usuario usuario;
@@ -47,6 +50,7 @@ class Postulante {
 
     factory Postulante.fromJson(Map<String, dynamic> json) => Postulante(
         status: json["status"],
+        requisitos: List<Requisito>.from(json["requisitos"].map((x) => Requisito.fromJson(x))),
         id: json["_id"],
         idJob: json["idJob"],
         usuario: Usuario.fromJson(json["idUser"]),
@@ -55,6 +59,7 @@ class Postulante {
 
     Map<String, dynamic> toJson() => {
         "status": status,
+        "requisitos": List<dynamic>.from(requisitos.map((x) => x.toJson())),
         "_id": id,
         "idJob": idJob,
         "idUser": usuario.toJson(),

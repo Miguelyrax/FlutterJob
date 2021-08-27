@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:master_jobz/models/capacitacione.dart';
 import 'package:master_jobz/models/empleo.dart';
+import 'package:master_jobz/models/requerimiento.dart';
+import 'package:master_jobz/models/requisito.dart';
 import 'package:master_jobz/peticiones/auth.dart';
 import 'package:master_jobz/peticiones/jobs.dart';
 import 'package:master_jobz/services/educacion_services.dart';
@@ -9,6 +11,7 @@ import 'package:master_jobz/services/formhabilidad_services.dart';
 import 'package:master_jobz/services/habilidad_services.dart';
 
 import 'package:master_jobz/services/profile_services.dart';
+import 'package:master_jobz/services/requisitos_services.dart';
 import 'package:master_jobz/ui/input_decoration.dart';
 import 'package:master_jobz/ui/style_decoration.dart';
 
@@ -77,7 +80,6 @@ class Formulario extends StatelessWidget {
                   initialValue: usuario.nombre,
                 onChanged: (value){
                 profileServices.nombre = value;
-                print(value); 
                 },
                 validator:  (value){
                 return (value != null && value.length >2 )
@@ -466,58 +468,164 @@ class Loading extends StatelessWidget {
 }
 
 class FormularioRequerimiento extends StatelessWidget {
-
+  final Requerimiento? requerimiento;
+  FormularioRequerimiento({Key? key, this.requerimiento}) : super(key: key);
   @override
   final ctrlController = TextEditingController();
-  @override
   Widget build(BuildContext context) {
    
     final jobProvider = Provider.of<JobProvider>(context, listen: false);
     final habilidadServices = Provider.of<HabilidadServices>(context, listen: false);
-    return Scaffold(
-      backgroundColor: Color(0xffF5F7FA),
-      appBar: AppBar(
-        title: Text('Agregar habilidad',style: TextStyle(color: Colors.black),),
-        backgroundColor: Colors.white,
-        iconTheme: IconThemeData(
-          color: Colors.red
+    if(requerimiento != null){
+    ctrlController.text = requerimiento!.title;
+  }
+    return WillPopScope(
+      onWillPop: habilidadServices.isLoading ? ()async{return false;}: requerimiento != null ?()async{
+                      FocusScope.of(context).unfocus();
+                      if(!habilidadServices.isValidForm()) {
+                        return false;
+                      }
+                      habilidadServices.isLoading = true;
+                     await jobProvider.editRequerimiento(requerimiento!.id, ctrlController.text);
+                    habilidadServices.isLoading = false;
+                    return true;
+                  }:null,
+      child: Scaffold(
+        backgroundColor: Color(0xffF5F7FA),
+        appBar: AppBar(
+          title:requerimiento != null ?Text('Editar habilidad',style: TextStyle(color: Colors.black),) :Text('Agregar habilidad',style: TextStyle(color: Colors.black),),
+          leading: IconButton(icon:habilidadServices.isLoading ? Loading(): Icon(Icons.arrow_back, size: 24,),onPressed:habilidadServices.isLoading ? null: requerimiento != null ? ()async{
+            FocusScope.of(context).unfocus();
+            if(!habilidadServices.isValidForm()) return;
+            habilidadServices.isLoading = true;
+            await jobProvider.editRequerimiento(requerimiento!.id, ctrlController.text);     
+            Navigator.pop(context);
+            habilidadServices.isLoading = false;
+            
+            }:()=>Navigator.pop(context)),
+          backgroundColor: Colors.white,
+          iconTheme: IconThemeData(
+            color: Colors.red
+          ),
+          
         ),
-        
-      ),
-      body: Column(
-        children: [
-          SizedBox(height: 30,),
-          Container(
-            width: double.infinity,
-            color: Colors.white,
-            child: Form(
-              key: habilidadServices.formKey,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              child: TextFormField(
-                style: TextStyle(color: Colors.black45),
-                controller:ctrlController,
-                decoration: InputDecorations.edicionesDecoration(),
-                validator:  (value){
-                  return (value != null && value.length >1 )
-                  ? null
-                  : 'La habilidad debe tener mas de 1 caracter';
-                },
+        body: Column(
+          children: [
+            SizedBox(height: 30,),
+            Container(
+              width: double.infinity,
+              color: Colors.white,
+              child: Form(
+                key: habilidadServices.formKey,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                child: TextFormField(
+                  style: TextStyle(color: Colors.black45),
+                  controller:ctrlController,
+                  decoration: InputDecorations.edicionesDecoration(),
+                  validator:  (value){
+                    return (value != null && value.length >1 )
+                    ? null
+                    : 'La habilidad debe tener mas de 1 caracter';
+                  },
+                ),
               ),
             ),
+            SizedBox(height: 30,),
+            requerimiento != null ? Container() :
+            MaterialButton(onPressed:habilidadServices.isLoading ? null : ()async{
+                  FocusScope.of(context).unfocus();
+                  if(!habilidadServices.isValidForm()) return;
+                  habilidadServices.isLoading = true;
+                  await jobProvider.newRequerimiento(jobProvider.job!.id, ctrlController.text);
+                  habilidadServices.isLoading = false;
+                  Navigator.pop(context);
+                  
+                  habilidadServices.isLoading = false;
+                },child: Text('Agregar habilidad', style: TextStyle(color: Colors.red,),))
+          ],
+        ),
+       ),
+    );
+  }
+}
+class FormularioRequisito extends StatelessWidget {
+  final Requisito? requisito;
+  FormularioRequisito({Key? key, this.requisito}) : super(key: key);
+  @override
+  final ctrlController = TextEditingController();
+  Widget build(BuildContext context) {
+   
+    final jobProvider = Provider.of<JobProvider>(context, listen: false);
+    final habilidadServices = Provider.of<RequisitosServices>(context, listen: false);
+    if(requisito != null){
+    ctrlController.text = requisito!.requisito;
+  }
+    return WillPopScope(
+      onWillPop: habilidadServices.isLoading ? ()async{return false;}: requisito != null ?()async{
+                      FocusScope.of(context).unfocus();
+                      if(!habilidadServices.isValidForm()) {
+                        return false;
+                      }
+                      habilidadServices.isLoading = true;
+                     await jobProvider.editRequisito(requisito!.id, ctrlController.text);
+                    habilidadServices.isLoading = false;
+                    return true;
+                  }:null,
+      child: Scaffold(
+        backgroundColor: Color(0xffF5F7FA),
+        appBar: AppBar(
+          title:requisito != null ?Text('Editar habilidad',style: TextStyle(color: Colors.black),) :Text('Agregar habilidad',style: TextStyle(color: Colors.black),),
+          leading: IconButton(icon:habilidadServices.isLoading ? Loading(): Icon(Icons.arrow_back, size: 24,),onPressed:habilidadServices.isLoading ? null: requisito != null ? ()async{
+            FocusScope.of(context).unfocus();
+            if(!habilidadServices.isValidForm()) return;
+            habilidadServices.isLoading = true;
+            await jobProvider.editRequisito(requisito!.id, ctrlController.text);     
+            Navigator.pop(context);
+            habilidadServices.isLoading = false;
+            
+            }:()=>Navigator.pop(context)),
+          backgroundColor: Colors.white,
+          iconTheme: IconThemeData(
+            color: Colors.red
           ),
-          SizedBox(height: 30,),
-          MaterialButton(onPressed:habilidadServices.isLoading ? null : ()async{
-                FocusScope.of(context).unfocus();
-                if(!habilidadServices.isValidForm()) return;
-                habilidadServices.isLoading = true;
-                await jobProvider.newRequerimiento(jobProvider.job!.id, ctrlController.text);
-                habilidadServices.isLoading = false;
-                Navigator.pop(context);
-                
-                habilidadServices.isLoading = false;
-              },child: Text('Agregar habilidad', style: TextStyle(color: Colors.red,),))
-        ],
-      ),
-   );
+          
+        ),
+        body: Column(
+          children: [
+            SizedBox(height: 30,),
+            Container(
+              width: double.infinity,
+              color: Colors.white,
+              child: Form(
+                key: habilidadServices.formKey,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                child: TextFormField(
+                  style: TextStyle(color: Colors.black45),
+                  controller:ctrlController,
+                  decoration: InputDecorations.edicionesDecoration(),
+                  validator:  (value){
+                    return (value != null && value.length >1 )
+                    ? null
+                    : 'El requisito debe tener mas de 1 caracter';
+                  },
+                ),
+              ),
+            ),
+            SizedBox(height: 30,),
+            requisito != null ? Container() :
+            MaterialButton(onPressed:habilidadServices.isLoading ? null : ()async{
+                  FocusScope.of(context).unfocus();
+                  if(!habilidadServices.isValidForm()) return;
+                  habilidadServices.isLoading = true;
+                  await jobProvider.newRequisito(jobProvider.requerimiento!.id, ctrlController.text);
+                  habilidadServices.isLoading = false;
+                  Navigator.pop(context);
+                  
+                  habilidadServices.isLoading = false;
+                },child: Text('Agregar habilidad', style: TextStyle(color: Colors.red,),))
+          ],
+        ),
+       ),
+    );
   }
 }
