@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:master_jobz/helpers/environment.dart';
 import 'package:master_jobz/models/capacitacione.dart';
 import 'package:master_jobz/models/empleo.dart';
 import 'package:master_jobz/models/habilidad.dart';
@@ -40,7 +41,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
     
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.black,
+        backgroundColor: Environment.rojo,
         title: Text('Usuario'),
         centerTitle: true,
         bottom: TabBar(
@@ -80,11 +81,11 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                         width: 100,
                         height: 100,
                         decoration: BoxDecoration(
-                          color: Color(0xffF5CB39),
+                          color: Environment.rojo,
                           border: Border.all(color: Colors.black, width: 4),
                           borderRadius: BorderRadius.circular(200)
                         ),
-                        child: Center(child: Text('${usuario.nombre.substring(0,2)}', style: TextStyle(fontSize: 30, color: Colors.black, fontWeight: FontWeight.bold),),),
+                        child: Center(child: Text('${usuario.nombre.substring(0,2)}', style: TextStyle(fontSize: 30, color: Colors.white, fontWeight: FontWeight.bold),),),
                       ),
                       SizedBox(height: 10,),
                       Text('${usuario.telefono}',style: TextStyle(color:Colors.black, fontSize: 16.0)),

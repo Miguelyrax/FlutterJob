@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:master_jobz/helpers/environment.dart';
 import 'package:master_jobz/models/requerimiento.dart';
 import 'package:master_jobz/models/requisito.dart';
 import 'package:master_jobz/peticiones/jobs.dart';
@@ -29,16 +30,14 @@ class EditJobScreen extends StatefulWidget{
 
 class _EditJobScreenState extends State<EditJobScreen> with SingleTickerProviderStateMixin {
   final ctrlDescription = TextEditingController();
-
   final ctrlTitle = TextEditingController();
-
   final ctrlSubtitle = TextEditingController();
-
   final ctrlTtotalRequerido = TextEditingController();
-
   final ctrlRequerimiento = TextEditingController();
+
    late TabController _tabController ;
    List<Requerimiento> requerimientos = [];
+
    @override
   void initState() {  
     _tabController = TabController(length: 2, vsync: this);
@@ -103,7 +102,7 @@ class _EditJobScreenState extends State<EditJobScreen> with SingleTickerProvider
           title: Text('Editar', style: TextStyle(color: Colors.black),),
           centerTitle: false,
           iconTheme: IconThemeData(
-            color: Colors.red, 
+            color: Environment.rojo, 
           ),
           elevation: 1,
           backgroundColor:Colors.white,
@@ -111,7 +110,7 @@ class _EditJobScreenState extends State<EditJobScreen> with SingleTickerProvider
         bottomNavigationBar: BottomNavigationBar(
           onTap: (i) => editNavegaion.paginaActual = i,
           currentIndex: editNavegaion.paginaActual,
-          fixedColor: Colors.red,
+          fixedColor: Environment.rojo,
           items: [
             BottomNavigationBarItem(icon: Icon(Icons.work), label: 'Trabajo'),
             BottomNavigationBarItem(icon: Icon(Icons.supervised_user_circle_outlined), label: 'Postulaciones'),
@@ -199,6 +198,7 @@ class _EditJobScreenState extends State<EditJobScreen> with SingleTickerProvider
                                       Container(
                                         child: ListView.separated(
                                           shrinkWrap: true,
+                                          reverse: true,
                                           physics: NeverScrollableScrollPhysics(),
                                          separatorBuilder: ( _ ,i) => SizedBox(height: 20,),
                                          itemCount: requerimientos.length,
@@ -246,7 +246,7 @@ class __EstadoState extends State<_Estado> {
           children: [
             Text('Estado',style: TextStyleDecoration.textStyleDecoration(),),
             Switch(
-              activeColor: Colors.red,
+              activeColor: Environment.rojo,
               value: estado, onChanged: (value)async{
               final resp = await jobProvider.editStatus(jobProvider.job!.id, value.toString());
               if(resp){
@@ -315,6 +315,7 @@ class __ReqState extends State<_Req> {
                child: ListView.separated(
                  physics: NeverScrollableScrollPhysics(),
                shrinkWrap: true,
+               reverse:true,
                separatorBuilder: ( _ ,i) => SizedBox(height: 20,),
                itemCount: widget.requerimiento.requisitos.length,
                itemBuilder: ( _ , i) {

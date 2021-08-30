@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 
 
@@ -97,11 +98,12 @@ class _EmpleosScreenState extends State<EmpleosScreen> with AutomaticKeepAliveCl
                           if(numero>6){
                             numero =1;
                           }
-                      return Targeta(job: jobProvider.empleos[i], color: color1, color2: color2, number: i, onPressed: ()=>Navigator.push(context, ruta(MultiProvider(providers: [
-                        ChangeNotifierProvider(create: ( _ ) =>JobServices(),),
-                        ChangeNotifierProvider(create: ( _ ) => EditNavegacionModel())
-                        
-                        ] ,child: EditJobScreen()),Offset(0,2),false)),);
+                      return FadeInLeft(from: i * 100, child: Targeta(job: jobProvider.empleos[i], color: color1, color2: color2, number: i, onPressed: ()=>Navigator.push(context, ruta(MultiProvider(providers: [
+                          ChangeNotifierProvider(create: ( _ ) =>JobServices(),),
+                          ChangeNotifierProvider(create: ( _ ) => EditNavegacionModel())
+                          
+                          ] ,child: EditJobScreen()),Offset(0,2),false)),),
+                      );
                     } ),
                   ),
                 ],

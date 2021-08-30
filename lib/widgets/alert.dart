@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:master_jobz/helpers/environment.dart';
 import 'package:master_jobz/peticiones/jobs.dart';
 import 'package:master_jobz/widgets/boton.dart';
 
@@ -79,7 +80,7 @@ void loading(BuildContext context){
           child: Transform.scale(
             scale: 1.5,
             child: CircularProgressIndicator(
-              color: Colors.red,
+              color: Environment.rojo,
               strokeWidth: 6,
             ),
           ),

@@ -4,7 +4,6 @@ import 'package:master_jobz/models/postulantes_response.dart';
 
 import 'package:master_jobz/peticiones/jobs.dart';
 import 'package:master_jobz/peticiones/postulantes.dart';
-import 'package:master_jobz/screens/profile_publico_screen.dart';
 import 'package:master_jobz/screens/profile_screen.dart';
 import 'package:master_jobz/widgets/pageroute.dart';
 
@@ -73,7 +72,7 @@ class _PostulantesScreenState extends State<PostulantesScreen> with AutomaticKee
                               
                               );
                             },
-                            leading:Icon(Icons.account_circle, size: 60, color: Colors.red,) ,
+                            leading:Icon(Icons.account_circle, size: 60, color: Color(0xffEA5D60),) ,
                             subtitle: Text('${postulantes[i].usuario.email}'),
                             title: Text('${postulantes[i].usuario.nombre}'),
                           ),

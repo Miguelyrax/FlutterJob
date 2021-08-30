@@ -148,6 +148,7 @@ class __RequisitoState extends State<_Requisito> {
       leading: jobProvider.job!.postulantes.any((j) => j == authProvider.usuario!.id) == true ?null : Transform.scale(
           scale: 2,
           child: Checkbox(
+            activeColor: jobProvider.color1,
             value: 
             widget.requisito.status,
             onChanged: (value){

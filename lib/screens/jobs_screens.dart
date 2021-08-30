@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 
 import 'package:master_jobz/peticiones/jobs.dart';
@@ -75,7 +76,7 @@ class _JobsScreenState extends State<JobsScreen> with AutomaticKeepAliveClientMi
                           if(numero>6){
                             numero =1;
                           }
-                        return Targeta(job: jobProvider.jobs[i], color: color1, color2: color2, colocar: false, number: i,);
+                        return FadeInLeft(from: i * 100 ,child: Targeta(job: jobProvider.jobs[i], color: color1, color2: color2, colocar: false, number: i,));
                       } ),
                   ),
                 ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:master_jobz/helpers/environment.dart';
 import 'package:master_jobz/models/capacitacione.dart';
 import 'package:master_jobz/models/empleo.dart';
 import 'package:master_jobz/models/requerimiento.dart';
@@ -60,7 +61,7 @@ class Formulario extends StatelessWidget {
           },),
           backgroundColor: Colors.white,
           iconTheme: IconThemeData(
-            color: Colors.red
+            color: Environment.rojo
           ),
         ),
         body: SingleChildScrollView(
@@ -187,7 +188,7 @@ class FormularioHabilidad extends StatelessWidget {
           title: Text('Habilidad', style: TextStyle(color: Colors.black),),
           centerTitle: false,
           iconTheme: IconThemeData(
-            color: Colors.red
+            color: Environment.rojo
           ),
         ),
         body: Form(
@@ -216,7 +217,7 @@ class FormularioHabilidad extends StatelessWidget {
                     await authProvider.newHabilidad(ctrlHabilidad.text);
                     formHabilidadProvider.isLoading = false;
                     Navigator.pop(context);              
-                  },child: Text('Agregar habilidad', style: TextStyle(color: Colors.red,),))
+                  },child: Text('Agregar habilidad', style: TextStyle(color: Environment.rojo,),))
             ],
           ),
         ),
@@ -269,7 +270,7 @@ class FormulariEmpleo extends StatelessWidget {
           }:()=>Navigator.pop(context)),
           backgroundColor: Colors.white,
           iconTheme: IconThemeData(
-            color: Colors.red
+            color: Environment.rojo
           ),
         ),
         body: SingleChildScrollView(
@@ -334,7 +335,7 @@ class FormulariEmpleo extends StatelessWidget {
                         Navigator.pop(context);
                        
                         
-                      },child: Text('Agregar empleo', style: TextStyle(color: Colors.red,),))
+                      },child: Text('Agregar empleo', style: TextStyle(color: Environment.rojo,),))
                   
                 ],
               ),
@@ -389,7 +390,7 @@ class FormulariEducacion extends StatelessWidget {
           centerTitle: false,
           backgroundColor: Colors.white,
           iconTheme: IconThemeData(
-            color: Colors.red
+            color: Environment.rojo
           ),
         ),
         body: SingleChildScrollView(
@@ -439,7 +440,7 @@ class FormulariEducacion extends StatelessWidget {
                         Navigator.pop(context);
                         cvProvider.isLoading = false;
                        
-                      },child: Text('Agregar capacitación', style: TextStyle(color: Colors.red,),))
+                      },child: Text('Agregar capacitación', style: TextStyle(color: Environment.rojo,),))
                   
                 ],
               ),
@@ -460,7 +461,7 @@ class Loading extends StatelessWidget {
     return Transform.scale(
       scale: 0.7,
       child: CircularProgressIndicator(
-        color: Colors.red,
+        color: Environment.rojo,
         strokeWidth: 5,
       ),
     );
@@ -505,7 +506,7 @@ class FormularioRequerimiento extends StatelessWidget {
             }:()=>Navigator.pop(context)),
           backgroundColor: Colors.white,
           iconTheme: IconThemeData(
-            color: Colors.red
+            color: Environment.rojo
           ),
           
         ),
@@ -541,7 +542,7 @@ class FormularioRequerimiento extends StatelessWidget {
                   Navigator.pop(context);
                   
                   habilidadServices.isLoading = false;
-                },child: Text('Agregar habilidad', style: TextStyle(color: Colors.red,),))
+                },child: Text('Agregar habilidad', style: TextStyle(color: Environment.rojo,),))
           ],
         ),
        ),
@@ -586,7 +587,7 @@ class FormularioRequisito extends StatelessWidget {
             }:()=>Navigator.pop(context)),
           backgroundColor: Colors.white,
           iconTheme: IconThemeData(
-            color: Colors.red
+            color: Environment.rojo
           ),
           
         ),
@@ -622,7 +623,7 @@ class FormularioRequisito extends StatelessWidget {
                   Navigator.pop(context);
                   
                   habilidadServices.isLoading = false;
-                },child: Text('Agregar habilidad', style: TextStyle(color: Colors.red,),))
+                },child: Text('Agregar habilidad', style: TextStyle(color: Environment.rojo,),))
           ],
         ),
        ),

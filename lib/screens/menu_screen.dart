@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:master_jobz/peticiones/jobs.dart';
 import 'package:rolling_bottom_bar/rolling_bottom_bar.dart';
@@ -30,16 +32,77 @@ class _MenuScreenState extends State<MenuScreen> {
     
     final auth = Provider.of<Auth>(context);
     final paginaProvider = Provider.of<NavegacionModel>(context);
+    final usuario = auth.usuario;
     return  Scaffold(
+          drawer: Drawer(
+            child: Container(
+              width: double.infinity,
+              height: double.infinity,
+              color: Color(0xff281A30),
+              child: Column(children: [
+                Container(
+                  width: double.infinity,
+                  height: MediaQuery.of(context).size.height * 0.4,
+                  child: Center(
+                    child:  Column(
+                     mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                     
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          IconButton(onPressed: (){}, icon: Icon(Icons.settings , color: Color(0xffEA5D60))),
+                          Container(
+                            width: 100,
+                            height: 100,
+                            decoration: BoxDecoration(
+                              color: Color(0xffF5CB39),
+                              border: Border.all(color: Colors.black, width: 4),
+                              borderRadius: BorderRadius.circular(200)
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(200),
+                              child: Image(
+                                image: AssetImage('assets/woman.jpg'),
+                                fit: BoxFit.cover,
+                              ),
+                            )
+                          ),
+                          IconButton(onPressed: (){}, icon: Icon(Icons.logout, color: Color(0xffEA5D60),)),
+                        ],
+                      ),
+                     
+                      
+                          Text('${usuario!.nombre} ${usuario.apellido}',style: TextStyle(color:Colors.white, fontSize: 20.0, fontWeight: FontWeight.normal)),
+                    
+                        ],
+                        
+                    ),
+                  ),
+                ),
+                
+                        Expanded(child: Container()),
+                        Column(children: [
+                          Text('GJoob',style: TextStyle(color:Colors.white, fontSize: 20.0, fontWeight: FontWeight.normal)),
+                          Text('Created by Miguel Albanez',style: TextStyle(color:Colors.white, fontSize: 16.0, fontWeight: FontWeight.normal)),
+                          SizedBox(height: 20,),
+                        ],)
+              ],),
+            )
+          ),
+          
           extendBody: true,
           backgroundColor: Colors.white,
           appBar: AppBar(
          toolbarHeight: 100,
           title: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text('Good\nmorning', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 40),),
+            child: Text('GJoob', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 40),),
           ),
-          centerTitle: false,
+          iconTheme: IconThemeData(
+            color: Colors.black
+          ),
+          centerTitle: true,
           elevation: 0,
           backgroundColor: Colors.white,
           actions: [

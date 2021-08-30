@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:master_jobz/helpers/environment.dart';
 import 'package:master_jobz/models/capacitacione.dart';
 import 'package:master_jobz/models/empleo.dart';
 import 'package:master_jobz/models/habilidad.dart';
@@ -55,11 +56,11 @@ class _ProfilePublicoScreenState extends State<ProfilePublicoScreen> {
                   width: 100,
                   height: 100,
                   decoration: BoxDecoration(
-                    color: Color(0xffF5CB39),
+                    color: Environment.rojo,
                     border: Border.all(color: Colors.black, width: 4),
                     borderRadius: BorderRadius.circular(200)
                   ),
-                  child: Center(child: Text('${usuario.nombre.substring(0,2)}', style: TextStyle(fontSize: 30, color: Colors.black, fontWeight: FontWeight.bold),),),
+                  child: Center(child: Text('${usuario.nombre.substring(0,2)}', style: TextStyle(fontSize: 30, color: Colors.white, fontWeight: FontWeight.bold),),),
                 ),
                 SizedBox(height: 10,),
                 Text('${usuario.telefono}',style: TextStyle(color:Colors.black, fontSize: 16.0)),
@@ -175,7 +176,7 @@ class _ProfilePublicoScreenState extends State<ProfilePublicoScreen> {
                                       await authProvider.deleteEmpleo(empleos[i].id);
                                       Navigator.pop(context);
                                     });
-                                  }, icon: Icon(Icons.delete, color: Colors.red,)),
+                                  }, icon: Icon(Icons.delete, color: Environment.rojo,)),
                                   IconButton(onPressed: (){
                                     Navigator.push(context, ruta(ChangeNotifierProvider(create: ( _ ) => EmpleoProvider(),child:FormulariEmpleo(empleo: empleos[i])), Offset(2,0), true));
                                   }, icon: Icon(Icons.edit, color: Colors.black,)),
@@ -232,7 +233,7 @@ class _ProfilePublicoScreenState extends State<ProfilePublicoScreen> {
                                       await authProvider.deleteEducacion(capacitaciones[i].id);
                                       Navigator.pop(context);
                                     });
-                                  }, icon: Icon(Icons.delete, color: Colors.red,)),
+                                  }, icon: Icon(Icons.delete, color: Environment.rojo,)),
                                   IconButton(onPressed: (){
                                     Navigator.push(context, ruta(ChangeNotifierProvider(create: ( _ ) => EducacionProvider(),child: FormulariEducacion(capacitacion: capacitaciones[i])), Offset(2,0), true));
                                   }, icon: Icon(Icons.edit, color: Colors.black,)),
