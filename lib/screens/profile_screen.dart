@@ -167,13 +167,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                                   children: [
                                     ListTile(
                                       title: Text('${requisitos[i].requisito}', style: TextStyle(fontSize: 17, color: Colors.black),),
-                                      leading: Transform.scale(
-                                        scale: 1.3,
-                                        child: Checkbox(
-                                          activeColor: Colors.grey,
-                                          onChanged: (value){}, value: true, ),
-                                      ),
-                                    )
+                                      leading: Icon(Icons.cancel_outlined, color: Colors.red,)),
                                   ],
                                 ),
                   

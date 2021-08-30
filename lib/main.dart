@@ -13,6 +13,7 @@ import 'package:master_jobz/screens/menu_screen.dart';
 import 'package:master_jobz/screens/postulantes_screen.dart';
 import 'package:master_jobz/screens/profile_publico_screen.dart';
 import 'package:master_jobz/screens/profile_screen.dart';
+import 'package:master_jobz/screens/welcome_screen.dart';
 import 'package:master_jobz/services/auth_navegacion_provider.dart';
 
 import 'package:master_jobz/services/navegacion_provider.dart';
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
         initialRoute: 'loading',
         routes: {
           'login' : ( _ ) => LoginScreen(),
+          'welcome' : ( _ ) => WelcomeScreen(),
           '/' : ( _ ) => MenuScreen(),
           'loading' : ( _ ) => LoadingScreen(),
           'jobs' : ( _ ) => JobsScreen(),

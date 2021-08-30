@@ -73,7 +73,7 @@ class Icono extends StatelessWidget {
           borderRadius: BorderRadius.circular(200),
           border: Border.all(color:Colors.white, width: 5 )
         ),
-        child: Center(child: Text('MZ',style: TextStyle(color: Colors.white, fontSize: 35, fontWeight: FontWeight.bold),),),
+        child: Center(child: Text('GJ',style: TextStyle(color: Colors.white, fontSize: 35, fontWeight: FontWeight.bold),),),
       ),
     );
   }
@@ -93,7 +93,15 @@ class Box extends StatelessWidget {
       width: double.infinity,
       height: size.height * 0.4,
       decoration: BoxDecoration(
-        color: Colors.black,
+        gradient: LinearGradient(
+          begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+            colors: [
+              Colors.black,
+              Color(0xff1D1D1B),
+
+            ]
+        )
       ),
     );
   }

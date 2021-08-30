@@ -38,7 +38,17 @@ class _MenuScreenState extends State<MenuScreen> {
             child: Container(
               width: double.infinity,
               height: double.infinity,
-              color: Color(0xff281A30),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Colors.black,
+              Color(0xff1D1D1B),
+
+            ]
+                )
+              ),
               child: Column(children: [
                 Container(
                   width: double.infinity,

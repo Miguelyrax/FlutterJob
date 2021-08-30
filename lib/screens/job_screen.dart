@@ -8,14 +8,20 @@ import 'package:master_jobz/widgets/boton.dart';
 import 'package:provider/provider.dart';
 
 
-class JobScreen extends StatelessWidget{
+class JobScreen extends StatefulWidget{
+  @override
+  _JobScreenState createState() => _JobScreenState();
+}
+
+class _JobScreenState extends State<JobScreen> {
    List<Requerimiento> requerimientos = [];
+
+    bool validator = false;
   @override
   Widget build(BuildContext context) {
     final jobProvider = Provider.of<JobProvider>(context);
     final authProvider = Provider.of<Auth>(context);
     requerimientos = jobProvider.job!.requerimientos;
-   
     return Scaffold(
      
   
@@ -62,9 +68,11 @@ class JobScreen extends StatelessWidget{
                             SizedBox(height: 40,),
                            requerimientos.length == 0  ?Container(height: 100,) :SizedBox(),
                             Boton(text:jobProvider.job!.postulantes.any((j) => j == authProvider.usuario!.id) == true ?'Postulado' : 'Postular', onPressed:
-                              jobProvider.job!.status == 'false' || jobProvider.job!.postulantes.any((j) => j == authProvider.usuario!.id) == true   ? null : ()async{
-                                
-                                 await jobProvider.postular();
+                              jobProvider.job!.status == 'false' || jobProvider.job!.postulantes.any((j) => j == authProvider.usuario!.id) == true || validator == true   ? null : ()async{
+                                setState(() {validator=true; });
+                                print(validator);
+                                await jobProvider.postular(jobProvider.job!.id);
+                                setState(() {validator=false; });
                                  Navigator.pop(context);
                                 
                                 
@@ -79,8 +87,6 @@ class JobScreen extends StatelessWidget{
        
    );
   }
-
- 
 }
 
 

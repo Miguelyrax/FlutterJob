@@ -47,7 +47,7 @@ class JobProvider with ChangeNotifier{
       return jobs;
     }
   }
-  Future postular()async{
+  Future postular(String id)async{
     final List<Requisito> requisitos = [];
     job!.requerimientos.forEach((e) => {
       e.requisitos.forEach((e) => {
@@ -60,7 +60,7 @@ class JobProvider with ChangeNotifier{
     final data = {
       "requisitos":requisitos
     };
-    final url = Uri.parse('${Environment.baseURL}/postulantes/${job!.id}');
+    final url = Uri.parse('${Environment.baseURL}/postulantes/${id}');
     final String? token = await Auth.getToken();
     final resp = await  http.post(url, headers: {
       'Content-type':'application/json',
@@ -70,7 +70,7 @@ class JobProvider with ChangeNotifier{
   
     if(resp.statusCode == 200){
       final postulantesResponse = postulanteResponseFromJson(resp.body);
-      int index = empleos.indexWhere((element) => element.id == job!.id);
+      int index = jobs.indexWhere((element) => element.id == id);
       this.jobs[index].postulantes.add(postulantesResponse.idUser);
       notifyListeners();
       return true;

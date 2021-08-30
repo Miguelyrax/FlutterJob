@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 class Boton extends StatelessWidget {
   final String text;
   final Function? onPressed;
-  const Boton({
-    Key? key,required  this.text, required this.onPressed,
+  final Color? color ;
+   Boton({
+    Key? key,required  this.text, required this.onPressed, this.color ,
   }) : super(key: key);
 
   @override
@@ -12,10 +13,10 @@ class Boton extends StatelessWidget {
                 child: MaterialButton(onPressed: this.onPressed == null ? null : ()=>onPressed!(),
                 disabledColor: Colors.grey,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-                color: Color(0xff0F1225),
+                color: this.color == null ? Color(0xff0F1225) : this.color,
                 minWidth: double.infinity,
                 padding: EdgeInsets.symmetric(vertical: 15),
-                child:  Text(this.text,style: TextStyle(fontSize: 20, color: Colors.white.withOpacity(0.8)))
+                child:  Text(this.text,style: TextStyle(fontSize: 20, color:this.color == null ? Colors.white:Colors.black.withOpacity(0.8)))
                 ),
               );
   }

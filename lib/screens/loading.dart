@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:master_jobz/peticiones/auth.dart';
-import 'package:master_jobz/screens/login_screen.dart';
 import 'package:master_jobz/screens/menu_screen.dart';
+import 'package:master_jobz/screens/welcome_screen.dart';
 import 'package:provider/provider.dart';
 
 
@@ -55,7 +55,7 @@ class LoadingScreen extends StatelessWidget {
       // Navigator.pushReplacementNamed(context, 'login');
       Navigator.pushReplacement(
         context,
-        PageRouteBuilder(pageBuilder: (_,__,___)=>LoginScreen(),
+        PageRouteBuilder(pageBuilder: (_,__,___)=>WelcomeScreen(),
         transitionDuration: Duration(milliseconds: 0))
         );
     }
