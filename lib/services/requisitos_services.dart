@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 class RequisitosServices with ChangeNotifier{
   GlobalKey<FormState> formKey = new GlobalKey<FormState>();
   bool _isLoading = false;
+  String requisito = '';
   bool get isLoading => _isLoading;
   set isLoading(bool value){
     _isLoading = value;

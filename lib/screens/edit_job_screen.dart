@@ -29,11 +29,6 @@ class EditJobScreen extends StatefulWidget{
 }
 
 class _EditJobScreenState extends State<EditJobScreen> with SingleTickerProviderStateMixin {
-  final ctrlDescription = TextEditingController();
-  final ctrlTitle = TextEditingController();
-  final ctrlSubtitle = TextEditingController();
-  final ctrlTtotalRequerido = TextEditingController();
-  final ctrlRequerimiento = TextEditingController();
 
    late TabController _tabController ;
    List<Requerimiento> requerimientos = [];
@@ -50,11 +45,6 @@ class _EditJobScreenState extends State<EditJobScreen> with SingleTickerProvider
    @override
   void dispose() {
     _tabController.dispose();
-    ctrlDescription.dispose();
-    ctrlTitle.dispose();
-    ctrlSubtitle.dispose();
-    ctrlTtotalRequerido.dispose();
-    ctrlRequerimiento.dispose();
     super.dispose();
   }
   @override
@@ -64,10 +54,9 @@ class _EditJobScreenState extends State<EditJobScreen> with SingleTickerProvider
     final jobServices = Provider.of<JobServices>(context);
     
     requerimientos = jobProvider.job!.requerimientos;
-    ctrlDescription.text = jobProvider.job!.description;
-    ctrlTitle.text = jobProvider.job!.title;
-    ctrlSubtitle.text = jobProvider.job!.subtitle;
-    ctrlTtotalRequerido.text = jobProvider.job!.totalRequerido.toString();
+    jobServices.title = jobProvider.job!.title;
+    jobServices.subTitle = jobProvider.job!.subtitle;
+    jobServices.description = jobProvider.job!.description;
     
 
     return WillPopScope(
@@ -80,7 +69,7 @@ class _EditJobScreenState extends State<EditJobScreen> with SingleTickerProvider
         }else{
           jobServices.isLoading = true;
           if(jobServices.isLoading) {loading(context);} 
-        await jobProvider.editJob(ctrlTitle.text, ctrlSubtitle.text, ctrlDescription.text, int.parse(ctrlTtotalRequerido.text), jobProvider.job!.id);     
+        await jobProvider.editJob(jobServices.title, jobServices.subTitle, jobServices.description, 100, jobProvider.job!.id);     
         jobServices.isLoading = false;
         Navigator.pop(context);
         return true;
@@ -94,7 +83,7 @@ class _EditJobScreenState extends State<EditJobScreen> with SingleTickerProvider
           if(!jobServices.isValidForm()) return;
           jobServices.isLoading = true;
           if(jobServices.isLoading) {loading(context);} 
-          await jobProvider.editJob(ctrlTitle.text, ctrlSubtitle.text, ctrlDescription.text, int.parse(ctrlTtotalRequerido.text), jobProvider.job!.id);     
+          await jobProvider.editJob(jobServices.title, jobServices.subTitle, jobServices.description, 100, jobProvider.job!.id);     
           Navigator.pop(context);
           Navigator.pop(context);
           jobServices.isLoading = false;
@@ -143,8 +132,11 @@ class _EditJobScreenState extends State<EditJobScreen> with SingleTickerProvider
                                    Pad(
                                      title: true,
                                      child: TextFormField(
-                                       maxLength: 11,
-                                       controller: ctrlTitle,
+                                       maxLength: 15,
+                                       initialValue: jobServices.title,
+                                       onChanged: (value){
+                                         jobServices.title = value;
+                                       },
                                        style: TextStyle(color: Colors.black45),
                                        validator:  (value){
                                         return (value != null && value.length >1 )
@@ -157,8 +149,11 @@ class _EditJobScreenState extends State<EditJobScreen> with SingleTickerProvider
     
                                   Pad(child: Text('Sub título',style: TextStyleDecoration.textStyleDecoration(), )),
                                   Pad(title: true,child: TextFormField(
-                                    maxLength: 18,style: TextStyle(color: Colors.black45),
-                                    controller: ctrlSubtitle,
+                                    maxLength: 30,style: TextStyle(color: Colors.black45),
+                                    initialValue: jobServices.subTitle,
+                                    onChanged: (value){
+                                         jobServices.subTitle = value;
+                                       },
                                     validator:  (value){
                                     return (value != null && value.length >3 )
                                     ? null
@@ -172,8 +167,12 @@ class _EditJobScreenState extends State<EditJobScreen> with SingleTickerProvider
                                   Pad(
                                     title: true,
                                     child: TextFormField(
+                                      initialValue: jobServices.description,
                                       style: TextStyle(color: Colors.black45),
-                                      maxLines: 8, controller: ctrlDescription,
+                                      onChanged: (value){
+                                         jobServices.description = value;
+                                       },
+                                      maxLines: 8,
                                       validator:  (value){
                                       return (value != null && value.length >8 )
                                       ? null
@@ -286,13 +285,9 @@ class _Req extends StatefulWidget {
 }
 
 class __ReqState extends State<_Req> {
-  final ctrlRequerimiento = TextEditingController();
-  final ctrlRequisitos = TextEditingController();
-  bool edit = false;
   @override
   Widget build(BuildContext context) {
     final jobProvider = Provider.of<JobProvider>(context);
-    ctrlRequerimiento.text = widget.requerimiento.title;
      final number = new ValueNotifier(0);
     widget.requerimiento.total = widget.requerimiento.requisitos.length.toDouble();
     return ValueListenableBuilder(
@@ -303,8 +298,7 @@ class __ReqState extends State<_Req> {
                      Pad(
                        
                        child: ListTile(
-                         title: edit ? TextFormField( controller: ctrlRequerimiento, decoration: InputDecorations.editRequerimiento(),)
-                                     :Text('${widget.requerimiento.title}',style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold ),), 
+                         title: Text('${widget.requerimiento.title}',style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold ),), 
                          trailing:  IconButton(onPressed: (){
                                           Navigator.push(context,ruta(ChangeNotifierProvider(create: ( _ ) => HabilidadServices(),child: FormularioRequerimiento(requerimiento: widget.requerimiento,)),Offset(2,0),true));
                                         }, icon: Icon(Icons.edit))
@@ -361,15 +355,11 @@ class _Requisito extends StatefulWidget {
 }
 
 class __RequisitoState extends State<_Requisito> {
-  final ctrlRequisito = TextEditingController();
   bool edit = false;
   @override
   Widget build(BuildContext context) {
-    ctrlRequisito.text = widget.requisito.requisito;
-    final jobProvider = Provider.of<JobProvider>(context);
     return ListTile(
-                title: edit ? TextFormField( controller: ctrlRequisito, decoration: InputDecorations.editRequerimiento(),)
-                            :Text('${widget.requisito.requisito}', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black38 , fontSize: 15),), 
+                title:Text('${widget.requisito.requisito}', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black38 , fontSize: 15),), 
                        trailing:  IconButton(onPressed: (){
                                   Navigator.push(context,ruta(ChangeNotifierProvider(create: ( _ ) => RequisitosServices(),child: FormularioRequisito(requisito: widget.requisito,)),Offset(2,0),true));
                                   }, icon: Icon(Icons.edit))

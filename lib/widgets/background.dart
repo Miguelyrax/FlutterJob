@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:master_jobz/peticiones/auth.dart';
 import 'package:master_jobz/peticiones/jobs.dart';
@@ -99,14 +100,14 @@ class _Cabezera extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(left: 30, top: 100),
+      padding: EdgeInsets.only(left: 30, top: 100,right: 30),
       child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
       SafeArea(child: Container()),
      
-      Text('${jobProvider.job?.title}', style:TextStyle(fontSize: 60, fontWeight: FontWeight.bold) ,),
-      Text('${jobProvider.job?.subtitle}', style:TextStyle(fontSize: 30, fontWeight: FontWeight.bold) ,),
+      AutoSizeText('${jobProvider.job?.title}', style:TextStyle(fontSize: 60, fontWeight: FontWeight.bold), maxLines: 1,),
+      AutoSizeText('${jobProvider.job?.subtitle}', style:TextStyle(fontSize: 30, fontWeight: FontWeight.bold) ,maxLines: 2,),
           ],
       ),
     );

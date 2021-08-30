@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:master_jobz/models/job.dart';
 import 'package:master_jobz/peticiones/jobs.dart';
@@ -65,15 +66,16 @@ class Targeta extends StatelessWidget {
             Positioned(
               top: 0,
               left: 30,
+              right: 30,
               child: Container(
                 width: size.width * 0.7,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('${this.number}', style: TextStyle(fontSize: 100, fontWeight: FontWeight.bold),),
+                    AutoSizeText('${this.number}', style: TextStyle(fontSize: 100, fontWeight: FontWeight.bold), maxLines: 1,),
                     SizedBox(height:30),
-                    Text(job.title, style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),),
-                    Text(job.subtitle, style: TextStyle(fontSize:30, fontWeight: FontWeight.bold)),
+                    AutoSizeText(job.title, style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold), maxLines: 1,),
+                    AutoSizeText(job.subtitle, style: TextStyle(fontSize:30, fontWeight: FontWeight.bold), maxLines: 2,),
                     SizedBox(height:10),
                     Text('26/07/2021', style: TextStyle(color: Colors.black54)),
                   ],

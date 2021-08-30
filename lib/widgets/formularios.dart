@@ -177,7 +177,6 @@ class FormularioHabilidad extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-  final ctrlHabilidad = TextEditingController();
   final authProvider = Provider.of<Auth>(context); 
   final formHabilidadProvider = Provider.of<FormHabilidadProvider>(context); 
     return 
@@ -201,7 +200,10 @@ class FormularioHabilidad extends StatelessWidget {
                 color: Colors.white,
                 child: TextFormField(
                   decoration: InputDecorations.edicionesDecoration(),
-                  controller: ctrlHabilidad,
+                  initialValue: formHabilidadProvider.habilidad,
+                  onChanged: (value){
+                    formHabilidadProvider.habilidad = value;
+                  },
                   validator:  (value){
                   return (value != null && value.length >1 )
                   ? null
@@ -214,7 +216,7 @@ class FormularioHabilidad extends StatelessWidget {
                 FocusScope.of(context).unfocus();
                     if(!formHabilidadProvider.isValidForm()) return;
                     formHabilidadProvider.isLoading = true;
-                    await authProvider.newHabilidad(ctrlHabilidad.text);
+                    await authProvider.newHabilidad(formHabilidadProvider.habilidad);
                     formHabilidadProvider.isLoading = false;
                     Navigator.pop(context);              
                   },child: Text('Agregar habilidad', style: TextStyle(color: Environment.rojo,),))
@@ -232,23 +234,20 @@ class FormulariEmpleo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-  final ctrlEmpresa = TextEditingController();
-  final ctrlCargo = TextEditingController();
-  final ctrlDescription = TextEditingController();
   final authProvider = Provider.of<Auth>(context); 
   final empleoProvider = Provider.of<EmpleoProvider>(context); 
 
   if(empleo != null){
-    ctrlEmpresa.text = empleo!.empresa;
-    ctrlCargo.text = empleo!.cargo;
-    ctrlDescription.text = empleo!.description;
+    empleoProvider.empresa = empleo!.empresa;
+    empleoProvider.cargo = empleo!.cargo;
+    empleoProvider.descripcion = empleo!.description;
   }
     return WillPopScope(
       onWillPop:empleoProvider.isLoading ? ()async{return false;} : empleo != null ?()async{
                     FocusScope.of(context).unfocus();
                     if(!empleoProvider.isValidForm()) return false;
                     empleoProvider.isLoading = true;
-                    await authProvider.editEmpleo(ctrlEmpresa.text, ctrlCargo.text, ctrlDescription.text, empleo!.id);
+                    await authProvider.editEmpleo(empleoProvider.empresa, empleoProvider.cargo, empleoProvider.descripcion, empleo!.id);
                     empleoProvider.isLoading = false;
                     
                     return true;
@@ -263,7 +262,7 @@ class FormulariEmpleo extends StatelessWidget {
           FocusScope.of(context).unfocus();
           if(!empleoProvider.isValidForm()) return;
           empleoProvider.isLoading = true;
-          await authProvider.editEmpleo(ctrlEmpresa.text, ctrlCargo.text, ctrlDescription.text, empleo!.id);    
+          await authProvider.editEmpleo(empleoProvider.empresa, empleoProvider.cargo, empleoProvider.descripcion, empleo!.id);    
           Navigator.pop(context);
           empleoProvider.isLoading = false;
           
@@ -287,7 +286,10 @@ class FormulariEmpleo extends StatelessWidget {
                     title: true,
                     child: TextFormField(
                       decoration: InputDecorations.editJobDecoration(hint: 'Agregar empresa'),
-                      controller: ctrlEmpresa,
+                      initialValue: empleoProvider.empresa,
+                      onChanged: (value){
+                        empleoProvider.empresa = value;
+                      },
                       validator:  (value){
                       return (value != null && value.length >2 )
                       ? null
@@ -301,7 +303,10 @@ class FormulariEmpleo extends StatelessWidget {
                     title: true,
                     child: TextFormField(
                       decoration: InputDecorations.editJobDecoration(hint: 'Agregar cargo'),
-                      controller: ctrlCargo,
+                      initialValue: empleoProvider.cargo,
+                      onChanged: (value){
+                        empleoProvider.cargo = value;
+                      },
                       validator:  (value){
                       return (value != null && value.length >5 )
                       ? null
@@ -316,7 +321,10 @@ class FormulariEmpleo extends StatelessWidget {
                     child: TextFormField(
                       maxLines: 8,
                       decoration: InputDecorations.editJobDecoration(hint: 'Agregar descripción'),
-                      controller: ctrlDescription,
+                      initialValue: empleoProvider.descripcion,
+                      onChanged: (value){
+                        empleoProvider.descripcion = value;
+                      },
                       validator:  (value){
                       return (value != null && value.length >10 )
                       ? null
@@ -330,7 +338,7 @@ class FormulariEmpleo extends StatelessWidget {
                         FocusScope.of(context).unfocus();
                         if(!empleoProvider.isValidForm()) return;
                         empleoProvider.isLoading = true;
-                        await authProvider.newEmpleo(ctrlEmpresa.text, ctrlCargo.text, ctrlDescription.text);
+                        await authProvider.newEmpleo(empleoProvider.empresa, empleoProvider.cargo, empleoProvider.descripcion);
                         empleoProvider.isLoading = false;
                         Navigator.pop(context);
                        
@@ -353,14 +361,13 @@ class FormulariEducacion extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-  final ctrlEstablecimiento = TextEditingController();
-  final ctrlTema = TextEditingController();
+
 
   final authProvider = Provider.of<Auth>(context); 
   final cvProvider = Provider.of<EducacionProvider>(context); 
   if(capacitacion != null){
-    ctrlEstablecimiento.text = capacitacion!.establecimiento;
-    ctrlTema.text = capacitacion!.tema;
+    cvProvider.establecimiento = capacitacion!.establecimiento;
+    cvProvider.tema = capacitacion!.tema;
   }
     return WillPopScope(
       onWillPop:cvProvider.isLoading ? ()async{return false;}: capacitacion != null ?()async{
@@ -370,7 +377,7 @@ class FormulariEducacion extends StatelessWidget {
                         return false;
                       }
                       cvProvider.isLoading = true;
-                     await authProvider.editEducacion(ctrlEstablecimiento.text, ctrlTema.text, capacitacion!.id);
+                     await authProvider.editEducacion(cvProvider.establecimiento, cvProvider.tema, capacitacion!.id);
                     cvProvider.isLoading = false;
                     return true;
                   }:null,
@@ -382,7 +389,7 @@ class FormulariEducacion extends StatelessWidget {
           FocusScope.of(context).unfocus();
           if(!cvProvider.isValidForm()) return;
           cvProvider.isLoading = true;
-          await await authProvider.editEducacion(ctrlEstablecimiento.text, ctrlTema.text, capacitacion!.id);     
+          await await authProvider.editEducacion(cvProvider.establecimiento, cvProvider.tema, capacitacion!.id);     
           Navigator.pop(context);
           cvProvider.isLoading = false;
           
@@ -407,7 +414,10 @@ class FormulariEducacion extends StatelessWidget {
                     title: true,
                     child: TextFormField(
                       decoration: InputDecorations.editJobDecoration(hint: 'Agregar establecimiento'),
-                      controller: ctrlEstablecimiento,
+                      initialValue: cvProvider.establecimiento,
+                      onChanged: (value){
+                        cvProvider.establecimiento = value;
+                      },
                       validator:  (value){
                       return (value != null && value.length >1 )
                       ? null
@@ -421,7 +431,10 @@ class FormulariEducacion extends StatelessWidget {
                     title: true,
                     child: TextFormField(
                       decoration: InputDecorations.editJobDecoration(hint: 'Agregar materia'),
-                      controller: ctrlTema,
+                      initialValue: cvProvider.tema,
+                      onChanged: (value){
+                        cvProvider.tema = value;
+                      },
                       validator:  (value){
                       return (value != null && value.length >1 )
                       ? null
@@ -436,7 +449,7 @@ class FormulariEducacion extends StatelessWidget {
                         FocusScope.of(context).unfocus();
                         if(!cvProvider.isValidForm()) return;
                         cvProvider.isLoading = true;
-                        await authProvider.newEducacion(ctrlEstablecimiento.text, ctrlTema.text);
+                        await authProvider.newEducacion(cvProvider.establecimiento, cvProvider.tema);
                         Navigator.pop(context);
                         cvProvider.isLoading = false;
                        
@@ -472,13 +485,13 @@ class FormularioRequerimiento extends StatelessWidget {
   final Requerimiento? requerimiento;
   FormularioRequerimiento({Key? key, this.requerimiento}) : super(key: key);
   @override
-  final ctrlController = TextEditingController();
+
   Widget build(BuildContext context) {
    
     final jobProvider = Provider.of<JobProvider>(context, listen: false);
     final habilidadServices = Provider.of<HabilidadServices>(context, listen: false);
     if(requerimiento != null){
-    ctrlController.text = requerimiento!.title;
+    habilidadServices.requerimiento = requerimiento!.title;
   }
     return WillPopScope(
       onWillPop: habilidadServices.isLoading ? ()async{return false;}: requerimiento != null ?()async{
@@ -487,7 +500,7 @@ class FormularioRequerimiento extends StatelessWidget {
                         return false;
                       }
                       habilidadServices.isLoading = true;
-                     await jobProvider.editRequerimiento(requerimiento!.id, ctrlController.text);
+                     await jobProvider.editRequerimiento(requerimiento!.id, habilidadServices.requerimiento);
                     habilidadServices.isLoading = false;
                     return true;
                   }:null,
@@ -499,7 +512,7 @@ class FormularioRequerimiento extends StatelessWidget {
             FocusScope.of(context).unfocus();
             if(!habilidadServices.isValidForm()) return;
             habilidadServices.isLoading = true;
-            await jobProvider.editRequerimiento(requerimiento!.id, ctrlController.text);     
+            await jobProvider.editRequerimiento(requerimiento!.id, habilidadServices.requerimiento);     
             Navigator.pop(context);
             habilidadServices.isLoading = false;
             
@@ -521,7 +534,10 @@ class FormularioRequerimiento extends StatelessWidget {
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 child: TextFormField(
                   style: TextStyle(color: Colors.black45),
-                  controller:ctrlController,
+                  initialValue: habilidadServices.requerimiento,
+                  onChanged: (value){
+                    habilidadServices.requerimiento = value;
+                  },
                   decoration: InputDecorations.edicionesDecoration(),
                   validator:  (value){
                     return (value != null && value.length >1 )
@@ -537,7 +553,7 @@ class FormularioRequerimiento extends StatelessWidget {
                   FocusScope.of(context).unfocus();
                   if(!habilidadServices.isValidForm()) return;
                   habilidadServices.isLoading = true;
-                  await jobProvider.newRequerimiento(jobProvider.job!.id, ctrlController.text);
+                  await jobProvider.newRequerimiento(jobProvider.job!.id, habilidadServices.requerimiento);
                   habilidadServices.isLoading = false;
                   Navigator.pop(context);
                   
@@ -553,13 +569,12 @@ class FormularioRequisito extends StatelessWidget {
   final Requisito? requisito;
   FormularioRequisito({Key? key, this.requisito}) : super(key: key);
   @override
-  final ctrlController = TextEditingController();
   Widget build(BuildContext context) {
    
     final jobProvider = Provider.of<JobProvider>(context, listen: false);
     final habilidadServices = Provider.of<RequisitosServices>(context, listen: false);
     if(requisito != null){
-    ctrlController.text = requisito!.requisito;
+    habilidadServices.requisito = requisito!.requisito;
   }
     return WillPopScope(
       onWillPop: habilidadServices.isLoading ? ()async{return false;}: requisito != null ?()async{
@@ -568,7 +583,7 @@ class FormularioRequisito extends StatelessWidget {
                         return false;
                       }
                       habilidadServices.isLoading = true;
-                     await jobProvider.editRequisito(requisito!.id, ctrlController.text);
+                     await jobProvider.editRequisito(requisito!.id, habilidadServices.requisito);
                     habilidadServices.isLoading = false;
                     return true;
                   }:null,
@@ -580,7 +595,7 @@ class FormularioRequisito extends StatelessWidget {
             FocusScope.of(context).unfocus();
             if(!habilidadServices.isValidForm()) return;
             habilidadServices.isLoading = true;
-            await jobProvider.editRequisito(requisito!.id, ctrlController.text);     
+            await jobProvider.editRequisito(requisito!.id, habilidadServices.requisito);     
             Navigator.pop(context);
             habilidadServices.isLoading = false;
             
@@ -602,7 +617,10 @@ class FormularioRequisito extends StatelessWidget {
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 child: TextFormField(
                   style: TextStyle(color: Colors.black45),
-                  controller:ctrlController,
+                  initialValue: habilidadServices.requisito,
+                  onChanged: (value){
+                    habilidadServices.requisito = value;
+                  },
                   decoration: InputDecorations.edicionesDecoration(),
                   validator:  (value){
                     return (value != null && value.length >1 )
@@ -618,7 +636,7 @@ class FormularioRequisito extends StatelessWidget {
                   FocusScope.of(context).unfocus();
                   if(!habilidadServices.isValidForm()) return;
                   habilidadServices.isLoading = true;
-                  await jobProvider.newRequisito(jobProvider.requerimiento!.id, ctrlController.text);
+                  await jobProvider.newRequisito(jobProvider.requerimiento!.id, habilidadServices.requisito);
                   habilidadServices.isLoading = false;
                   Navigator.pop(context);
                   
