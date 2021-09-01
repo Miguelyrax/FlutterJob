@@ -15,6 +15,8 @@ import 'package:master_jobz/services/profile_services.dart';
 import 'package:master_jobz/services/requisitos_services.dart';
 import 'package:master_jobz/ui/input_decoration.dart';
 import 'package:master_jobz/ui/style_decoration.dart';
+import 'package:master_jobz/widgets/boton.dart';
+import 'package:master_jobz/widgets/boton_date.dart';
 
 import 'package:master_jobz/widgets/cuerpo.dart';
 import 'package:provider/provider.dart';
@@ -186,6 +188,7 @@ class FormularioHabilidad extends StatelessWidget {
           backgroundColor: Colors.white,
           title: Text('Habilidad', style: TextStyle(color: Colors.black),),
           centerTitle: false,
+          leading: IconButton(icon:formHabilidadProvider.isLoading ? Loading(): Icon(Icons.arrow_back, size: 24,),onPressed:()=>Navigator.pop(context)),
           iconTheme: IconThemeData(
             color: Environment.rojo
           ),
@@ -226,28 +229,40 @@ class FormularioHabilidad extends StatelessWidget {
       );
   }
 }
-class FormulariEmpleo extends StatelessWidget {
+class FormulariEmpleo extends StatefulWidget {
   final Empleo? empleo;
   const FormulariEmpleo({
     Key? key, this.empleo,
   }) : super(key: key);
 
   @override
+  _FormulariEmpleoState createState() => _FormulariEmpleoState();
+}
+
+class _FormulariEmpleoState extends State<FormulariEmpleo> {
+  @override
+  void initState() { 
+    final empleoProvider = Provider.of<EmpleoProvider>(context,listen: false); 
+    if(widget.empleo != null){
+    empleoProvider.empresa = widget.empleo!.empresa;
+    empleoProvider.cargo = widget.empleo!.cargo;
+    empleoProvider.descripcion = widget.empleo!.description;
+    empleoProvider.inicio = widget.empleo!.inicio;
+    empleoProvider.termino = widget.empleo!.termino;
+  }
+    super.initState();
+    
+  }
+  @override
   Widget build(BuildContext context) {
   final authProvider = Provider.of<Auth>(context); 
   final empleoProvider = Provider.of<EmpleoProvider>(context); 
-
-  if(empleo != null){
-    empleoProvider.empresa = empleo!.empresa;
-    empleoProvider.cargo = empleo!.cargo;
-    empleoProvider.descripcion = empleo!.description;
-  }
     return WillPopScope(
-      onWillPop:empleoProvider.isLoading ? ()async{return false;} : empleo != null ?()async{
+      onWillPop:empleoProvider.isLoading ? ()async{return false;} : widget.empleo != null ?()async{
                     FocusScope.of(context).unfocus();
                     if(!empleoProvider.isValidForm()) return false;
                     empleoProvider.isLoading = true;
-                    await authProvider.editEmpleo(empleoProvider.empresa, empleoProvider.cargo, empleoProvider.descripcion, empleo!.id);
+                    await authProvider.editEmpleo(empleoProvider.empresa, empleoProvider.cargo, empleoProvider.descripcion,empleoProvider.inicio,empleoProvider.termino, widget.empleo!.id);
                     empleoProvider.isLoading = false;
                     
                     return true;
@@ -255,14 +270,14 @@ class FormulariEmpleo extends StatelessWidget {
       child: Scaffold(
 
         appBar: AppBar(
-          title: empleo != null ? Text('Editar empleo', style: TextStyle(color:Colors.black45, fontSize: 20.0, fontWeight: FontWeight.bold),) :
+          title: widget.empleo != null ? Text('Editar empleo', style: TextStyle(color:Colors.black45, fontSize: 20.0, fontWeight: FontWeight.bold),) :
                 Text('Empleo', style: TextStyle(color:Colors.black45, fontSize: 20.0, fontWeight: FontWeight.bold),),
           centerTitle: false,
-          leading:IconButton(icon:empleoProvider.isLoading ? Loading(): Icon(Icons.arrow_back, size: 24,),onPressed:empleoProvider.isLoading ? null : empleo != null ?()async{
+          leading:IconButton(icon:empleoProvider.isLoading ? Loading(): Icon(Icons.arrow_back, size: 24,),onPressed:empleoProvider.isLoading ? null : widget.empleo != null ?()async{
           FocusScope.of(context).unfocus();
           if(!empleoProvider.isValidForm()) return;
           empleoProvider.isLoading = true;
-          await authProvider.editEmpleo(empleoProvider.empresa, empleoProvider.cargo, empleoProvider.descripcion, empleo!.id);    
+          await authProvider.editEmpleo(empleoProvider.empresa, empleoProvider.cargo, empleoProvider.descripcion,empleoProvider.inicio,empleoProvider.termino, widget.empleo!.id);    
           Navigator.pop(context);
           empleoProvider.isLoading = false;
           
@@ -314,12 +329,24 @@ class FormulariEmpleo extends StatelessWidget {
                       },
                     ),
                   ),
+                  Pad(child: Text('Inicio',style: TextStyleDecoration.textStyleDecoration(), )),
+                   Pad(
+                     title: true,
+                     child: BotonDate(funcion: (result)=>empleoProvider.setInicio = result, value: empleoProvider.inicio,),
+                   ),
+                  Pad(child: Text('Final',style: TextStyleDecoration.textStyleDecoration(), )),
+                   Pad(
+                     title: true,
+                     child: BotonDate(funcion: (result)=>empleoProvider.setFinal = result, value: empleoProvider.termino,),
+                   ),
+                   
+                 
                   SizedBox(height: 20,),
                   Pad(child: Text('Descripción',style: TextStyleDecoration.textStyleDecoration(), )),
                   Pad(
                     title: true,
                     child: TextFormField(
-                      maxLines: 8,
+                      maxLines: null,
                       decoration: InputDecorations.editJobDecoration(hint: 'Agregar descripción'),
                       initialValue: empleoProvider.descripcion,
                       onChanged: (value){
@@ -333,12 +360,12 @@ class FormulariEmpleo extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 20,),
-                  empleo != null ?
+                  widget.empleo != null ?
                       Container():MaterialButton(onPressed: empleoProvider.isLoading ? null : ()async{
                         FocusScope.of(context).unfocus();
                         if(!empleoProvider.isValidForm()) return;
                         empleoProvider.isLoading = true;
-                        await authProvider.newEmpleo(empleoProvider.empresa, empleoProvider.cargo, empleoProvider.descripcion);
+                        await authProvider.newEmpleo(empleoProvider.empresa, empleoProvider.cargo, empleoProvider.descripcion,empleoProvider.inicio, empleoProvider.termino);
                         empleoProvider.isLoading = false;
                         Navigator.pop(context);
                        
@@ -353,43 +380,59 @@ class FormulariEmpleo extends StatelessWidget {
     );
   }
 }
-class FormulariEducacion extends StatelessWidget {
+
+
+class FormulariEducacion extends StatefulWidget {
   final Capacitacione? capacitacion;
   const FormulariEducacion({
     Key? key, this.capacitacion,
   }) : super(key: key);
 
   @override
+  _FormulariEducacionState createState() => _FormulariEducacionState();
+}
+
+class _FormulariEducacionState extends State<FormulariEducacion> {
+  @override
+  void initState() { 
+    final cvProvider = Provider.of<EducacionProvider>(context, listen: false); 
+    if(widget.capacitacion != null){
+    cvProvider.establecimiento = widget.capacitacion!.establecimiento;
+    cvProvider.tema = widget.capacitacion!.tema;
+    cvProvider.inicio = widget.capacitacion!.inicio;
+    cvProvider.termino = widget.capacitacion!.termino;
+  }
+    super.initState();
+    
+  }
+  @override
   Widget build(BuildContext context) {
 
 
   final authProvider = Provider.of<Auth>(context); 
   final cvProvider = Provider.of<EducacionProvider>(context); 
-  if(capacitacion != null){
-    cvProvider.establecimiento = capacitacion!.establecimiento;
-    cvProvider.tema = capacitacion!.tema;
-  }
+
     return WillPopScope(
-      onWillPop:cvProvider.isLoading ? ()async{return false;}: capacitacion != null ?()async{
+      onWillPop:cvProvider.isLoading ? ()async{return false;}: widget.capacitacion != null ?()async{
                       FocusScope.of(context).unfocus();
                       if(!cvProvider.isValidForm()) {
 
                         return false;
                       }
                       cvProvider.isLoading = true;
-                     await authProvider.editEducacion(cvProvider.establecimiento, cvProvider.tema, capacitacion!.id);
+                     await authProvider.editEducacion(cvProvider.establecimiento, cvProvider.tema, widget.capacitacion!.id);
                     cvProvider.isLoading = false;
                     return true;
                   }:null,
       child: Scaffold(
         appBar: AppBar(
-          title: capacitacion != null ? Text('Editar capacitación', style: TextStyle(color:Colors.black45, fontSize: 20.0, fontWeight: FontWeight.bold),) :
+          title: widget.capacitacion != null ? Text('Editar capacitación', style: TextStyle(color:Colors.black45, fontSize: 20.0, fontWeight: FontWeight.bold),) :
           Text('Capacitación', style: TextStyle(color:Colors.black45, fontSize: 20.0, fontWeight: FontWeight.bold),),
-          leading:IconButton(icon:cvProvider.isLoading ? Loading(): Icon(Icons.arrow_back, size: 24,),onPressed:cvProvider.isLoading ? null: capacitacion != null ? ()async{
+          leading:IconButton(icon:cvProvider.isLoading ? Loading(): Icon(Icons.arrow_back, size: 24,),onPressed:cvProvider.isLoading ? null: widget.capacitacion != null ? ()async{
           FocusScope.of(context).unfocus();
           if(!cvProvider.isValidForm()) return;
           cvProvider.isLoading = true;
-          await await authProvider.editEducacion(cvProvider.establecimiento, cvProvider.tema, capacitacion!.id);     
+          await await authProvider.editEducacion(cvProvider.establecimiento, cvProvider.tema, widget.capacitacion!.id);     
           Navigator.pop(context);
           cvProvider.isLoading = false;
           
@@ -442,14 +485,23 @@ class FormulariEducacion extends StatelessWidget {
                       },
                     ),
                   ),
-                  
+                  Pad(child: Text('Inicio',style: TextStyleDecoration.textStyleDecoration(), )),
+                   Pad(
+                     title: true,
+                     child: BotonDate(funcion: (result)=>cvProvider.setInicio = result, value: cvProvider.inicio,),
+                   ),
+                  Pad(child: Text('Término',style: TextStyleDecoration.textStyleDecoration(), )),
+                   Pad(
+                     title: true,
+                     child: BotonDate(funcion: (result)=>cvProvider.setFinal = result, value: cvProvider.termino,),
+                   ),
                   SizedBox(height: 20,),
-                  capacitacion != null ?
+                  widget.capacitacion != null ?
                       Container():MaterialButton(onPressed:cvProvider.isLoading ? null : ()async{
                         FocusScope.of(context).unfocus();
                         if(!cvProvider.isValidForm()) return;
                         cvProvider.isLoading = true;
-                        await authProvider.newEducacion(cvProvider.establecimiento, cvProvider.tema);
+                        await authProvider.newEducacion(cvProvider.establecimiento, cvProvider.tema, cvProvider.inicio, cvProvider.termino);
                         Navigator.pop(context);
                         cvProvider.isLoading = false;
                        

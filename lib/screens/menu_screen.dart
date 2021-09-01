@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:master_jobz/helpers/environment.dart';
 import 'package:master_jobz/peticiones/jobs.dart';
 import 'package:rolling_bottom_bar/rolling_bottom_bar.dart';
 import 'package:rolling_bottom_bar/rolling_bottom_bar_item.dart';
@@ -39,15 +40,7 @@ class _MenuScreenState extends State<MenuScreen> {
               width: double.infinity,
               height: double.infinity,
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Colors.black,
-              Color(0xff1D1D1B),
-
-            ]
-                )
+                color: Environment.negro
               ),
               child: Column(children: [
                 Container(
@@ -142,7 +135,7 @@ class _Navegacion extends StatelessWidget {
       enableIconRotation: true,
       flat: false,
       useActiveColorByDefault: true,
-      color: Colors.black,
+      color: Environment.negro,
       onTap: (i)=>paginaProvider.paginaActual = i,
       activeItemColor: Colors.white,
       itemColor: Colors.white,

@@ -41,7 +41,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
     
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Environment.rojo,
+        backgroundColor: Environment.negro,
         title: Text('Usuario'),
         centerTitle: true,
         bottom: TabBar(
@@ -207,9 +207,11 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                                 itemBuilder: (_,i) => Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text('${empleos[i].cargo} en ${empleos[i].empresa}', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
+                                    Text('${empleos[i].cargo} en ${empleos[i].empresa}', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Environment.rojo),),
                                     SizedBox(height: 10,),
                                     Text('${empleos[i].description}', style: TextStyle(fontSize: 17),),
+                                    SizedBox(height: 10,),
+                                    Text('${empleos[i].inicio.month}/${empleos[i].inicio.year} - ${empleos[i].termino.month}/${empleos[i].termino.year}', style: TextStyle(fontSize: 17, color: Colors.black54),),
                                     SizedBox(height: 10,),
                                   ],
                                 ),
@@ -242,9 +244,13 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                           itemBuilder: (_,i) => Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('${capacitaciones[i].tema}', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
-                              SizedBox(height: 20,),
+                              SizedBox(height: 10,),
+                              Text('${capacitaciones[i].tema}', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Environment.rojo),),
+                              SizedBox(height: 10,),
                               Text('${capacitaciones[i].establecimiento}', style: TextStyle(fontSize: 17),),
+                              SizedBox(height: 10,),
+                              Text('${capacitaciones[i].inicio.month}/${capacitaciones[i].inicio.year} - ${capacitaciones[i].termino.month}/${capacitaciones[i].termino.year}', style: TextStyle(fontSize: 17, color: Colors.black54),),
+                              SizedBox(height: 10,),
                             ],
                           ),
                           separatorBuilder: (_,snapshot)=> Divider(height: 10,thickness: 1,color: Colors.black12,),

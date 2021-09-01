@@ -21,6 +21,8 @@ class Job {
         required this.description,
          this.totalRequerido,
         required this.idUser,
+        required this.createdAt,
+        required this.updatedAt,
         required this.v,
     });
 
@@ -34,6 +36,8 @@ class Job {
     int? totalRequerido;
     String idUser;
     int v;
+    DateTime createdAt;
+    DateTime updatedAt;
 
     factory Job.fromJson(Map<String, dynamic> json) => Job(
         status: json["status"],
@@ -45,6 +49,8 @@ class Job {
         description: json["description"],
         totalRequerido: json["totalRequerido"],
         idUser: json["idUser"],
+        createdAt:DateTime.parse(json["createdAt"]),
+        updatedAt: DateTime.parse(json["updatedAt"]),
         v: json["__v"],
     );
 
@@ -58,6 +64,8 @@ class Job {
         "description": description,
         "totalRequerido": totalRequerido,
         "idUser": idUser,
+        "createdAt": createdAt.toIso8601String(),
+        "updatedAt": updatedAt.toIso8601String(),
         "__v": v,
     };
 }

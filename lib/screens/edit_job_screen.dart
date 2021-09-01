@@ -172,7 +172,7 @@ class _EditJobScreenState extends State<EditJobScreen> with SingleTickerProvider
                                       onChanged: (value){
                                          jobServices.description = value;
                                        },
-                                      maxLines: 8,
+                                      maxLines: null,
                                       validator:  (value){
                                       return (value != null && value.length >8 )
                                       ? null

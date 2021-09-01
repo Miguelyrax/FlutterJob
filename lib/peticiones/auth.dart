@@ -144,11 +144,13 @@ class Auth with ChangeNotifier{
     }
     return false;
   }
-  Future newEmpleo(String empresa, String cargo, String description)async{
+  Future newEmpleo(String empresa, String cargo, String description, DateTime inicio, DateTime termino)async{
     final data = {
       "empresa":empresa,
       "cargo":cargo,
       "description":description,
+      "inicio":inicio.toIso8601String(),
+      "final":termino.toIso8601String(),
     };
     final url = Uri.parse('${Environment.baseURL}/empleo/');
     final String? token = await _storage.read(key: 'token');
@@ -166,11 +168,13 @@ class Auth with ChangeNotifier{
     }
     return false;
   }
-  Future editEmpleo(String empresa, String cargo, String description, String id)async{
+  Future editEmpleo(String empresa, String cargo, String description,DateTime inicio, DateTime termino, String id)async{
     final data = {
       "empresa":empresa,
       "cargo":cargo,
       "description":description,
+      "inicio":inicio.toIso8601String(),
+      "final":termino.toIso8601String(),
     };
     final url = Uri.parse('${Environment.baseURL}/empleo/$id');
     final String? token = await _storage.read(key: 'token');
@@ -206,10 +210,12 @@ class Auth with ChangeNotifier{
     }
     return false;
   }
-  Future newEducacion(String educacion, String tema)async{
+  Future newEducacion(String educacion, String tema, DateTime inicio, DateTime termino)async{
     final data = {
       "establecimiento":educacion,
-      "tema":tema
+      "tema":tema,
+      "inicio":inicio.toIso8601String(),
+      "final":termino.toIso8601String()
     };
     final url = Uri.parse('${Environment.baseURL}/educacion/');
     final String? token = await _storage.read(key: 'token');

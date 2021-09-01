@@ -77,7 +77,7 @@ class Targeta extends StatelessWidget {
                     AutoSizeText(job.title, style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold), maxLines: 1,),
                     AutoSizeText(job.subtitle, style: TextStyle(fontSize:30, fontWeight: FontWeight.bold), maxLines: 2,),
                     SizedBox(height:10),
-                    Text('26/07/2021', style: TextStyle(color: Colors.black54)),
+                    Text(job.createdAt.toString().split(' ')[0], style: TextStyle(color: Colors.black54)),
                   ],
                 ),
               ),

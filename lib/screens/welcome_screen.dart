@@ -1,12 +1,39 @@
-import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
+import 'package:master_jobz/helpers/environment.dart';
 import 'package:master_jobz/screens/login_screen.dart';
 import 'package:master_jobz/widgets/boton.dart';
 import 'package:master_jobz/widgets/pageroute.dart';
 
 
-class WelcomeScreen extends StatelessWidget {
+class WelcomeScreen extends StatefulWidget {
 
+  @override
+  _WelcomeScreenState createState() => _WelcomeScreenState();
+}
+
+class _WelcomeScreenState extends State<WelcomeScreen> {
+  double valor = 0;
+  final _pageViewcontroller = new PageController();
+  double get pageViewcontroller => valor;
+  set pageViewcontroller(double value){
+    valor = value;
+    setState(() {
+      
+    });
+  }
+  @override
+  void initState() { 
+    _pageViewcontroller.addListener(() {
+     pageViewcontroller = _pageViewcontroller.page!;
+     });
+    super.initState();
+    
+  }
+  @override
+  void dispose() {
+    _pageViewcontroller.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,37 +41,63 @@ class WelcomeScreen extends StatelessWidget {
         width: double.infinity,
         height: double.infinity,
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Colors.black,
-              Color(0xff1D1D1B),
-
-            ]
-          )
+          color:Environment.negro,
         ),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-                SizedBox(height: 50,),
-              FadeInLeft(
-                child: Image(
-                  image:AssetImage('assets/intro2.png') ,),
+        child: Stack(
+          children: [
+            SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                    SizedBox(height: 60,),
+                   Container(
+                     width: double.infinity,
+                     height: 450,
+                     child: PageView(
+                       controller: _pageViewcontroller,
+                       children: [
+                         Column(
+                           children: [
+                             Image(image: AssetImage('assets/bro.png') ,),
+                             Text('Progresa',textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontSize: 22),),
+                             Text('Atrevete a confiar en tus capacidades',textAlign: TextAlign.center, style: TextStyle(color: Colors.white60, fontSize: 12),),
+                           ],
+                         ),
+                         Column(
+                           children: [
+                             Image(image: AssetImage('assets/body.png') ,),
+                             Text('Confía',textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontSize: 22),),
+                             Text('Busca y publica nuevos empleos',textAlign: TextAlign.center, style: TextStyle(color: Colors.white60, fontSize: 12),),
+                           ],
+                         ),
+                         Column(
+                           children: [
+                             Image(image: AssetImage('assets/work.png') ,),
+                             Text('Adaptate',textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontSize: 22),),
+                             Text('Trabaja en el lugar de tus sueños',textAlign: TextAlign.center, style: TextStyle(color: Colors.white60, fontSize: 12),),
+                           ],
+                         ),
+                   
+                       ],
+                     ),),
+                     Row(
+                       mainAxisAlignment: MainAxisAlignment.center,
+                       children: [
+                         Icon(Icons.brightness_1, color: valor == 0  ? Environment.rojo :Colors.grey,),
+                         Icon(Icons.brightness_1, color: valor >0 && valor <= 1  ? Environment.rojo :Colors.grey,),
+                         Icon(Icons.brightness_1, color: valor >1 ? Environment.rojo :Colors.grey,),
+                       ],
+                     ),
+                 SizedBox(height: 50,),
+                    
+                     Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 60),
+                        child: Boton(text: 'Comenzar', onPressed: ()=>Navigator.pushReplacement(context,ruta(LoginScreen(),Offset(2,0),true)), color: Colors.white,)),
+                    
+                ],
               ),
-                SizedBox(height: 100,),
-                Text('GJoob',textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontSize: 22),),
-                SizedBox(height: 10,),
-                Text('Encuentra el empleo de tus sueños con un solo click',textAlign: TextAlign.center, style: TextStyle(color: Colors.white60, fontSize: 12),),
-                SizedBox(height: 50,),
-                BounceInUp(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 60),
-                    child: Boton(text: 'Comenzar', onPressed: ()=>Navigator.push(context,ruta(LoginScreen(),Offset(2,0),true)), color: Colors.white,)),
-                )
-            ],
-          ),
+            ),
+          ],
         ),
       ),
    );

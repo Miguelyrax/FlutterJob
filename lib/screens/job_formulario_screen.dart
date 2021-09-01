@@ -4,6 +4,7 @@ import 'package:master_jobz/services/edit_job_services.dart';
 import 'package:master_jobz/ui/input_decoration.dart';
 import 'package:master_jobz/ui/style_decoration.dart';
 import 'package:master_jobz/widgets/cuerpo.dart';
+import 'package:master_jobz/widgets/formularios.dart';
 import 'package:provider/provider.dart';
 class FormularioJob extends StatelessWidget {
 
@@ -15,6 +16,7 @@ class FormularioJob extends StatelessWidget {
       appBar: AppBar(
         title: Text('Trabajo', style: TextStyle(color: Colors.black),),
         centerTitle: false,
+        leading: IconButton(icon:jobServices.isLoading ? Loading(): Icon(Icons.arrow_back, size: 24,),onPressed:()=>Navigator.pop(context)),
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(
           color: Colors.red
@@ -75,8 +77,7 @@ class FormularioJob extends StatelessWidget {
                 Pad(
                   title: true,
                   child: TextFormField(
-                    minLines: 8,
-                    maxLines: 8,
+                    maxLines: null,
                     // initialValue: usuario.email,
                     style: TextStyle(color: Colors.black45),
                   onChanged: (value){

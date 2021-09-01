@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:master_jobz/helpers/environment.dart';
 class Boton extends StatelessWidget {
   final String text;
   final Function? onPressed;
@@ -13,7 +14,7 @@ class Boton extends StatelessWidget {
                 child: MaterialButton(onPressed: this.onPressed == null ? null : ()=>onPressed!(),
                 disabledColor: Colors.grey,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-                color: this.color == null ? Color(0xff0F1225) : this.color,
+                color: this.color == null ? Environment.negro : this.color,
                 minWidth: double.infinity,
                 padding: EdgeInsets.symmetric(vertical: 15),
                 child:  Text(this.text,style: TextStyle(fontSize: 20, color:this.color == null ? Colors.white:Colors.black.withOpacity(0.8)))

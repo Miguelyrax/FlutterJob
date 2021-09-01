@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:master_jobz/helpers/environment.dart';
 
 class AuthBackground extends StatelessWidget {
   final Widget child;
@@ -35,14 +36,14 @@ class AuthBackgroundRegister extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: double.infinity,
-      color: Colors.black,
+      color: Environment.negro,
       child: Stack(
         children: [
           Container(
           width: double.infinity,
           height: size.height * 0.2,
           decoration: BoxDecoration(
-          color: Colors.black,
+          color: Environment.negro,
           ),
           child: Center(child: Text('Register', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 30),),),
         ),
@@ -69,7 +70,7 @@ class Icono extends StatelessWidget {
         width: 120,
         height: 120,
         decoration: BoxDecoration(
-          color: Colors.black,
+          color: Environment.negro,
           borderRadius: BorderRadius.circular(200),
           border: Border.all(color:Colors.white, width: 5 )
         ),
@@ -93,15 +94,7 @@ class Box extends StatelessWidget {
       width: double.infinity,
       height: size.height * 0.4,
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.centerLeft,
-            end: Alignment.centerRight,
-            colors: [
-              Colors.black,
-              Color(0xff1D1D1B),
-
-            ]
-        )
+        color: Environment.negro,
       ),
     );
   }

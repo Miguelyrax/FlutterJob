@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:master_jobz/peticiones/auth.dart';
 import 'package:master_jobz/peticiones/jobs.dart';
 import 'package:master_jobz/peticiones/postulantes.dart';
+
 import 'package:master_jobz/screens/edit_job_screen.dart';
 import 'package:master_jobz/screens/empleos_screen.dart';
 
@@ -48,7 +49,7 @@ class MyApp extends StatelessWidget {
           'empleos' : ( _ ) => EmpleosScreen(),
           'editJob' : ( _ ) => EditJobScreen(),
           'postulantes' : ( _ ) => PostulantesScreen(),
-
+          
         },
       ),
     );

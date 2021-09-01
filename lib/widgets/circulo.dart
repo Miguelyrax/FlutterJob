@@ -28,3 +28,51 @@ class Circulo extends StatelessWidget {
     );
   }
 }
+class CirculoFondo extends StatelessWidget {
+  final IconData icon;
+  final double width;
+  final Color color;
+
+  const CirculoFondo({Key? key, this.icon = Icons.add, this.width = 50, this.color = Colors.red}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        width: this.width,
+        height: this.width,
+        decoration: BoxDecoration(
+          color: this.color,
+          borderRadius: BorderRadius.circular(200),
+          boxShadow: [BoxShadow(
+            color: Colors.black.withOpacity(0.2),
+            blurRadius: 2,
+            spreadRadius: 2,
+            offset: Offset(0,2)
+          )]
+        ),
+  
+    );
+  }
+}
+class Cuadrado extends StatelessWidget {
+  final IconData icon;
+  final double width;
+  final Color color;
+
+  const Cuadrado({Key? key, this.icon = Icons.add, this.width = 50, this.color = Colors.red}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        width: this.width,
+        height: this.width,
+        decoration: BoxDecoration(
+          color: this.color,
+          boxShadow: [BoxShadow(
+            color: Colors.black.withOpacity(0.2),
+            blurRadius: 2,
+            spreadRadius: 2,
+          )]
+        ),
+  
+    );
+  }
+}

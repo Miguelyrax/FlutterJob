@@ -155,18 +155,19 @@ class _ProfilePublicoScreenState extends State<ProfilePublicoScreen> {
                       ),
                     
                       SizedBox(height: 20,),
-                        GridView.builder(
+                        ListView.builder(
                           physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
-                          itemBuilder: (_,i) => Wrap(
-                            crossAxisAlignment: WrapCrossAlignment.start,
-                            
+                          itemBuilder: (_,i) => Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                                Divider(),
-                              Container(width: double.infinity,child: Text('${empleos[i].cargo} en ${empleos[i].empresa}', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),)),
+                              Container(width: double.infinity,child: Text('${empleos[i].cargo} en ${empleos[i].empresa}', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Environment.rojo),)),
+                              SizedBox(height: 20,),
+                              Container(width: double.infinity,child: Text('${empleos[i].description}', style: TextStyle(fontSize: 15),)),
                               SizedBox(height: 10,),
-                              Text('${empleos[i].description}', style: TextStyle(fontSize: 17),),
-                              SizedBox(height: 10,),
+                              Text('${empleos[i].inicio.month}/${empleos[i].inicio.year} - ${empleos[i].termino.month}/${empleos[i].termino.year}', style: TextStyle(fontSize: 17, color: Colors.black54),),
                               Row(
                                 
                                 mainAxisAlignment: MainAxisAlignment.end,
@@ -186,12 +187,7 @@ class _ProfilePublicoScreenState extends State<ProfilePublicoScreen> {
                           ),
                            itemCount: empleos.length,
                           padding: EdgeInsets.only(bottom: 0),
-                           gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 1,
-                            childAspectRatio: 2,
-                            
-                            
-                          ),),
+                           ),
                     
                     
                     ],
@@ -212,17 +208,20 @@ class _ProfilePublicoScreenState extends State<ProfilePublicoScreen> {
                       ),
                      
                       SizedBox(height: 20,),
-                        GridView.builder(
+                        ListView.builder(
                           physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
-                          itemBuilder: (_,i) => Wrap(
-                            crossAxisAlignment: WrapCrossAlignment.start,
+                          itemBuilder: (_,i) => Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                                Divider(),
                               SizedBox(height: 10,),
-                              Container(width: double.infinity,child: Text('${capacitaciones[i].tema}', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),)),
-                              SizedBox(height: 20,),
-                              Text('${capacitaciones[i].establecimiento}', style: TextStyle(fontSize: 17),),
+                              Container(width: double.infinity,child: Text('${capacitaciones[i].tema}', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Environment.rojo),)),
+                              SizedBox(height: 10,),
+                              Container(width: double.infinity,child: Text('${capacitaciones[i].establecimiento}', style: TextStyle(fontSize: 17),)),
+                              SizedBox(height: 10,),
+                              Text('${capacitaciones[i].inicio.month}/${capacitaciones[i].inicio.year} - ${capacitaciones[i].termino.month}/${capacitaciones[i].termino.year}', style: TextStyle(fontSize: 17, color: Colors.black54),),
                               
                      
                               Row(
@@ -243,12 +242,7 @@ class _ProfilePublicoScreenState extends State<ProfilePublicoScreen> {
                             ],
                           ),
                           padding: EdgeInsets.only(bottom: 0),
-                           gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 1,
-                            childAspectRatio: 2,
-                            
-                            
-                          ),
+                          
                           itemCount: capacitaciones.length),
                     ],
                   ),)      ,
