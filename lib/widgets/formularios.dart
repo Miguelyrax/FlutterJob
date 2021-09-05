@@ -339,6 +339,7 @@ class _FormulariEmpleoState extends State<FormulariEmpleo> {
                      title: true,
                      child: BotonDate(funcion: (result)=>empleoProvider.setFinal = result, value: empleoProvider.termino,),
                    ),
+                   Pad(child: Text(empleoProvider.msg,style: TextStyleDecoration.textStyleDecorationRojo(), )),
                    
                  
                   SizedBox(height: 20,),
@@ -420,7 +421,7 @@ class _FormulariEducacionState extends State<FormulariEducacion> {
                         return false;
                       }
                       cvProvider.isLoading = true;
-                     await authProvider.editEducacion(cvProvider.establecimiento, cvProvider.tema, widget.capacitacion!.id);
+                     await authProvider.editEducacion(cvProvider.establecimiento, cvProvider.tema,cvProvider.inicio,cvProvider.termino, widget.capacitacion!.id);
                     cvProvider.isLoading = false;
                     return true;
                   }:null,
@@ -432,7 +433,7 @@ class _FormulariEducacionState extends State<FormulariEducacion> {
           FocusScope.of(context).unfocus();
           if(!cvProvider.isValidForm()) return;
           cvProvider.isLoading = true;
-          await await authProvider.editEducacion(cvProvider.establecimiento, cvProvider.tema, widget.capacitacion!.id);     
+          await await authProvider.editEducacion(cvProvider.establecimiento, cvProvider.tema,cvProvider.inicio,cvProvider.termino, widget.capacitacion!.id);     
           Navigator.pop(context);
           cvProvider.isLoading = false;
           
@@ -495,6 +496,7 @@ class _FormulariEducacionState extends State<FormulariEducacion> {
                      title: true,
                      child: BotonDate(funcion: (result)=>cvProvider.setFinal = result, value: cvProvider.termino,),
                    ),
+                  Pad(child: Text(cvProvider.msg,style: TextStyleDecoration.textStyleDecorationRojo(), )),
                   SizedBox(height: 20,),
                   widget.capacitacion != null ?
                       Container():MaterialButton(onPressed:cvProvider.isLoading ? null : ()async{

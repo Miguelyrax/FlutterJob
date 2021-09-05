@@ -32,6 +32,15 @@ class Background extends StatelessWidget {
               iconTheme: IconThemeData(
                 color: Colors.black
               ),
+              leadingWidth: 80,
+              centerTitle: true,
+              title: Image(
+                image: AssetImage('assets/logoblack.png'),
+                width: 100,
+                height: 100,
+              ),
+             elevation: 1,
+              
               expandedHeight: 50,
             ),    
             SliverList(

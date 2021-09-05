@@ -12,6 +12,7 @@ import 'package:master_jobz/services/job_services.dart';
 
 
 import 'package:master_jobz/widgets/circulo.dart';
+import 'package:master_jobz/widgets/formularios.dart';
 
 import 'package:master_jobz/widgets/pageroute.dart';
 import 'package:master_jobz/widgets/targeta.dart';
@@ -25,7 +26,13 @@ class EmpleosScreen extends StatefulWidget {
 
 class _EmpleosScreenState extends State<EmpleosScreen> with AutomaticKeepAliveClientMixin{
  
-  
+  @override
+  void initState() { 
+    final jobProvider = Provider.of<JobProvider>(context, listen: false);
+    jobProvider.getEmpleos();
+    super.initState();
+    
+  }
  
   @override
   Widget build(BuildContext context) {
@@ -61,15 +68,18 @@ class _EmpleosScreenState extends State<EmpleosScreen> with AutomaticKeepAliveCl
                       
                       ), width: 30)
                   ],),
+                  jobProvider.empleos.length < 1 ? Center(child: Loading()) :
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 35, vertical: 10),
                     child: ListView.separated(
                       shrinkWrap: true,
                       reverse: true,
+                      
                       separatorBuilder: ( _ , i) => SizedBox(height: 20,),
                       physics: NeverScrollableScrollPhysics(),
                       itemCount: jobProvider.empleos.length,
                       itemBuilder: ( context , i) {
+                        
                         if(numero == 1){
                             color1 = Color(0xffFDD93C);
                             color2 = Color(0xffFEF170);

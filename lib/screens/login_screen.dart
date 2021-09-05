@@ -35,7 +35,7 @@ class LoginScreen extends StatelessWidget {
                        ChangeNotifierProvider(
                          create: ( _ )=> AuthProvider(),
                          child: _Formulario()),
-                         SizedBox(height: 50,),
+                         SizedBox(height: 20,),
                   GestureDetector(
                     onTap: (){
                       authNavegacionProvider.paginaActual = 1;
@@ -62,7 +62,7 @@ class LoginScreen extends StatelessWidget {
                          ChangeNotifierProvider(
                            create: ( _ )=> AuthProvider(),
                            child: _Formulario2()),
-                           SizedBox(height: 50,),
+                           SizedBox(height: 20,),
                     GestureDetector(
                       onTap: (){
                         authNavegacionProvider.paginaActual = 0;
@@ -113,7 +113,7 @@ class _Formulario extends StatelessWidget {
               },
         decoration: InputDecorations.authInputDecoration(hintText: 'Usuario', labelText: 'Usuario', prefixIcon: Icons.supervised_user_circle),
       ),),
-          SizedBox(height: 50,),
+          SizedBox(height: 20,),
         
           Contenido(
            child: TextFormField(
@@ -137,7 +137,7 @@ class _Formulario extends StatelessWidget {
                 authProvider.isLoading = true;
                 final resp = await auth.login(authProvider.usuario, authProvider.password);
                 if(resp){
-                  Navigator.pushReplacementNamed(context, 'loading');
+                  Navigator.pushReplacementNamed(context, '/');
                 }else{
                   alertOk(context, false, 'Credenciales no son correctas');
                 authProvider.isLoading = false;
@@ -179,7 +179,7 @@ class _Formulario2 extends StatelessWidget {
               },
         decoration: InputDecorations.authInputDecoration(hintText: 'Nombre', labelText: 'Nombre', prefixIcon: Icons.title),
       ),),
-      SizedBox(height: 50,),
+      SizedBox(height: 20,),
           Contenido(
           child: TextFormField(
         onChanged: (value){
@@ -193,7 +193,7 @@ class _Formulario2 extends StatelessWidget {
               },
         decoration: InputDecorations.authInputDecoration(hintText: 'Apellido', labelText: 'Apellido', prefixIcon: Icons.text_fields),
       ),),
-      SizedBox(height: 50,),
+      SizedBox(height: 20,),
           Contenido(
           child: TextFormField(
         onChanged: (value){
@@ -209,7 +209,7 @@ class _Formulario2 extends StatelessWidget {
               },
         decoration: InputDecorations.authInputDecoration(hintText: 'Email', labelText: 'Email', prefixIcon: Icons.email),
       ),),
-      SizedBox(height: 50,),
+      SizedBox(height: 20,),
           Contenido(
           child: TextFormField(
         onChanged: (value){
@@ -223,7 +223,7 @@ class _Formulario2 extends StatelessWidget {
               },
         decoration: InputDecorations.authInputDecoration(hintText: 'Password', labelText: 'Password', prefixIcon: Icons.lock),
       ),),
-          SizedBox(height: 50,),
+          SizedBox(height: 20,),
           Boton(text: 'REGISTRARSE', onPressed: authProvider.isLoading ? null :  ()async{
                 FocusScope.of(context).unfocus();
                 if(!authProvider.isValidForm()) return;

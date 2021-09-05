@@ -8,6 +8,7 @@ class EmpleoProvider with ChangeNotifier {
   String empresa = '';
   String cargo = '';
   String descripcion = '';
+   String msg = '';
   DateTime inicio = DateTime.now();
   DateTime termino = DateTime.now();
   bool _isLoading = false;
@@ -26,7 +27,13 @@ class EmpleoProvider with ChangeNotifier {
   }
 
   bool isValidForm(){
-
+    if(inicio.isAfter(termino)){
+      msg = 'Valide las fechas';
+      notifyListeners();
+      return false;
+    }
+    msg = '';
+    notifyListeners();
     return formKey.currentState?.validate() ?? false;
 
   }

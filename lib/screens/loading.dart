@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:master_jobz/peticiones/auth.dart';
 import 'package:master_jobz/screens/menu_screen.dart';
@@ -10,29 +11,17 @@ class LoadingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: FutureBuilder(
         future: _isAuthenticated(context),
         builder: (context, snapshot) {
           return Center(
-            child: Stack(
-              children: [
-                Text('MZ', style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
-                Transform.scale(
-                  scale: 3,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 5,
-                    color: Colors.black,
-                  ),
-                ),
-                Transform.scale(
-                  scale: 5,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 5,
-                    color: Colors.black,
-                  ),
-                ),
-              ],
-            ),);
+            child: ElasticIn(
+              child: Image(
+                image: AssetImage('assets/logo.png'),
+              ),
+            )
+            );
         } ,
       )
    );

@@ -24,7 +24,7 @@ class BotonDate extends StatelessWidget {
              child:Container(
                child: Row(
                  children: [
-                   Text('Inicio: ${value.day}-${value.month}-${value.year}'),
+                   Text('${value.day}-${value.month}-${value.year}'),
                    Icon(Icons.date_range)
                  ],
                ),

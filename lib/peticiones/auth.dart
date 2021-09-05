@@ -232,10 +232,12 @@ class Auth with ChangeNotifier{
     }
     return false;
   }
-  Future editEducacion(String educacion, String tema, String id)async{
+  Future editEducacion(String educacion, String tema,DateTime inicio, DateTime termino, String id)async{
     final data = {
       "establecimiento":educacion,
-      "tema":tema
+      "tema":tema,
+      "inicio":inicio.toIso8601String(),
+      "final":termino.toIso8601String()
     };
     final url = Uri.parse('${Environment.baseURL}/educacion/$id');
     final String? token = await _storage.read(key: 'token');

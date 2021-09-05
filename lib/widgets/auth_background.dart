@@ -74,7 +74,9 @@ class Icono extends StatelessWidget {
           borderRadius: BorderRadius.circular(200),
           border: Border.all(color:Colors.white, width: 5 )
         ),
-        child: Center(child: Text('GJ',style: TextStyle(color: Colors.white, fontSize: 35, fontWeight: FontWeight.bold),),),
+        child: Center(child: Image(
+              image: AssetImage('assets/logowhite.png'),
+            ),),
       ),
     );
   }

@@ -209,7 +209,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                                   children: [
                                     Text('${empleos[i].cargo} en ${empleos[i].empresa}', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Environment.rojo),),
                                     SizedBox(height: 10,),
-                                    Text('${empleos[i].description}', style: TextStyle(fontSize: 17),),
+                                    Text('${empleos[i].description}', style: TextStyle(fontSize: 15),),
                                     SizedBox(height: 10,),
                                     Text('${empleos[i].inicio.month}/${empleos[i].inicio.year} - ${empleos[i].termino.month}/${empleos[i].termino.year}', style: TextStyle(fontSize: 17, color: Colors.black54),),
                                     SizedBox(height: 10,),

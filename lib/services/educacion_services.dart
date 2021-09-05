@@ -9,6 +9,7 @@ class EducacionProvider with ChangeNotifier {
   String tema = '';
   DateTime inicio = DateTime.now();
   DateTime termino = DateTime.now();
+  String msg = '';
   bool _isLoading = false;
   bool get isLoading => _isLoading;
   set isLoading(bool value){
@@ -25,7 +26,13 @@ class EducacionProvider with ChangeNotifier {
   }
 
   bool isValidForm(){
-
+    if(inicio.isAfter(termino)){
+      msg = 'Valide las fechas';
+      notifyListeners();
+      return false;
+    }
+    msg = '';
+    notifyListeners();
     return formKey.currentState?.validate() ?? false;
 
   }

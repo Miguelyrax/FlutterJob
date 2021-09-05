@@ -22,12 +22,7 @@ class MenuScreen extends StatefulWidget {
 
 class _MenuScreenState extends State<MenuScreen> {
 
-@override
-  void initState() {
-      final jobProvider = Provider.of<JobProvider>(context,listen: false);
-    jobProvider.cargarTodo();
-    super.initState();
-  }
+
   @override
   Widget build(BuildContext context) {
     
@@ -35,64 +30,64 @@ class _MenuScreenState extends State<MenuScreen> {
     final paginaProvider = Provider.of<NavegacionModel>(context);
     final usuario = auth.usuario;
     return  Scaffold(
-          drawer: Drawer(
-            child: Container(
-              width: double.infinity,
-              height: double.infinity,
-              decoration: BoxDecoration(
-                color: Environment.negro
-              ),
-              child: Column(children: [
-                Container(
-                  width: double.infinity,
-                  height: MediaQuery.of(context).size.height * 0.4,
-                  child: Center(
-                    child:  Column(
-                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
+          // drawer: Drawer(
+          //   child: Container(
+          //     width: double.infinity,
+          //     height: double.infinity,
+          //     decoration: BoxDecoration(
+          //       color: Environment.negro
+          //     ),
+          //     child: Column(children: [
+          //       Container(
+          //         width: double.infinity,
+          //         height: MediaQuery.of(context).size.height * 0.4,
+          //         child: Center(
+          //           child:  Column(
+          //            mainAxisAlignment: MainAxisAlignment.center,
+          //           children: [
                      
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          IconButton(onPressed: (){}, icon: Icon(Icons.settings , color: Color(0xffEA5D60))),
-                          Container(
-                            width: 100,
-                            height: 100,
-                            decoration: BoxDecoration(
-                              color: Color(0xffF5CB39),
-                              border: Border.all(color: Colors.black, width: 4),
-                              borderRadius: BorderRadius.circular(200)
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(200),
-                              child: Image(
-                                image: AssetImage('assets/woman.jpg'),
-                                fit: BoxFit.cover,
-                              ),
-                            )
-                          ),
-                          IconButton(onPressed: (){}, icon: Icon(Icons.logout, color: Color(0xffEA5D60),)),
-                        ],
-                      ),
+          //             Row(
+          //               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          //               children: [
+          //                 IconButton(onPressed: (){}, icon: Icon(Icons.settings , color: Color(0xffEA5D60))),
+          //                 Container(
+          //                   width: 100,
+          //                   height: 100,
+          //                   decoration: BoxDecoration(
+          //                     color: Color(0xffF5CB39),
+          //                     border: Border.all(color: Colors.black, width: 4),
+          //                     borderRadius: BorderRadius.circular(200)
+          //                   ),
+          //                   child: ClipRRect(
+          //                     borderRadius: BorderRadius.circular(200),
+          //                     child: Image(
+          //                       image: AssetImage('assets/woman.jpg'),
+          //                       fit: BoxFit.cover,
+          //                     ),
+          //                   )
+          //                 ),
+          //                 IconButton(onPressed: (){}, icon: Icon(Icons.logout, color: Color(0xffEA5D60),)),
+          //               ],
+          //             ),
                      
                       
-                          Text('${usuario!.nombre} ${usuario.apellido}',style: TextStyle(color:Colors.white, fontSize: 20.0, fontWeight: FontWeight.normal)),
+          //                 Text('${usuario!.nombre} ${usuario.apellido}',style: TextStyle(color:Colors.white, fontSize: 20.0, fontWeight: FontWeight.normal)),
                     
-                        ],
+          //               ],
                         
-                    ),
-                  ),
-                ),
+          //           ),
+          //         ),
+          //       ),
                 
-                        Expanded(child: Container()),
-                        Column(children: [
-                          Text('GJoob',style: TextStyle(color:Colors.white, fontSize: 20.0, fontWeight: FontWeight.normal)),
-                          Text('Created by Miguel Albanez',style: TextStyle(color:Colors.white, fontSize: 16.0, fontWeight: FontWeight.normal)),
-                          SizedBox(height: 20,),
-                        ],)
-              ],),
-            )
-          ),
+          //               Expanded(child: Container()),
+          //               Column(children: [
+          //                 Text('GJoob',style: TextStyle(color:Colors.white, fontSize: 20.0, fontWeight: FontWeight.normal)),
+          //                 Text('Created by Miguel Albanez',style: TextStyle(color:Colors.white, fontSize: 16.0, fontWeight: FontWeight.normal)),
+          //                 SizedBox(height: 20,),
+          //               ],)
+          //     ],),
+          //   )
+          // ),
           
           extendBody: true,
           backgroundColor: Colors.white,
@@ -100,7 +95,11 @@ class _MenuScreenState extends State<MenuScreen> {
          toolbarHeight: 100,
           title: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text('GJoob', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 40),),
+            child: Image(
+                      image: AssetImage('assets/logo.png'),
+                      width: 200,
+                      height: 90,
+                    ),
           ),
           iconTheme: IconThemeData(
             color: Colors.black
@@ -112,8 +111,9 @@ class _MenuScreenState extends State<MenuScreen> {
             IconButton(onPressed: ()async{
               await auth.logout();
               Navigator.pushReplacementNamed(context, 'login');
-            }, icon: Icon(Icons.logout_sharp, color: Colors.red,))
+            }, icon: Icon(Icons.logout_sharp, color: Environment.rojo,))
           ],  
+          
           ),
           
           bottomNavigationBar: _Navegacion(paginaProvider:paginaProvider),

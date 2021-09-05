@@ -2,6 +2,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 
 import 'package:master_jobz/peticiones/jobs.dart';
+import 'package:master_jobz/widgets/formularios.dart';
 
 import 'package:master_jobz/widgets/targeta.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +15,13 @@ class JobsScreen extends StatefulWidget {
 
 class _JobsScreenState extends State<JobsScreen> with AutomaticKeepAliveClientMixin {
 
-
+@override
+void initState() { 
+  final _jobProvider = Provider.of<JobProvider>(context, listen: false);
+  _jobProvider.getJobs('100');
+  super.initState();
+  
+}
   
   @override
   Widget build(BuildContext context) {
@@ -39,6 +46,7 @@ class _JobsScreenState extends State<JobsScreen> with AutomaticKeepAliveClientMi
                 
                   SizedBox(height: 50,),
                   Text('Trabajos', style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
+                  jobProvider.jobs.length < 1 ? Center(child: Loading()) :
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 35, vertical: 10),
                     child: ListView.separated(

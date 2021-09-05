@@ -23,18 +23,18 @@ class JobProvider with ChangeNotifier{
   Job? job;
   Color color1 = Colors.red;
   Color color2 = Colors.red;
-   JobProvider(){
-    print('---------hola----------');
-    this.getEmpleos();
-    this.getJobs();
-  }
+  //  JobProvider(){
+  //   print('---------hola----------');
+  //   this.getEmpleos();
+  //   this.getJobs('30');
+  // }
   cargarTodo(){
     this.getEmpleos();
-    this.getJobs();
+    this.getJobs('30');
   }
-  Future getJobs()async{
-    print('---------hola----------');
-    final url = Uri.parse('${Environment.baseURL}/jobs/');
+  Future getJobs(String limite)async{
+    print('---------holaj----------');
+    final url = Uri.parse('${Environment.baseURL}/jobs/?limit=$limite');
     final String? token = await Auth.getToken();
     final resp = await  http.get(url, headers: {
       'Content-type':'application/json',
@@ -78,6 +78,7 @@ class JobProvider with ChangeNotifier{
       return false;
   }
   Future getEmpleos()async{
+    print('---------hola----------');
     final url = Uri.parse('${Environment.baseURL}/jobs/empleos/');
     final String? token = await Auth.getToken();
     final resp = await  http.get(url, headers: {

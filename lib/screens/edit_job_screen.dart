@@ -38,7 +38,13 @@ class _EditJobScreenState extends State<EditJobScreen> with SingleTickerProvider
     _tabController = TabController(length: 2, vsync: this);
     final jobProvider = Provider.of<JobProvider>(context,listen: false);
     final postulantesProvider = Provider.of<Postulantes>(context,listen: false);
+    final jobServices = Provider.of<JobServices>(context, listen: false);
     postulantesProvider.getTodo(jobProvider.job!.id);
+    requerimientos = jobProvider.job!.requerimientos;
+    jobServices.title = jobProvider.job!.title;
+    jobServices.subTitle = jobProvider.job!.subtitle;
+    jobServices.description = jobProvider.job!.description;
+    
     super.initState();
   }
 
@@ -53,11 +59,7 @@ class _EditJobScreenState extends State<EditJobScreen> with SingleTickerProvider
     final editNavegaion = Provider.of<EditNavegacionModel>(context);
     final jobServices = Provider.of<JobServices>(context);
     
-    requerimientos = jobProvider.job!.requerimientos;
-    jobServices.title = jobProvider.job!.title;
-    jobServices.subTitle = jobProvider.job!.subtitle;
-    jobServices.description = jobProvider.job!.description;
-    
+
 
     return WillPopScope(
       onWillPop:jobServices.isLoading ? ()async{return false;}: ()async{
@@ -181,7 +183,7 @@ class _EditJobScreenState extends State<EditJobScreen> with SingleTickerProvider
                                       decoration: InputDecorations.editJobDecoration(),),
                                   ),
                                   Pad(
-                                    child: Text('Habilidades esperadas',style: TextStyleDecoration.textStyleDecoration(),)),
+                                    child: Text('Habilidades esperadas',style: TextStyleDecoration.textStyleDecorationRojo(),)),
                                       Container(width: double.infinity,
                                       child: MaterialButton(
                                         padding: EdgeInsets.only(left: 22),
@@ -204,7 +206,26 @@ class _EditJobScreenState extends State<EditJobScreen> with SingleTickerProvider
                                          itemBuilder: ( _ , i) {
                                            return Dismissible(key: UniqueKey(),background: Align(alignment: Alignment.centerLeft,child: Icon(Icons.delete, color: Colors.red, size: 40,)),direction: DismissDirection.startToEnd,onDismissed: (value)async{
                                             await jobProvider.deleteRequerimiento(requerimientos[i].id);
-                                          },child: _Req(requerimiento: requerimientos[i],));
+                                          },child: ExpansionTile(
+
+                                            collapsedBackgroundColor: Colors.black.withOpacity(0.05),
+                                            initiallyExpanded: jobProvider.job!.requerimientos[i].estado,
+                                            iconColor: Environment.rojo,
+                                            textColor:  Environment.rojo,
+                                            onExpansionChanged: (value){
+                                              jobProvider.job!.requerimientos[i].estado = value;
+                                            },
+                                            title:  ListTile(
+                                              title: Text('${requerimientos[i].title}',style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold ),), 
+                                              trailing:  IconButton(onPressed: (){
+                                                                Navigator.push(context,ruta(ChangeNotifierProvider(create: ( _ ) => HabilidadServices(),child: FormularioRequerimiento(requerimiento: requerimientos[i],)),Offset(2,0),true));
+                                                              }, icon: Icon(Icons.edit))
+                                              ),
+                                         
+                                            children: [
+                                              _Req(requerimiento: requerimientos[i],),
+                                            ],
+                                          ));
                                          },
                                          ),
                                       ),
@@ -295,15 +316,7 @@ class __ReqState extends State<_Req> {
       builder: (_,value, child) {
         return Column(
           children: [
-                     Pad(
-                       
-                       child: ListTile(
-                         title: Text('${widget.requerimiento.title}',style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold ),), 
-                         trailing:  IconButton(onPressed: (){
-                                          Navigator.push(context,ruta(ChangeNotifierProvider(create: ( _ ) => HabilidadServices(),child: FormularioRequerimiento(requerimiento: widget.requerimiento,)),Offset(2,0),true));
-                                        }, icon: Icon(Icons.edit))
-                         ),
-                     ),            
+                               
              SizedBox(height: 30,), 
              Container(
                child: ListView.separated(
@@ -334,7 +347,7 @@ class __ReqState extends State<_Req> {
                              jobProvider.requerimiento = widget.requerimiento;
                           Navigator.push(context,ruta(ChangeNotifierProvider(create: ( _ ) => RequisitosServices(),child: FormularioRequisito()),Offset(2,0),true));
                           },
-                          child: Align(alignment: Alignment.centerLeft,child: Text('Agregar requisito', style: TextStyle(color: Colors.black45, fontSize: 15),)))),  
+                          child: Align(alignment: Alignment.centerLeft,child: Text('Agregar requisito', style: TextStyle(color: Environment.rojo, fontSize: 15),)))),  
           ],
           );
       },

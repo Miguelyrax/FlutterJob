@@ -30,6 +30,7 @@ class Requerimiento {
     double total =0;
     double suma =0;
     bool status =false;
+    bool estado =false;
     int v;
 
     factory Requerimiento.fromJson(Map<String, dynamic> json) => Requerimiento(
