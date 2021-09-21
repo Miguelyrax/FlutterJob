@@ -1,16 +1,15 @@
-# master_jobz
+# GJoob
 
-A new Flutter project.
+GJboob es una aplicacion de prueba que consiste en postular a un trabajo, llenar los requerimientos y mandar tu curriculum, y los que no son marcados, son expuestos como caacitaciones necesarias que vera tu empleador para ver si es posible capacitarte en esas herramientas o simplemente no te considera, ademas podra crear tus propias ofertas laborales y modificar tu curriculum.
+La aplicacion se alimenta de una api creada en Node.js que actualmente está desplegada en Heroku.
 
-## Getting Started
+## Instalación
 
-This project is a starting point for a Flutter application.
+Ejecutar el siguiente comando en la raiz del proyecto para instalar las dependencias
+### `flutter packages get`
 
-A few resources to get you started if this is your first Flutter project:
+## Levantar la aplicacion
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+Seleccione un dispositivo movil y levante la aplicación
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### `F5`
