@@ -16,24 +16,30 @@ Seleccione un dispositivo movil y levante la aplicación
 
 ## Imagenes de la aplicacion 
 <p float="left">
-  <img src="https://s9.gifyu.com/images/Screenshot_20210921_133434_com.example.master_jobz.jpg" width="180"> 
-  <img src="https://s9.gifyu.com/images/Screenshot_20210921_133447_com.example.master_jobz.md.jpg" width="180"> 
-  <img src="https://s9.gifyu.com/images/Screenshot_20210921_133506_com.example.master_jobz.md.jpg" width="180"> 
+  <img src="assets/estaticos/welcome.jpg" width="180"> 
+  <img src="assets/estaticos/login.jpg" width="180"> 
+  <img src="assets/estaticos/menu.jpg" width="180"> 
 </p>
 <p float="left">
-  <img src="https://s9.gifyu.com/images/Screenshot_20210921_133514_com.example.master_jobz.md.jpg" width="180"> 
-  <img src="https://s9.gifyu.com/images/Screenshot_20210921_133549_com.example.master_jobz.jpg" width="180"> 
-  <img src="https://s9.gifyu.com/images/Screenshot_20210921_133519_com.example.master_jobz.md.jpg" width="180"> 
+  <img src="assets/estaticos/ofertas.jpg" width="180"> 
+  <img src="assets/estaticos/edit.jpg" width="180"> 
+  <img src="assets/estaticos/cv.jpg" width="180"> 
 </p>
 <p float="left">
-  <img src="https://s9.gifyu.com/images/ezgif-7-4e14eda8648f.gif" width="180"> 
-  <img src="https://s9.gifyu.com/images/ezgif-7-b2beeb76b52b.gif" width="180"> 
-  <img src="https://s9.gifyu.com/images/ezgif-7-531621993e03.gif" width="180"> 
+  <img src="assets/estaticos/habilidades.jpg" width="180"> 
+  <img src="assets/estaticos/laboral.jpg" width="180"> 
+  <img src="assets/estaticos/educacion.jpg" width="180"> 
+</p>
+<p float="left">
+  <img src="assets/estaticos/1.gif" width="180">
+   <img src="assets/estaticos/2.gif" width="180"> 
+   <img src="assets/estaticos/3.gif" width="180"> 
 </p>
 <p float="left">
   
-  <img src="https://s9.gifyu.com/images/330db05286ac4e6f14.gif" width="180">
-   <img src=" https://s9.gifyu.com/images/225d5cad93dcb83892.gif" width="180"> 
+  <img src="assets/estaticos/4.gif" width="180">
+   <img src="assets/estaticos/5.gif" width="180"> 
+   <img src="assets/estaticos/6.gif" width="180"> 
 </p>
 
 ## Video resumen

@@ -75,7 +75,7 @@ class Icono extends StatelessWidget {
           border: Border.all(color:Colors.white, width: 5 )
         ),
         child: Center(child: Image(
-              image: AssetImage('assets/logowhite.png'),
+              image: AssetImage('assets/white.png'),
             ),),
       ),
     );
